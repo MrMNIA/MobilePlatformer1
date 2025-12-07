@@ -1,33 +1,50 @@
-﻿    using Unity.VisualScripting;
-    using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
-    public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviour
+{
+    [SerializeField] private AttackJoystick attackJoystick;
+    [SerializeField] private Transform playerPosition;
+    [SerializeField] private float attackDistance;
+    Vector3 control = Vector3.zero;
+    public float smooothTime;
+    private Transform currentTarget;
+
+    private void Awake()
     {
-        [SerializeField] private MovementJoystick movementJoystick; //joystick referans�
-        [SerializeField] private AttackJoystick attackJoystick;
-        [SerializeField] private Transform cameraPointer;
-        [SerializeField] private Transform playerPosition;
-        [SerializeField] private Rigidbody2D playerBody;
-        [SerializeField] private float movementDistance;
-        [SerializeField] private float attackDistance;
-        Vector3 control = Vector3.zero;
-        public float smooothTime;
-
-        private void LateUpdate()
-        {
-
-            Vector2 cameraTarget = new Vector2(playerPosition.position.x, playerPosition.position.y);
-            
-            float OffsetX = playerBody.linearVelocity.x * movementDistance + attackJoystick.Horizontal * attackDistance;
-            float OffsetY = playerBody.linearVelocity.y * (movementDistance / 2) + attackJoystick.Vertical * attackDistance;
-
-            cameraTarget.x += OffsetX;
-            cameraTarget.y += OffsetY;
-
-            cameraPointer.position = cameraTarget;
-
-            Vector3 targetPosition = new Vector3(cameraPointer.position.x,cameraPointer.position.y, -10f);
-
-            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref control, smooothTime);
-        }
+        currentTarget = playerPosition;
     }
+    private void LateUpdate()
+    {
+        Vector3 cameraTarget;
+
+        if (currentTarget == playerPosition)
+        {
+            cameraTarget = playerPosition.position;
+
+            if (Mathf.Abs(attackJoystick.Horizontal) >= 0.3f)
+                cameraTarget.x += attackJoystick.Horizontal * attackDistance;
+            if (Mathf.Abs(attackJoystick.Vertical) >= 0.3f)
+                cameraTarget.y += attackJoystick.Vertical * attackDistance;
+        }
+        else
+        {
+            cameraTarget = currentTarget.position;
+        }
+
+            cameraTarget.z = -10f;
+
+        transform.position = Vector3.SmoothDamp(transform.position, cameraTarget, ref control, smooothTime);
+    }
+
+    public void StartCinematicFocus(Transform newTarget)
+    {
+        if (newTarget != null)
+            currentTarget = newTarget;
+    }
+
+    public void EndCinematicFocus()
+    {
+        currentTarget = playerPosition;
+    }
+}

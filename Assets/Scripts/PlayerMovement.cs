@@ -21,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Layers")]
     [SerializeField] private LayerMask groundLayer;     //baz� katmanlar� karaktere referans g�sterece�iz.
-    [SerializeField] private LayerMask wallLayer;
 
     private float horizontalInput;
     private float verticalInput;
@@ -127,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
             0, 
             new Vector2(transform.localScale.x, 0), //karakterin bakt��� y�ne do�ru olmal�
             0.2f, 
-            wallLayer);
+            groundLayer);
 
         return hit.collider != null;
     }
