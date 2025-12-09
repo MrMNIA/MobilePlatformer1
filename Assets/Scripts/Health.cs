@@ -27,7 +27,7 @@ public class Health : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Vector3 attackerPosition, float knockbackForce)
     {
         if (isImmune) return;
 
@@ -36,11 +36,29 @@ public class Health : MonoBehaviour
 
         if(currentHealth > 0){
             anim.SetTrigger("hurt");
+            Knockback(attackerPosition, knockbackForce);
             StartCoroutine(Immunity());
         }
         else
         {
             DieSequence();
+        }
+    }
+
+    private void Knockback(Vector3 attackerPosition, float knockbackForce)
+    {
+        Rigidbody2D rib = GetComponent<Rigidbody2D>();
+
+        if (rib != null)
+        {
+            Vector2 knockbackDirection;
+            knockbackDirection.x = Mathf.Sign(transform.position.x - attackerPosition.x);
+            knockbackDirection.y = 0.5f;
+            knockbackDirection = knockbackDirection.normalized;
+
+            rib.linearVelocity = Vector2.zero;
+
+            rib.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
         }
     }
     private void DieSequence()

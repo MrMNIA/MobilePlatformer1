@@ -8,8 +8,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSpeed;        //ula�abilece�i azami yatay h�z
     [SerializeField] private float jumpPower;       //z�plama kuvveti
     [SerializeField] private float jumpCooldown = 0.25f;    //�st �ste z�plamalar� dizginlemek i�in saya�
+    [HideInInspector] public bool isRotationOverridden = false;
 
-    private BoxCollider2D boxCollider;  
+    private BoxCollider2D boxCollider;
     private Rigidbody2D body;
     [SerializeField] private MovementJoystick movementJoystick; //joystick referans�
     [SerializeField] private AttackJoystick attackJoystick;
@@ -61,12 +62,15 @@ public class PlayerMovement : MonoBehaviour
         else
             body.gravityScale = 2.0f;
 
-        if(Mathf.Abs(horizontalInput) >= 0.2f)
+        if (!isRotationOverridden)
         {
-            if (horizontalInput >0)                            //joystickin y�n�ne g�re karakteri �evir
-                transform.localScale = new Vector3(1, 1, 1);
-            else if (horizontalInput <0)
-                transform.localScale = new Vector3(-1, 1, 1);
+            if (Mathf.Abs(horizontalInput) >= 0.2f)
+            {
+                if (horizontalInput > 0)                            //joystickin y�n�ne g�re karakteri �evir
+                    transform.localScale = new Vector3(1, 1, 1);
+                else if (horizontalInput < 0)
+                    transform.localScale = new Vector3(-1, 1, 1);
+            }
         }
     }
 
@@ -121,11 +125,11 @@ public class PlayerMovement : MonoBehaviour
     private bool onWall()
     {
         RaycastHit2D hit = Physics2D.BoxCast(
-            boxCollider.bounds.center, 
-            boxCollider.bounds.size, 
-            0, 
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0,
             new Vector2(transform.localScale.x, 0), //karakterin bakt��� y�ne do�ru olmal�
-            0.2f, 
+            0.2f,
             groundLayer);
 
         return hit.collider != null;
