@@ -5,16 +5,22 @@ using static UnityEngine.Rendering.DebugUI;
 public class Health : MonoBehaviour
 {
     [SerializeField] private float maximumHealth = 100;
-    public float currentHealth {  get; private set; }
+    public float currentHealth { get; private set; }
 
     private Animator anim;
     private bool isDead = false;
 
     [Header("Immunity")]
     [SerializeField] private float immunityTime;
-    [SerializeField] private LayerMask ignoreLayer;
+    [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private LayerMask enemyLayerMask;
     private SpriteRenderer spriteRenderer;
     private bool isImmune = false;
+    private Color defaultColor;
+
+    [Header("Enemy")]
+    private EnemyAI enemyAI;
+    private Coroutine enemyAICoroutine;
 
     [SerializeField] private Behaviour[] components;
     private Rigidbody2D rb;
@@ -25,6 +31,9 @@ public class Health : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        enemyAI = GetComponent<EnemyAI>();
+
+        defaultColor = spriteRenderer.color;
     }
 
     public void TakeDamage(float damage, Vector3 attackerPosition, float knockbackForce)
@@ -34,7 +43,8 @@ public class Health : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maximumHealth);
 
-        if(currentHealth > 0){
+        if (currentHealth > 0)
+        {
             anim.SetTrigger("hurt");
             Knockback(attackerPosition, knockbackForce);
             StartCoroutine(Immunity());
@@ -47,19 +57,35 @@ public class Health : MonoBehaviour
 
     private void Knockback(Vector3 attackerPosition, float knockbackForce)
     {
-        Rigidbody2D rib = GetComponent<Rigidbody2D>();
 
-        if (rib != null)
+        if (rb != null)
         {
+            if (enemyAI != null)
+            {
+                if (enemyAICoroutine != null)
+                {
+                    StopCoroutine(enemyAICoroutine);
+                }
+                enemyAICoroutine = StartCoroutine(DisableEnemyAI(0.25f));
+            }
+
             Vector2 knockbackDirection;
             knockbackDirection.x = Mathf.Sign(transform.position.x - attackerPosition.x);
             knockbackDirection.y = 0.5f;
             knockbackDirection = knockbackDirection.normalized;
 
-            rib.linearVelocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
 
-            rib.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
         }
+    }
+
+    private IEnumerator DisableEnemyAI(float duration)
+    {
+        if (enemyAI != null) { enemyAI.enabled = false; }
+        yield return new WaitForSeconds(duration);
+        if (enemyAI != null) enemyAI.enabled = true;
+        enemyAICoroutine = null;
     }
     private void DieSequence()
     {
@@ -81,7 +107,7 @@ public class Health : MonoBehaviour
         isDead = true;
     }
 
-    private void SuddenDeath()
+    public void SuddenDeath()
     {
         currentHealth = 0f;
         DieSequence();
@@ -96,14 +122,16 @@ public class Health : MonoBehaviour
     {
         isImmune = true;
 
-        Physics2D.IgnoreLayerCollision(8, 11, true);
         spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.5f);
-        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
-        yield return new WaitForSeconds(immunityTime - 0.5f);
-        spriteRenderer.color = Color.white;
 
-        Physics2D.IgnoreLayerCollision(8, 11, false);
+        yield return new WaitForSeconds(0.5f);
+
+        spriteRenderer.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0.5f);
+
+        yield return new WaitForSeconds(immunityTime - 0.5f);
+
+        spriteRenderer.color = defaultColor;
+
         isImmune = false;
 
     }

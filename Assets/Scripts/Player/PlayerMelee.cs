@@ -5,11 +5,14 @@ using System;
 public class PlayerMelee : MonoBehaviour
 {
     [SerializeField] public AttackJoystick attackJoystick;
+    [SerializeField] public MovementJoystick movementJoystick;
     [SerializeField] private Animator anim;
     private Transform attackCenter;
+    public LayerMask enemyLayer;
     [SerializeField] private BoxCollider2D attackCollider;
     [SerializeField] private SpriteRenderer attackRange;
     [SerializeField] private PlayerMovement playerMove;
+    [SerializeField] private float damage;
 
     public float attackCooldown = 1f;
     private float attackTimer;
@@ -53,12 +56,7 @@ public class PlayerMelee : MonoBehaviour
 
         if (transform.localScale.x < 0)
         {
-            attackCenter.localScale = new Vector3(-1,1,1);
-            angle = -(angle);
-        }
-        else
-        {
-            attackCenter.localScale = new Vector3(1,1,1);
+            angle = 180 - angle;
         }
 
         // Yalnızca görsel ofseti uygulayın (örn. nişan alma görseliniz yukarı bakıyorsa -90f)
@@ -93,7 +91,10 @@ public class PlayerMelee : MonoBehaviour
             attackTimer = attackCooldown;
             FlipCharacterToDirection(lastValidDirection.x);
             playerMove.isRotationOverridden = true;
+
+
             SetDirection(lastValidDirection);
+
             anim.SetTrigger("meleeAttack");
             attackJoystick.CooldownCounter(attackCooldown);
         }
@@ -109,13 +110,28 @@ public class PlayerMelee : MonoBehaviour
     }
     public void DealMeleeDamage()
     {
-        attackCollider.enabled = true;
-        Debug.Log("Melee");
+        attackRange.enabled = true;
+        Vector2 point = attackCollider.bounds.center;
+        Vector2 size = attackCollider.size; // Kutunun boyutları
+        float angle = attackCenter.eulerAngles.z; // O anki dönüş açımız
+
+        // 2. O kutunun içindeki düşmanları bul (OverlapBox)
+        Collider2D[] hits = Physics2D.OverlapBoxAll(point, size, angle, enemyLayer);
+
+        foreach (Collider2D hit in hits)
+        {
+            // Health scriptini bul
+            Health enemyHealth = hit.GetComponent<Health>();
+            if (enemyHealth != null)
+            {
+                // Hasar Ver
+                enemyHealth.TakeDamage(damage, transform.position, 8f);
+            }
+        }
     }
 
     public void EndMelee()
     {
-        attackCollider.enabled = false;
         attackRange.enabled = false;
         playerMove.isRotationOverridden = false;
     }
