@@ -65,7 +65,7 @@ public class MeleeEnemy : EnemyAI
             if (playerHealth != null)
             {
                 // Knockback uygula
-                playerHealth.TakeDamage(damage, transform.position, 5f);
+                playerHealth.TakeDamage(damage, transform.position, 6f);
             }
         }
 

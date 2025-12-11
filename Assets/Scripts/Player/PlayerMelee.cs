@@ -16,6 +16,7 @@ public class PlayerMelee : MonoBehaviour
 
     public float attackCooldown = 1f;
     private float attackTimer;
+    public bool isAttacking = false;
     private Vector2 lastValidDirection = Vector2.right;
 
     private void Awake()
@@ -34,6 +35,8 @@ public class PlayerMelee : MonoBehaviour
     private void Update()
     {
         if (attackTimer > 0) { attackTimer -= Time.deltaTime; }
+
+        if (isAttacking) { return; }
 
         Vector2 targetDirection = new Vector2(attackJoystick.Horizontal, attackJoystick.Vertical);
 
@@ -59,11 +62,8 @@ public class PlayerMelee : MonoBehaviour
             angle = 180 - angle;
         }
 
-        // Yalnızca görsel ofseti uygulayın (örn. nişan alma görseliniz yukarı bakıyorsa -90f)
-        const float visualDefaultOffset = 0f;
-
         // KRİTİK: localRotation'ı kullanmaya devam edin ve flipOffset'ları kaldırın.
-        attackCenter.localRotation = Quaternion.Euler(0f, 0f, angle + visualDefaultOffset);
+        attackCenter.localRotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     private void Start() // Awake yerine Start kullanın, daha güvenlidir.
@@ -89,6 +89,7 @@ public class PlayerMelee : MonoBehaviour
         if (attackTimer <= 0)
         {
             attackTimer = attackCooldown;
+            isAttacking = true;
             FlipCharacterToDirection(lastValidDirection.x);
             playerMove.isRotationOverridden = true;
 
@@ -110,6 +111,7 @@ public class PlayerMelee : MonoBehaviour
     }
     public void DealMeleeDamage()
     {
+        attackCollider.enabled = true;
         attackRange.enabled = true;
         Vector2 point = attackCollider.bounds.center;
         Vector2 size = attackCollider.size; // Kutunun boyutları
@@ -132,8 +134,10 @@ public class PlayerMelee : MonoBehaviour
 
     public void EndMelee()
     {
+        attackCollider.enabled = false;
         attackRange.enabled = false;
         playerMove.isRotationOverridden = false;
+        isAttacking = false;
     }
 
 

@@ -7,23 +7,19 @@ public class Health : MonoBehaviour
     [SerializeField] private float maximumHealth = 100;
     public float currentHealth { get; private set; }
 
-    private Animator anim;
-    private bool isDead = false;
-
     [Header("Immunity")]
     [SerializeField] private float immunityTime;
-    [SerializeField] private LayerMask playerLayerMask;
-    [SerializeField] private LayerMask enemyLayerMask;
     private SpriteRenderer spriteRenderer;
     private bool isImmune = false;
-    private Color defaultColor;
 
-    [Header("Enemy")]
+    [Header("Enemy")] //düþmanlar için
     private EnemyAI enemyAI;
     private Coroutine enemyAICoroutine;
 
     [SerializeField] private Behaviour[] components;
     private Rigidbody2D rb;
+    private Animator anim;
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -32,8 +28,6 @@ public class Health : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         enemyAI = GetComponent<EnemyAI>();
-
-        defaultColor = spriteRenderer.color;
     }
 
     public void TakeDamage(float damage, Vector3 attackerPosition, float knockbackForce)
@@ -47,7 +41,7 @@ public class Health : MonoBehaviour
         {
             anim.SetTrigger("hurt");
             Knockback(attackerPosition, knockbackForce);
-            StartCoroutine(Immunity());
+            StartCoroutine(Immunity(immunityTime));
         }
         else
         {
@@ -89,21 +83,15 @@ public class Health : MonoBehaviour
     }
     private void DieSequence()
     {
-        // Bu blok, TakeDamage metodundaki 'else' bloðundan taþýnmýþtýr.
-
-        // Animasyonu tetikle
         anim.SetTrigger("die");
 
-        // Karakterin diðer bileþenlerini devre dýþý býrak
         foreach (var item in components)
         {
             item.enabled = false;
         }
 
-        // Fizik simülasyonunu durdur
         rb.simulated = false;
-
-        // Durum bayraðýný ayarla
+            
         isDead = true;
     }
 
@@ -118,17 +106,31 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maximumHealth);
     }
 
-    private IEnumerator Immunity()
+    private IEnumerator Immunity(float immunityTime)
     {
+        if (immunityTime <= 0) yield break;
         isImmune = true;
 
+        Color defaultColor = spriteRenderer.color;
+        Color flashColor = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0.35f);
+        float blinkDuration = 0.25f;
+        float colorTimer = 0f;
+
         spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
 
-        yield return new WaitForSeconds(0.5f);
+        while (colorTimer < immunityTime - 0.1f)
+        {
+            // Yarý saydam/Soluk renge geç
+            spriteRenderer.color = flashColor;
+            yield return new WaitForSeconds(blinkDuration);
 
-        spriteRenderer.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0.5f);
+            // Orijinal renge geri dön
+            spriteRenderer.color = defaultColor;
+            yield return new WaitForSeconds(blinkDuration);
 
-        yield return new WaitForSeconds(immunityTime - 0.5f);
+            colorTimer += (blinkDuration * 2);
+        }
 
         spriteRenderer.color = defaultColor;
 
