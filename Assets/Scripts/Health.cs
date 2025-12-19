@@ -12,7 +12,7 @@ public class Health : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private bool isImmune = false;
 
-    [Header("Enemy")] //düþmanlar için
+    [Header("Enemy")] //dï¿½ï¿½manlar iï¿½in
     private EnemyAI enemyAI;
     private Coroutine enemyAICoroutine;
 
@@ -23,6 +23,7 @@ public class Health : MonoBehaviour
 
     private void Awake()
     {
+        isDead = true;
         currentHealth = maximumHealth;
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -81,6 +82,7 @@ public class Health : MonoBehaviour
         if (enemyAI != null) enemyAI.enabled = true;
         enemyAICoroutine = null;
     }
+    
     private void DieSequence()
     {
         anim.SetTrigger("die");
@@ -93,6 +95,7 @@ public class Health : MonoBehaviour
         rb.simulated = false;
             
         isDead = true;
+        Debug.Log(gameObject.name + " is dead.");
     }
 
     public void SuddenDeath()
@@ -121,11 +124,11 @@ public class Health : MonoBehaviour
 
         while (colorTimer < immunityTime - 0.1f)
         {
-            // Yarý saydam/Soluk renge geç
+            // Yarï¿½ saydam/Soluk renge geï¿½
             spriteRenderer.color = flashColor;
             yield return new WaitForSeconds(blinkDuration);
 
-            // Orijinal renge geri dön
+            // Orijinal renge geri dï¿½n
             spriteRenderer.color = defaultColor;
             yield return new WaitForSeconds(blinkDuration);
 

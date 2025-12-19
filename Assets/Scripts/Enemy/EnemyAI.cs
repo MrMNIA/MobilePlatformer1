@@ -15,11 +15,14 @@ public class EnemyAI : MonoBehaviour
     public LayerMask groundLayer;
     public Vector2 detectionRange = new Vector2(5f, 2f);
 
-    [Header("Attack Trigger Settings")]
-    // Bu de�erleri inspector'dan elle girmene gerek kalmayacak, 
-    // MeleeEnemy scripti bunlar� otomatik y�netecek.
-    public float attackRangeX = 1.5f;
-    public float attackRangeY = 2.0f;
+    [Header("Range Settings")]
+    // Düşmanın durup bekleyeceği mesafe (Oyuncunun içine girmemesi için)
+    public float stopDistanceX = 1.5f;
+    public float stopDistanceY = 2.0f;
+
+    // Düşmanın saldırıya başlayabileceği gerçek menzil
+    public float attackRangeX = 5f;
+    public float attackRangeY = 2f;
 
     protected Transform player;
     protected Rigidbody2D rib;
@@ -52,7 +55,10 @@ public class EnemyAI : MonoBehaviour
         }
 
         bool isBlocked = CheckIsBlocked();
-        bool PlayerInSight = CheckPlayer() || isAggressive;
+        // Chase durumundaysak algılama mesafesini %50 artır (Düşman daha zor pes eder)
+        float detectionMultiplier = (state == State.Chase) ? 1.5f : 1f;
+
+        bool PlayerInSight = CheckPlayer(detectionMultiplier) || isAggressive;
 
         switch (state)
         {
@@ -75,46 +81,75 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    protected bool CheckPlayer()
+    protected bool CheckPlayer(float multiplier = 1f)
+{
+    float distX = Mathf.Abs(transform.position.x - player.position.x);
+    float distY = Mathf.Abs(transform.position.y - player.position.y);
+
+    // Çarpanı (multiplier) burada kullanıyoruz
+    if (distX < detectionRange.x * multiplier && distY < detectionRange.y)
     {
-        float distX = Mathf.Abs(transform.position.x - player.position.x);
-        float distY = Mathf.Abs(transform.position.y - player.position.y);
-        return (distX < detectionRange.x && distY < detectionRange.y);
+        Vector2 startPos = boxCollider.bounds.center;
+        Vector2 endPos = new Vector2(player.position.x, player.position.y + 0.5f); 
+
+        RaycastHit2D hit = Physics2D.Linecast(startPos, endPos, groundLayer);
+        
+        if (hit.collider == null) 
+        {
+            Debug.DrawLine(startPos, endPos, Color.green);
+            return true; 
+        }
+        else 
+        {
+            Debug.DrawLine(startPos, endPos, Color.red);
+            return false; // Duvara çarptığı için görmüyor
+        }
     }
+    return false;
+}
 
     protected void HandleChase(float distanceX)
     {
         float distanceY = Mathf.Abs(player.position.y - transform.position.y);
         float xDiff = player.position.x - transform.position.x;
 
+        // Yön değiştirme (Flip)
         if (Mathf.Abs(xDiff) > 0.2f)
         {
             if (xDiff > 0 && !movingRight) Flip();
             else if (xDiff < 0 && movingRight) Flip();
         }
 
-        // Sald�r� pozisyonunda m�y�z?
-        // NOT: attackRangeX art�k merkezden merkeze olan toplam mesafeyi ifade edecek.
-        bool inAttackPosition = (distanceX <= attackRangeX) && (distanceY <= attackRangeY);
+        // MANTIK AYRIMI:
+        // 1. Saldırı yapabilir miyim? (Attack Range içinde mi?)
+        bool canAttack = (distanceX <= attackRangeX) && (distanceY <= attackRangeY);
 
-        if (!inAttackPosition)
+        // 2. Durmalı mıyım? (Stop Distance içinde mi?)
+        bool shouldStop = (distanceX <= stopDistanceX) && (distanceY <= stopDistanceY);
+
+        // 3. Önüm kapalı mı?
+        bool isBlockedAhead = CheckIsBlocked();
+
+        if (!shouldStop && !isBlockedAhead)
         {
+            // Durma mesafesinde değilsek ve önümüz boşsa yürümeye devam et
             anim.SetBool("isRunning", true);
-            if (IsGrounded())
-            {
-                float direction = movingRight ? 1f : -1f;
-                rib.linearVelocity = new Vector2(chaseSpeed * direction, rib.linearVelocity.y);
-            }
+            float direction = movingRight ? 1f : -1f;
+            rib.linearVelocity = new Vector2(chaseSpeed * direction, rib.linearVelocity.y);
         }
         else
         {
-            // Menzile girdik, dur ve sald�r.
-            rib.linearVelocity = Vector2.zero;
+            // Durma mesafesine girdik veya önümüz kapandı, dur.
+            rib.linearVelocity = new Vector2(0, rib.linearVelocity.y);
             anim.SetBool("isRunning", false);
+        }
+
+        // Eğer saldırı menzilindeysek saldır (Durup durmamaktan bağımsız)
+        if (canAttack)
+        {
             Attack();
         }
     }
-
     protected bool CheckIsBlocked()
     {
         float OffsetX = boxCollider.bounds.extents.x + 0.1f;
@@ -181,16 +216,19 @@ public class EnemyAI : MonoBehaviour
 
     protected virtual void OnDrawGizmosSelected()
     {
-        // 1. Detection Range (SARI) - Fark etme alan�
+        // 1. Algılama Menzili (SARI)
         Gizmos.color = Color.yellow;
-        // detectionRange merkezden uzakl�k oldu�u i�in boyutu 2 ile �arp�yoruz.
         Gizmos.DrawWireCube(transform.position, new Vector3(detectionRange.x * 2, detectionRange.y * 2, 0));
 
-        // 2. Attack Trigger Range (MAV�) - Durma/Fren yapma alan�
-        // Bu kutunun i�ine Oyuncu girdi�i an Enemy ko�may� b�rak�r ve sald�r�ya ge�er.
-        Gizmos.color = Color.blue;
+        // 2. Gerçek Saldırı Menzili (KIRMIZI)
+        Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, new Vector3(attackRangeX * 2, attackRangeY * 2, 0));
+
+        // 3. Durma/Fren Mesafesi (MAVİ)
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(transform.position, new Vector3(stopDistanceX * 2, stopDistanceY * 2, 0));
     }
+
 
     public virtual void Attack() { }
 }

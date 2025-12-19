@@ -4,12 +4,12 @@ using UnityEngine;
 public class Dealingdamage : MonoBehaviour
 {
     [SerializeField] protected float damage;
-    [SerializeField] private LayerMask damageLayer; // Inspector'da ayarlanacak
+    [SerializeField] protected LayerMask damageLayer; // Inspector'da ayarlanacak
 
-    [SerializeField] private float knockbackForce = 10f;
-    protected void OnTriggerEnter2D(Collider2D collision)
+    [SerializeField] protected float knockbackForce = 10f;
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        // Kontrol: Çarpýþan objenin Layer'ý, 'playerLayer' maskesi içinde mi?
+        // Kontrol: ï¿½arpï¿½ï¿½an objenin Layer'ï¿½, 'playerLayer' maskesi iï¿½inde mi?
         if ((damageLayer.value & (1 << collision.gameObject.layer)) != 0)
         {
             collision.GetComponent<Health>()?.TakeDamage(damage, transform.position, knockbackForce);

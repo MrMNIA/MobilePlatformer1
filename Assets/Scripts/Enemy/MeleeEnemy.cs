@@ -12,11 +12,11 @@ public class MeleeEnemy : EnemyAI
     public float distance = 1.5f;
     public LayerMask playerLayer;
 
-    // Eðer Awake'te ekstra iþlem yapacaksan:
+    // Eï¿½er Awake'te ekstra iï¿½lem yapacaksan:
     protected override void Awake()
     {
-        base.Awake(); // Önce babanýn Awake'i çalýþsýn (rb, collider alýnsýn)
-        // Sonra kendi özel kodlarýn (varsa)
+        base.Awake(); // ï¿½nce babanï¿½n Awake'i ï¿½alï¿½ï¿½sï¿½n (rb, collider alï¿½nsï¿½n)
+        // Sonra kendi ï¿½zel kodlarï¿½n (varsa)
         attackRangeX = boxCollider.bounds.extents.x + distance;
         attackRangeY = attackSize.y;
     }
@@ -24,19 +24,19 @@ public class MeleeEnemy : EnemyAI
     protected override void Update()
     {
         if (attackTimer > 0 ) attackTimer -= Time.deltaTime;
-        // Babanýn Update'i çalýþsýn (Patrol/Idle mantýðý)
+        // Babanï¿½n Update'i ï¿½alï¿½ï¿½sï¿½n (Patrol/Idle mantï¿½ï¿½ï¿½)
         base.Update();
 
-        // BURAYA EKLEME YAPACAÐIZ:
-        // Eðer oyuncu menzile girerse state = State.Chase yap
-        // Chase mantýðý ve Attack vuruþunu burada override edeceðiz.
+        // BURAYA EKLEME YAPACAï¿½IZ:
+        // Eï¿½er oyuncu menzile girerse state = State.Chase yap
+        // Chase mantï¿½ï¿½ï¿½ ve Attack vuruï¿½unu burada override edeceï¿½iz.
     }
 
     public override void Attack()
     {
         if (attackTimer <= 0)
         {
-            // Sadece animasyonu baþlatýyoruz. Hasarý animasyon event verecek.
+            // Sadece animasyonu baï¿½latï¿½yoruz. Hasarï¿½ animasyon event verecek.
             anim.SetTrigger("meleeAttack");
             attackTimer = attackCooldown;
         }
@@ -46,18 +46,18 @@ public class MeleeEnemy : EnemyAI
     {
         float direction = transform.localScale.x > 0 ? 1f : -1f;
 
-        // 2. BoxCast Fýrlat
-        // Origin: Kendi merkezimiz (boxCollider EnemyAI'da tanýmlýydý)
+        // 2. BoxCast Fï¿½rlat
+        // Origin: Kendi merkezimiz (boxCollider EnemyAI'da tanï¿½mlï¿½ydï¿½)
         RaycastHit2D hit = Physics2D.BoxCast(
-            boxCollider.bounds.center, // Baþlangýç: Göbek deliðimiz
-            attackSize,                // Boyut: Inspector'dan ayarladýðýn kutu
-            0f,                        // Açý: 0 (Döndürme yok)
-            Vector2.right * direction, // Yön: Baktýðýmýz yön
+            boxCollider.bounds.center, // Baï¿½langï¿½ï¿½: Gï¿½bek deliï¿½imiz
+            attackSize,                // Boyut: Inspector'dan ayarladï¿½ï¿½ï¿½n kutu
+            0f,                        // Aï¿½ï¿½: 0 (Dï¿½ndï¿½rme yok)
+            Vector2.right * direction, // Yï¿½n: Baktï¿½ï¿½ï¿½mï¿½z yï¿½n
             distance,               // Mesafe: Ne kadar ileri?
-            playerLayer                // Maske: Sadece Player'a çarp
+            playerLayer                // Maske: Sadece Player'a ï¿½arp
         );
 
-        // 3. Çarpýþma Kontrolü
+        // 3. ï¿½arpï¿½ï¿½ma Kontrolï¿½
         if (hit.collider != null)
         {
             // Vurduk!
@@ -76,14 +76,10 @@ public class MeleeEnemy : EnemyAI
     {
         base.OnDrawGizmosSelected();
 
-        if (boxCollider != null)
-        {
-            Gizmos.color = Color.red;
-            float direction = transform.localScale.x > 0 ? 1f : -1f;
-
-            // BoxCast'in varacaðý tahmini noktayý çiziyoruz
-            Vector3 center = boxCollider.bounds.center + (Vector3)(Vector2.right * direction * distance);
-            Gizmos.DrawWireCube(center, attackSize);
-        }
+        float OffsetX = (boxCollider != null) ? boxCollider.bounds.extents.x + 0.1f : 0.5f;
+        if (!movingRight) OffsetX *= -1;
+        Vector3 rayOrigin = transform.position + new Vector3(OffsetX, -0.5f, 0);
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(rayOrigin, Vector2.down * rayDistance);
     }
 }
