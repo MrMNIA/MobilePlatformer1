@@ -95,9 +95,15 @@ public class Health : MonoBehaviour
         rb.simulated = false;
             
         isDead = true;
-        Debug.Log(gameObject.name + " is dead.");
     }
 
+    public void GameOver()
+    {
+        if (gameObject.CompareTag("Player"))
+        {
+            UIManager.instance.ShowGameOver();
+        }
+    }
     public void SuddenDeath()
     {
         currentHealth = 0f;
