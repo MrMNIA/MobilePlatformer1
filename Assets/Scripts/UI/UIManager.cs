@@ -1,22 +1,23 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
     [Header("Menu Panels")]
-    public GameObject pausePanel;    // Gri filtreli panel
+    public GameObject pausePanel;
     public GameObject gameOverPanel;
     public GameObject winPanel;
 
     [Header("HUD Elements")]
-    public GameObject pauseButton;   // HUD üzerindeki duraklatma butonu
+    public GameObject pauseButton;
+    public Text currentLevelCoinText;
+    public Text totalCoinText;
 
-    // 1. Oyunu Duraklatma (Pause Butonuna basınca çalışır)
-    public static UIManager instance; // Diğer scriptlerin ulaşacağı kapı
+    public static UIManager instance;
 
     void Awake()
     {
-        // Singleton tanımlaması
         if (instance == null) { instance = this; }
         else { Destroy(gameObject); }
     }
@@ -28,6 +29,24 @@ public class UIManager : MonoBehaviour
         pausePanel.SetActive(false);
         gameOverPanel.SetActive(false);
         winPanel.SetActive(false);
+
+        UpdateTotalCoinUI();
+        UpdateCurrentLevelCoinUI(0);
+    }
+
+    public void UpdateCurrentLevelCoinUI(int amount)
+    {
+        if (currentLevelCoinText != null)
+            currentLevelCoinText.text = "Coins: " + amount.ToString();
+    }
+
+    public void UpdateTotalCoinUI()
+    {
+        if (totalCoinText != null)
+        {
+            int total = PlayerPrefs.GetInt("TotalCoins", 0);
+            totalCoinText.text = "Bank: " + total.ToString();
+        }
     }
     public void PauseGame()
     {
@@ -53,6 +72,29 @@ public class UIManager : MonoBehaviour
         // Mevcut aktif sahnenin adını veya index'ini alıp tekrar yüklüyoruz
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+    public void LoadNextLevel()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+
+        // Eğer bir sonraki sahne build settings'de varsa yükle
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            Time.timeScale = 1f; // Zamanı normalleştir
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            // Eğer sonraki seviye yoksa ana menüye dön
+            GotoMainMenu();
+        }
+    }
+
+    public void GotoMainMenu()
+    {
+        Time.timeScale = 1f; // Ana menüye giderken zamanı normalleştir
+        SceneManager.LoadScene(0); // Ana menü sahnesinin adını kullanarak yükle
+    }
+
 
     // 3. Oyun Sonu (Ölünce çağrılır)
     public void ShowGameOver()

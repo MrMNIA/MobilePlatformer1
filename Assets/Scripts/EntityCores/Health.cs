@@ -23,12 +23,24 @@ public class Health : MonoBehaviour
 
     private void Awake()
     {
-        isDead = true;
+        isDead = false;
         currentHealth = maximumHealth;
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         enemyAI = GetComponent<EnemyAI>();
+    }
+
+    private void Start()
+    {
+        // --- ZORLUK SİSTEMİ ENTEGRASYONU ---
+        // Eğer bu obje bir düşmansa, zorluğa göre canını artırıyoruz.
+        if (gameObject.CompareTag("Enemy"))
+        {
+            float multiplier = DifficultyManager.Instance.GetStatsMultiplier();
+            maximumHealth *= multiplier;
+            currentHealth = maximumHealth;
+        }
     }
 
     public void TakeDamage(float damage, Vector3 attackerPosition, float knockbackForce)
@@ -82,19 +94,33 @@ public class Health : MonoBehaviour
         if (enemyAI != null) enemyAI.enabled = true;
         enemyAICoroutine = null;
     }
-    
+
     private void DieSequence()
     {
+        if (isDead) return;
+        isDead = true;
+
         anim.SetTrigger("die");
 
+        // --- COIN SİSTEMİ ENTEGRASYONU ---
+        // Eğer ölen bir düşmansa, cüzdana para ekle
+        if (gameObject.CompareTag("Enemy") && enemyAI != null)
+        {
+            // EnemyAI scriptindeki baseCoinReward değerini kullanıyoruz
+            LevelManager.Instance.AddCoins(enemyAI.baseCoinReward);
+        }
+
+        // Bileşenleri kapat
         foreach (var item in components)
         {
             item.enabled = false;
         }
 
-        rb.simulated = false;
-            
-        isDead = true;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.simulated = false; // Artık fizik dünyasıyla etkileşime girmesin
+        }
     }
 
     public void GameOver()

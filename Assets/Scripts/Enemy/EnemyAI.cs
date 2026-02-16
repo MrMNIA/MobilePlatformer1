@@ -4,6 +4,8 @@ public class EnemyAI : MonoBehaviour
 {
     protected enum State { Patrol, Idle, Chase }
 
+    [Header("Economy & Combat Settings")] // --- YENİ EKLENEN KISIM ---
+    public int baseCoinReward = 10; // Öldüğünde vereceği temel coin miktarı
     [Header("AI Movement Settings")]
     public float moveSpeed = 2f;
     public float chaseSpeed = 3f;

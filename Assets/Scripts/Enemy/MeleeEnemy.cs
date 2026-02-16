@@ -4,6 +4,7 @@ public class MeleeEnemy : EnemyAI
 {
     [Header("Melee Settings")]
     public float damage = 10f;
+    private float finalDamage; // Zorluk çarpanıyla güncellenmiş hasar
     public float attackCooldown = 1f;
     private float attackTimer;
 
@@ -21,6 +22,15 @@ public class MeleeEnemy : EnemyAI
         attackRangeY = attackSize.y;
     }
 
+    protected virtual void Start()
+    {
+        // Zorluk yöneticisinden çarpanı al (1.0, 1.2 veya 1.4)
+        float multiplier = DifficultyManager.Instance.GetStatsMultiplier();
+
+        // Final hasarı hesapla
+        finalDamage = damage * multiplier;
+
+    }
     protected override void Update()
     {
         if (attackTimer > 0 ) attackTimer -= Time.deltaTime;
@@ -65,7 +75,7 @@ public class MeleeEnemy : EnemyAI
             if (playerHealth != null)
             {
                 // Knockback uygula
-                playerHealth.TakeDamage(damage, transform.position, 6f);
+                playerHealth.TakeDamage(finalDamage, transform.position, 6f);
             }
         }
 

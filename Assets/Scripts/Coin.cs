@@ -1,0 +1,22 @@
+using UnityEngine;
+
+public class Coin : MonoBehaviour
+{
+    public int baseValue = 1; // Temel coin değeri
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            // Zorluk çarpanını al
+            float multiplier = DifficultyManager.Instance.GetCoinMultiplier();
+            int finalValue = Mathf.RoundToInt(baseValue * multiplier);
+
+            // Parayı ekle
+            LevelManager.Instance.AddCoins(finalValue);
+
+            // Coin'i yok et
+            Destroy(gameObject);
+        }
+    }
+}

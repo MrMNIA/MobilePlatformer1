@@ -2,13 +2,12 @@ using UnityEngine;
 
 public class WinZone : MonoBehaviour
 {
-    private bool isWon = false; // Birden fazla tetiklenmeyi önlemek için
+    private bool isWon = false;
+    [Header("Level Settings")]
+    public string levelName = "Level1"; // Her level için farklı isim ver (örn: Level2, Level3)
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        // 1. Gelen obje Player mı?
-        // 2. Daha önce kazanıldı mı?
         if (other.CompareTag("Player") && !isWon)
         {
             isWon = true;
@@ -18,9 +17,17 @@ public class WinZone : MonoBehaviour
 
     void WinGame()
     {
-        // UIManager üzerinden Win ekranını açıyoruz
+        // 1. Muhasebe işlemini yap (Parayı aktar ve Bonusları hesapla)
+        if (LevelManager.Instance != null)
+        {
+            LevelManager.Instance.FinalizeLevelCoins(levelName);
+        }
+
+        // 2. UI Ekranını aç
         if (UIManager.instance != null)
         {
+            // Toplam parayı güncelle ki win ekranında doğru görünsün
+            UIManager.instance.UpdateTotalCoinUI();
             UIManager.instance.ShowWinScreen();
         }
     }
