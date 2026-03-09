@@ -21,6 +21,10 @@ public class Health : MonoBehaviour
     private Animator anim;
     private bool isDead = false;
 
+    public AudioClip hurtSound;
+    public AudioClip dieSound;
+
+
     private void Awake()
     {
         isDead = false;
@@ -53,6 +57,7 @@ public class Health : MonoBehaviour
         if (currentHealth > 0)
         {
             anim.SetTrigger("hurt");
+            SoundManager.Instance.PlaySound(hurtSound);
             Knockback(attackerPosition, knockbackForce);
             StartCoroutine(Immunity(immunityTime));
         }
@@ -101,6 +106,7 @@ public class Health : MonoBehaviour
         isDead = true;
 
         anim.SetTrigger("die");
+        SoundManager.Instance.PlaySound(dieSound);
 
         // --- COIN SİSTEMİ ENTEGRASYONU ---
         // Eğer ölen bir düşmansa, cüzdana para ekle

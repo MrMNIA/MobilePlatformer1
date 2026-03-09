@@ -14,6 +14,8 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] private PlayerMovement playerMove;
     [SerializeField] private float damage;
 
+    [SerializeField] private AudioClip meleeSound;
+
     public float attackCooldown = 1f;
     private float attackTimer;
     public bool isAttacking = false;
@@ -98,6 +100,7 @@ public class PlayerMelee : MonoBehaviour
 
             anim.SetTrigger("meleeAttack");
             attackJoystick.CooldownCounter(attackCooldown);
+            SoundManager.Instance.PlaySound(meleeSound);
         }
     }
 

@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -9,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpPower;       //z�plama kuvveti
     [SerializeField] private float jumpCooldown = 0.25f;    //�st �ste z�plamalar� dizginlemek i�in saya�
     [HideInInspector] public bool isRotationOverridden = false;
+
+    [SerializeField] private AudioClip jumpSound;
 
     private BoxCollider2D boxCollider;
     private Rigidbody2D body;
@@ -93,11 +94,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+
         if (onWall() && !onGround()) //duvara yapisiksa ve yerde degilse
         {
             //Duvar Z�plamas�
             body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX * 50, wallJumpY * 50));
             anim.SetTrigger("jump");
+
+            SoundManager.Instance.PlaySound(jumpSound);
 
             //karakterin bakt��� y�n�n tersine ve yukar� do�ru
         }
@@ -105,6 +109,8 @@ public class PlayerMovement : MonoBehaviour
         {
             body.AddForce(new Vector2(0, jumpPower * 50)); //yukari dogru jumpPower kadar kuvvet
             anim.SetTrigger("jump");
+
+            SoundManager.Instance.PlaySound(jumpSound);
         }
 
         jumpTimer = jumpCooldown;

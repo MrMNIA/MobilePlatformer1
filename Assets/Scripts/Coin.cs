@@ -3,6 +3,7 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     public int baseValue = 1; // Temel coin değeri
+    public AudioClip coinPickupSound;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -14,6 +15,8 @@ public class Coin : MonoBehaviour
 
             // Parayı ekle
             LevelManager.Instance.AddCoins(finalValue);
+            // Ses efektini çal
+            SoundManager.Instance.PlaySound(coinPickupSound);
 
             // Coin'i yok et
             Destroy(gameObject);

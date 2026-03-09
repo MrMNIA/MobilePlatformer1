@@ -14,6 +14,12 @@ public class UIManager : MonoBehaviour
     public Text currentLevelCoinText;
     public Text totalCoinText;
 
+    [Header("Audio")]
+    public AudioClip gameOverSound;
+
+    public AudioClip winSound;
+
+
     public static UIManager instance;
 
     void Awake()
@@ -50,6 +56,7 @@ public class UIManager : MonoBehaviour
     }
     public void PauseGame()
     {
+        SoundManager.Instance.PauseMusic();
         Time.timeScale = 0f;
         pausePanel.SetActive(true);
         pauseButton.SetActive(false); // Oyun duruyorken pause butonu gizlensin
@@ -58,6 +65,7 @@ public class UIManager : MonoBehaviour
     // 2. Devam Etme (Pause menüsündeki Resume butonuna basınca çalışır)
     public void ResumeGame()
     {
+        SoundManager.Instance.ResumeMusic();
         Time.timeScale = 1f;
         pausePanel.SetActive(false);
         pauseButton.SetActive(true); // Pause butonu geri gelsin
@@ -99,6 +107,8 @@ public class UIManager : MonoBehaviour
     // 3. Oyun Sonu (Ölünce çağrılır)
     public void ShowGameOver()
     {
+        SoundManager.Instance.PlaySound(gameOverSound);
+        SoundManager.Instance.PauseMusic();
         Time.timeScale = 0f;
         gameOverPanel.SetActive(true);
         pauseButton.SetActive(false);
@@ -107,6 +117,7 @@ public class UIManager : MonoBehaviour
     // 4. Kazanma (Win Zone'a girince çağrılır)
     public void ShowWinScreen()
     {
+        SoundManager.Instance.PlaySound(winSound);
         Time.timeScale = 0f;
         winPanel.SetActive(true);
         pauseButton.SetActive(false);
