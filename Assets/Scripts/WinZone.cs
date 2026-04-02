@@ -18,9 +18,9 @@ public class WinZone : MonoBehaviour
     void WinGame()
     {
         // 1. Muhasebe işlemini yap (Parayı aktar ve Bonusları hesapla)
-        if (LevelManager.Instance != null)
+        if (MoneyManager.Instance != null)
         {
-            LevelManager.Instance.FinalizeLevelCoins(levelName);
+            MoneyManager.Instance.FinalizeLevelCoins(levelName);
         }
 
         // 2. UI Ekranını aç

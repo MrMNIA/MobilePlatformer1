@@ -33,8 +33,8 @@ public class ParallaxManager : MonoBehaviour
         _camHalfWidth = cam.orthographicSize * cam.aspect;
 
         // 2. Grid sınırlarını Tilemap'ten çek
-        _gridStartX = gridTilemap.localBounds.min.x + gridTilemap.transform.position.x;
-        _gridEndX = gridTilemap.localBounds.max.x + gridTilemap.transform.position.x;
+        _gridStartX = gridTilemap.localBounds.min.x - 15 + gridTilemap.transform.position.x;
+        _gridEndX = gridTilemap.localBounds.max.x + 15 + gridTilemap.transform.position.x;
 
         foreach (var layer in layers)
         {

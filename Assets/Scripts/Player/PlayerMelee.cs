@@ -33,6 +33,17 @@ public class PlayerMelee : MonoBehaviour
 
         anim = GetComponent<Animator>();
         attackTimer = 0;
+
+    }
+    private void Start() // Awake yerine Start kullanın, daha güvenlidir.
+    {
+        damage += PlayerPrefs.GetInt("AttackLevel", 0) * 4; // Mağazadan alınan hasar geliştirmesi etkisi
+
+        // 1. Olayı dinlemeye başla (Abone olma)
+        if (attackJoystick != null)
+        {
+            attackJoystick.OnJoystickReleased += meleeAttack;
+        }
     }
     private void Update()
     {
@@ -68,14 +79,7 @@ public class PlayerMelee : MonoBehaviour
         attackCenter.localRotation = Quaternion.Euler(0f, 0f, angle);
     }
 
-    private void Start() // Awake yerine Start kullanın, daha güvenlidir.
-    {
-        // 1. Olayı dinlemeye başla (Abone olma)
-        if (attackJoystick != null)
-        {
-            attackJoystick.OnJoystickReleased += meleeAttack;
-        }
-    }
+
 
     // 2. Oyundan çıkıldığında dinlemeyi bırak (Bellek sızıntısını önler)
     private void OnDisable()

@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float maximumHealth = 100;
+    public float maximumHealth = 100;
     public float currentHealth { get; private set; }
 
     [Header("Immunity")]
@@ -28,23 +29,31 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         isDead = false;
-        currentHealth = maximumHealth;
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         enemyAI = GetComponent<EnemyAI>();
+
+        if (gameObject.CompareTag("Enemy"))
+        {
+            maximumHealth += SceneManager.GetActiveScene().buildIndex * 10; // Örneğin, her sahne için düşmanların canını 10 artırabilirsiniz.
+            float multiplier = DifficultyManager.Instance.GetStatsMultiplier();
+            maximumHealth *= multiplier;
+            currentHealth = maximumHealth;
+        }
+
+        if (gameObject.CompareTag("Player"))
+        {
+            maximumHealth += PlayerPrefs.GetInt("HealthLevel", 0) * 10; // Mağazadan alınan sağlık geliştirmesi etkisi
+            currentHealth = maximumHealth;
+        }
     }
 
     private void Start()
     {
         // --- ZORLUK SİSTEMİ ENTEGRASYONU ---
         // Eğer bu obje bir düşmansa, zorluğa göre canını artırıyoruz.
-        if (gameObject.CompareTag("Enemy"))
-        {
-            float multiplier = DifficultyManager.Instance.GetStatsMultiplier();
-            maximumHealth *= multiplier;
-            currentHealth = maximumHealth;
-        }
+        
     }
 
     public void TakeDamage(float damage, Vector3 attackerPosition, float knockbackForce)
@@ -113,7 +122,7 @@ public class Health : MonoBehaviour
         if (gameObject.CompareTag("Enemy") && enemyAI != null)
         {
             // EnemyAI scriptindeki baseCoinReward değerini kullanıyoruz
-            LevelManager.Instance.AddCoins(enemyAI.baseCoinReward);
+            MoneyManager.Instance.AddCoins(enemyAI.baseCoinReward);
         }
 
         // Bileşenleri kapat

@@ -14,7 +14,7 @@ public class Coin : MonoBehaviour
             int finalValue = Mathf.RoundToInt(baseValue * multiplier);
 
             // Parayı ekle
-            LevelManager.Instance.AddCoins(finalValue);
+            MoneyManager.Instance.AddCoins(finalValue);
             // Ses efektini çal
             SoundManager.Instance.PlaySound(coinPickupSound);
 

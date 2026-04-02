@@ -1,23 +1,39 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 public class PlayerBars : MonoBehaviour
 {
-    [Header("Health")]
     [SerializeField] private Health playerHealth;
     [SerializeField] private Image healthBar;
     [SerializeField] private Text healthText;
 
-    float maxHealth;
+    private float cachedMaxHealth;
 
     private void Start()
     {
-        maxHealth = playerHealth.currentHealth;
-        healthBar.fillAmount = 1;
+        // Değeri bir kez alıyoruz
+        cachedMaxHealth = playerHealth.maximumHealth;
+
+        // Oyun açılır açılmaz barın doğru görünmesi için bir kez tetikliyoruz
+        UpdateUI();
     }
+
     private void Update()
     {
-        float healthPercent = playerHealth.currentHealth / maxHealth;
-        healthBar.fillAmount = healthPercent;
-        healthText.text = healthPercent * 100 + "/" + maxHealth;
+        // Update içinde UpdateUI fonksiyonunu çağırıyoruz
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        float current = playerHealth.currentHealth;
+
+        // Bölme işlemi (0'a bölme hatasına karşı küçük bir önlem)
+        if (cachedMaxHealth > 0)
+        {
+            healthBar.fillAmount = current / cachedMaxHealth;
+        }
+
+        healthText.text = Mathf.RoundToInt(current) + " / " + Mathf.RoundToInt(cachedMaxHealth);
     }
 }

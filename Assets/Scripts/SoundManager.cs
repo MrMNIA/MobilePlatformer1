@@ -73,7 +73,11 @@ public class SoundManager : MonoBehaviour
 
     // --- SES AYARLARI (%0 - %100) ---
 
+
+    public void PauseMusic() => musicSource.Pause();
+    public void ResumeMusic() => musicSource.UnPause();
     // Müzik butonları için (Unity Inspector'dan bunu çağır)
+
     public void AdjustMusic(int amount)
     {
         UpdateVolume(amount, musicSource, "MusicVol");
@@ -84,11 +88,6 @@ public class SoundManager : MonoBehaviour
     {
         UpdateVolume(amount, sfxSource, "SFXVol");
     }
-
-    public void PauseMusic() => musicSource.Pause();
-    public void ResumeMusic() => musicSource.UnPause();
-
-
     private void UpdateVolume(int amount, AudioSource source, string prefKey)
     {
         int current = PlayerPrefs.GetInt(prefKey, 100);
