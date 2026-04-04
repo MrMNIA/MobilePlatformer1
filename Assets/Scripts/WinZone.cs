@@ -17,18 +17,21 @@ public class WinZone : MonoBehaviour
 
     void WinGame()
     {
-        // 1. Muhasebe işlemini yap (Parayı aktar ve Bonusları hesapla)
-        if (MoneyManager.Instance != null)
-        {
-            MoneyManager.Instance.FinalizeLevelCoins(levelName);
-        }
+        if (MoneyManager.Instance == null) return;
 
-        // 2. UI Ekranını aç
+        int baseAmount = MoneyManager.Instance.currentLevelCoins;
+
+        // ÖNEMLİ: Daha parayı finalize etmeden "ilk bitirme mi?" kontrolünü yapıyoruz
+        string levelKey = levelName + "_Completed";
+        bool isFirstClear = PlayerPrefs.GetInt(levelKey, 0) == 0;
+
+        // 1. Muhasebe işlemini yap (Veritabanına/Prefs'e kaydeder)
+        MoneyManager.Instance.FinalizeLevelCoins(levelName);
+
+        // 2. UI Ekranını aç (isFirstClear bilgisini de gönderiyoruz)
         if (UIManager.instance != null)
         {
-            // Toplam parayı güncelle ki win ekranında doğru görünsün
-            UIManager.instance.UpdateTotalCoinUI();
-            UIManager.instance.ShowWinScreen();
+            StartCoroutine(UIManager.instance.ShowWinScreen(baseAmount, isFirstClear));
         }
     }
 }

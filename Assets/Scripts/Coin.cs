@@ -19,7 +19,7 @@ public class Coin : MonoBehaviour
             SoundManager.Instance.PlaySound(coinPickupSound);
 
             // Coin'i yok et
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

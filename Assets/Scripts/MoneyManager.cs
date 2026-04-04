@@ -7,6 +7,10 @@ public class MoneyManager : MonoBehaviour
     [Header("Level İçi Para")]
     public int currentLevelCoins = 0;
 
+    [Header("SFX")]
+    public AudioClip moneyspendSound;
+    public AudioClip notenoughSound;
+
     private void Awake()
     {
         // Singleton Yapısı
@@ -23,50 +27,58 @@ public class MoneyManager : MonoBehaviour
 
     // --- PARA KAZANMA VE SEVİYE SONU ---
 
-    public void AddCoins(int baseAmount)
+    public void AddCoins(int amount)
     {
-        // DifficultyManager'dan çarpanı al ve ekle
-        float multiplier = DifficultyManager.Instance.GetCoinMultiplier();
-        currentLevelCoins += Mathf.RoundToInt(baseAmount * multiplier);
+        currentLevelCoins += amount;
 
         // Seviye içindeki geçici UI'ı güncelle
         if (UIManager.instance != null)
             UIManager.instance.UpdateCurrentLevelCoinUI(currentLevelCoins);
     }
 
+    /// <summary>
+    /// Seviye bittiğinde parayı hesaplar, çarpanları uygular ve kalıcı cüzdana ekler.
+    /// </summary>
     public void FinalizeLevelCoins(string levelName)
     {
-        int totalWallet = GetTotalCoins();
-        int bonusMultiplier = 1;
+        // 1. Temel miktar (Seviye içinde toplanan)
+        float earnedAmount = currentLevelCoins;
 
-        // İlk bitirme bonusu kontrolü
+        // 2. Zorluk Çarpanını uygula (Sadece seviye kazancına)
+        if (DifficultyManager.Instance != null)
+        {
+            earnedAmount *= DifficultyManager.Instance.GetCoinMultiplier();
+        }
+
+        // 3. İlk bitirme bonusu kontrolü (Sadece seviye kazancına)
         string levelKey = levelName + "_Completed";
         if (PlayerPrefs.GetInt(levelKey, 0) == 0)
         {
-            bonusMultiplier = 3;
-            PlayerPrefs.SetInt(levelKey, 1);
-            Debug.Log("İLK BİTİRME! x3 Bonus kazandınız.");
+            earnedAmount *= 2; // İlk bitirme x2 bonusu
+            PlayerPrefs.SetInt(levelKey, 1); // Artık bu seviye bitirildi
         }
 
-        // Hesapla ve ana cüzdana ekle
-        int finalAmount = currentLevelCoins * bonusMultiplier;
-        totalWallet += finalAmount;
+        // 4. Nihai miktarı tam sayıya yuvarla
+        int finalReward = Mathf.RoundToInt(earnedAmount);
 
-        SaveTotalCoins(totalWallet);
+        // 5. Ana cüzdana ekle (Eski para + yeni kazanç)
+        int currentTotalWallet = GetTotalCoins();
+        SaveTotalCoins(currentTotalWallet + finalReward);
 
-        // Seviye bittiği için geçici parayı sıfırla
+        // 6. Sıfırla ve diske kaydet
         currentLevelCoins = 0;
+        PlayerPrefs.Save();
     }
 
     // --- CÜZDAN VE SHOP YÖNETİMİ ---
 
-    // Cüzdandaki toplam parayı PlayerPrefs'ten çeker
+    // Cüzdandaki toplam parayı çeker
     public int GetTotalCoins()
     {
         return PlayerPrefs.GetInt("TotalCoins", 0);
     }
 
-    // Harcama yapmaya çalışır. Para yetiyorsa true döner ve düşer.
+    // Harcama yapma fonksiyonu
     public bool TrySpendCoins(int amount)
     {
         int total = GetTotalCoins();
@@ -75,16 +87,23 @@ public class MoneyManager : MonoBehaviour
         {
             total -= amount;
             SaveTotalCoins(total);
-            return true; // İşlem onaylandı
+            SoundManager.Instance.PlaySound(moneyspendSound);
+            PlayerPrefs.Save();
+            return true;
         }
-
-        return false; // Bakiye yetersiz
+        else
+        {
+            SoundManager.Instance.PlaySound(notenoughSound);
+            return false;
+        }
     }
 
-    // Parayı kaydeder ve UI'ı haberdar eder
+    // Parayı kaydeder ve UI'ı (varsa) bilgilendirir
     private void SaveTotalCoins(int amount)
     {
         PlayerPrefs.SetInt("TotalCoins", amount);
-        PlayerPrefs.Save();
+
+        // Eğer ana menüde veya markette toplam parayı gösteren bir UI varsa burayı tetikle:
+        // if (UIManager.instance != null) UIManager.instance.UpdateTotalCoinUI(amount);
     }
 }

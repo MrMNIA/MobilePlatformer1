@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
@@ -12,11 +13,11 @@ public class UIManager : MonoBehaviour
     [Header("HUD Elements")]
     public GameObject pauseButton;
     public Text currentLevelCoinText;
-    public Text totalCoinText;
+    public Text finalCoinText;
+    public Text addText; // Seviye sonu kazançlarını göstermek için (isteğe bağlı)
 
     [Header("Audio")]
     public AudioClip gameOverSound;
-
     public AudioClip winSound;
 
 
@@ -35,24 +36,13 @@ public class UIManager : MonoBehaviour
         pausePanel.SetActive(false);
         gameOverPanel.SetActive(false);
         winPanel.SetActive(false);
-
-        UpdateTotalCoinUI();
         UpdateCurrentLevelCoinUI(0);
     }
 
     public void UpdateCurrentLevelCoinUI(int amount)
     {
         if (currentLevelCoinText != null)
-            currentLevelCoinText.text = "Coins: " + amount.ToString();
-    }
-
-    public void UpdateTotalCoinUI()
-    {
-        if (totalCoinText != null)
-        {
-            int total = PlayerPrefs.GetInt("TotalCoins", 0);
-            totalCoinText.text = "Bank: " + total.ToString();
-        }
+            currentLevelCoinText.text = amount.ToString();
     }
     public void PauseGame()
     {
@@ -115,11 +105,74 @@ public class UIManager : MonoBehaviour
     }
 
     // 4. Kazanma (Win Zone'a girince çağrılır)
-    public void ShowWinScreen()
+    public IEnumerator ShowWinScreen(int baseAmount, bool isFirstClear)
     {
         SoundManager.Instance.PlaySound(winSound);
+
+        // Zamanı durdurduğunuz için 'Realtime' bekleme kullanmalıyız
         Time.timeScale = 0f;
         winPanel.SetActive(true);
         pauseButton.SetActive(false);
+
+        // Bekleme süresini değişkene atayalım (Performans için)
+        float waitTime = 1f / baseAmount; // Miktara göre hızlanır
+        var wait = new WaitForSecondsRealtime(waitTime);
+
+        // 1. AŞAMA: Temel Miktar Artışı
+        for (int i = 0; i <= baseAmount; i++)
+        {
+            finalCoinText.text = i.ToString();
+            yield return wait; // Bekleme burada gerçekleşir
+        }
+
+        int tempAmount = baseAmount;
+        yield return new WaitForSecondsRealtime(0.5f); // Küçük bir duraklama ekleyelim
+
+        // 2. AŞAMA: Zorluk Bonusu
+        if (DifficultyManager.Instance != null && DifficultyManager.Instance.currentDifficulty != DifficultyManager.Difficulty.Easy)
+        {
+            baseAmount = Mathf.RoundToInt(baseAmount * DifficultyManager.Instance.GetCoinMultiplier());
+
+            if (DifficultyManager.Instance.currentDifficulty == DifficultyManager.Difficulty.Medium)
+            {
+                addText.text = "Medium Bonus: x1.25";
+                addText.color = Color.yellow;
+            }
+            else if (DifficultyManager.Instance.currentDifficulty == DifficultyManager.Difficulty.Hard)
+            {
+                addText.text = "Hard Bonus: x1.5";
+                addText.color = Color.red;
+            }
+
+            waitTime = 1f / baseAmount; // Miktara göre hızlanır
+            wait = new WaitForSecondsRealtime(waitTime);
+
+            for (int i = tempAmount; i <= baseAmount; i++)
+            {
+                finalCoinText.text = i.ToString();
+                yield return wait;
+            }
+
+            tempAmount = baseAmount;
+        }
+
+        yield return new WaitForSecondsRealtime(0.5f); // Küçük bir duraklama ekleyelim
+
+        // 3. AŞAMA: İlk Bitirme Bonusu
+        if (isFirstClear)
+        {
+            addText.text = "First Clear Bonus: x2"; // Alt satıra geçmesi için \n ekledim
+            addText.color = Color.green;
+            baseAmount = Mathf.RoundToInt(baseAmount * 2);
+
+            waitTime = 1f / baseAmount; // Miktara göre hızlanır
+            wait = new WaitForSecondsRealtime(waitTime);
+
+            for (int i = tempAmount; i <= baseAmount; i++)
+            {
+                finalCoinText.text = i.ToString();
+                yield return wait;
+            }
+        }
     }
 }
