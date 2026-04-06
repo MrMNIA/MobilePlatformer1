@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpPower;       //z�plama kuvveti
     [SerializeField] private float jumpCooldown = 0.25f;    //�st �ste z�plamalar� dizginlemek i�in saya�
     [HideInInspector] public bool isRotationOverridden = false;
-
+    [SerializeField] private PlayerEnergy playerEnergy; // Enerji bileşenine erişim
     [SerializeField] private AudioClip jumpSound;
 
     private BoxCollider2D boxCollider;
@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+        playerEnergy = GetComponent<PlayerEnergy>();
     }
 
     void Update()
@@ -82,10 +83,14 @@ public class PlayerMovement : MonoBehaviour
             currentAcceleration = onGround() ? accelerationForce : (accelerationForce / 2);   //karakter yerde de�ilse itme kuvveti daha az olsun.
             body.AddForce(new Vector2(horizontalInput * currentAcceleration, 0));       //karaktere yatay girdi y�n�ne g�re bir kuvvet uygula
         }
-
-        //joystick b�rak�ld���nda karakterin h�zla durmas�n� sa�lamak i�in
-        if (Mathf.Abs(body.linearVelocity.x) > 0.1f && Mathf.Abs(horizontalInput) < 0.25f) //girdi yoksa ve hareket halindeyse
-            body.AddForce(new Vector2(-body.linearVelocity.x * 20f, 0));              //ters y�nde bir itme uygula
+        else if (Mathf.Abs(body.linearVelocity.x) > 0.1f && Mathf.Abs(horizontalInput) < 0.25f) //joystick merkeze yak�nsa da karakter hareket ediyor olabilir, bu durumda karakteri yava��latmak i�in ters y�nde bir kuvvet uygulayabiliriz
+        {
+            body.AddForce(new Vector2(-body.linearVelocity.x * 20f, 0));    
+        }
+        else
+        {
+            body.linearVelocity = new Vector2(0, body.linearVelocity.y); //joystick merkeze yak�nsa da karakter hareket ediyor olabilir, bu durumda karakteri tamamen durdurmak i
+        }
 
         //karakter azami h�z� y�r�yerek a�amamal�
         if (Mathf.Abs(body.linearVelocity.x) > maxSpeed)              //e�er h�z� azami h�z� ge�iyorsa
@@ -94,11 +99,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-
+        if (!playerEnergy.tryUseEnergy(10f)) // Enerji yeterli değilse zıplamayı engelle
+        {
+            return;
+        }
+        
         if (onWall() && !onGround()) //duvara yapisiksa ve yerde degilse
         {
-            //Duvar Z�plamas�
+            body.linearVelocity = new Vector2(body.linearVelocity.x, 0); //duvar zplamasnda karakterin mevcut yatay hzn iptal ediyoruz, bu sayede duvara yapk kalmaz ve zplama daha tutarl olur
             body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX * 50, wallJumpY * 50));
+            playerEnergy.UseEnergy(10f);
+
             anim.SetTrigger("jump");
 
             SoundManager.Instance.PlaySound(jumpSound);
@@ -107,7 +118,9 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (onGround())        //yerdeyse
         {
+            body.linearVelocity = new Vector2(body.linearVelocity.x, 0);
             body.AddForce(new Vector2(0, jumpPower * 50)); //yukari dogru jumpPower kadar kuvvet
+            playerEnergy.UseEnergy(10f);
             anim.SetTrigger("jump");
 
             SoundManager.Instance.PlaySound(jumpSound);

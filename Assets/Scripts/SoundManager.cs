@@ -28,19 +28,43 @@ public class SoundManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Event aboneliği
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            // Ayarları yükle (Doğru anahtarlarla)
             LoadAllSettings();
         }
-        else { Destroy(gameObject); }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    void OnEnable()
+    {
+        // Sahne yüklendiğinde çalışacak metodu delegeye ekliyoruz
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void Start()
+    void OnDisable()
     {
-            OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single); // Başlangıçta müziği ayarla
+        // Bellek sızıntısını önlemek için objenin işi bittiğinde aboneliği iptal ediyoruz
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    
+    private void Start() {
+        PlayMusic(); // Oyun başladığında müziği çalmaya başla
+    }
+
+    // Bu metod her sahne değişiminde otomatik olarak çağrılır
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        int index = scene.buildIndex;
+        PlayMusic();
+    }
+
+    void PlayMusic()
+    {
+        int index = SceneManager.GetActiveScene().buildIndex;
 
         if (index == 0)
             ChangeMusic(menuMusic);
@@ -51,10 +75,8 @@ public class SoundManager : MonoBehaviour
         else if (index >= 21 && index <= 30)
             ChangeMusic(chapterMusic[2]);
     }
-
     public void ChangeMusic(AudioClip newClip)
     {
-        if (newClip == null || musicSource.clip == newClip) return;
         musicSource.Stop();
         musicSource.clip = newClip;
         musicSource.loop = true;
@@ -111,7 +133,7 @@ public class SoundManager : MonoBehaviour
     }
     private void LoadAllSettings()
     {
-        musicSource.volume = PlayerPrefs.GetInt("MusicSource", 100) / 100f;
-        sfxSource.volume = PlayerPrefs.GetInt("SoundSource", 100) / 100f;
+        musicSource.volume = PlayerPrefs.GetInt("MusicVol", 100) / 100f;
+        sfxSource.volume = PlayerPrefs.GetInt("SFXVol", 100) / 100f;
     }
 }

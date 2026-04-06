@@ -33,5 +33,9 @@ public class WinZone : MonoBehaviour
         {
             StartCoroutine(UIManager.instance.ShowWinScreen(baseAmount, isFirstClear));
         }
+
+        // 3. Level tamamlandı bilgisini kaydet (Bu, sonraki levelin kilidini açmak için gerekli)
+        PlayerPrefs.SetInt(levelKey, 1); // Level tamamlandı olarak işaretle
+        PlayerPrefs.Save();
     }
 }

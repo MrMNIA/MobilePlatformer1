@@ -4,15 +4,20 @@ using UnityEngine.UI;
 public class PlayerBars : MonoBehaviour
 {
     [SerializeField] private Health playerHealth;
+    [SerializeField] private PlayerEnergy playerEnergy;
     [SerializeField] private Image healthBar;
     [SerializeField] private Text healthText;
+    [SerializeField] private Image energyBar;
+    [SerializeField] private Text energyText;
 
     private float cachedMaxHealth;
+    private float cachedMaxEnergy;
 
     private void Start()
     {
         // Değeri bir kez alıyoruz
         cachedMaxHealth = playerHealth.maximumHealth;
+        cachedMaxEnergy = playerEnergy.maxEnergy;
 
         // Oyun açılır açılmaz barın doğru görünmesi için bir kez tetikliyoruz
         UpdateUI();
@@ -27,6 +32,7 @@ public class PlayerBars : MonoBehaviour
     private void UpdateUI()
     {
         float current = playerHealth.currentHealth;
+        float energyCurrent = playerEnergy.currentEnergy;
 
         // Bölme işlemi (0'a bölme hatasına karşı küçük bir önlem)
         if (cachedMaxHealth > 0)
@@ -35,5 +41,11 @@ public class PlayerBars : MonoBehaviour
         }
 
         healthText.text = Mathf.RoundToInt(current) + " / " + Mathf.RoundToInt(cachedMaxHealth);
+
+        if (cachedMaxEnergy > 0)
+        {
+            energyBar.fillAmount = energyCurrent / cachedMaxEnergy;
+        }
+        energyText.text = Mathf.RoundToInt(energyCurrent) + " / " + Mathf.RoundToInt(cachedMaxEnergy);
     }
 }
