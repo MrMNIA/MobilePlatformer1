@@ -2,11 +2,15 @@ using System.Collections;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class Health : MonoBehaviour
 {
     public float maximumHealth = 100;
     public float currentHealth { get; private set; }
+
+    public static event Action<Health> imDead;
+
 
     [Header("Immunity")]
     [SerializeField] private float immunityTime;
@@ -122,7 +126,9 @@ public class Health : MonoBehaviour
         if (gameObject.CompareTag("Enemy") && enemyAI != null)
         {
             // EnemyAI scriptindeki baseCoinReward değerini kullanıyoruz
+
             MoneyManager.Instance.AddCoins(enemyAI.baseCoinReward);
+            imDead?.Invoke(this);
         }
 
         // Bileşenleri kapat

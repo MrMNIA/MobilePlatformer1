@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7996141452789112437
+--- !u!1 &1008460132550891683
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1594092744638689753}
-  - component: {fileID: 7630183257061754497}
-  - component: {fileID: 2082969862835872240}
-  - component: {fileID: 4651510667890611847}
+  - component: {fileID: 1342350053276512232}
+  - component: {fileID: 1326811574501771574}
+  - component: {fileID: 8347909378281939045}
+  - component: {fileID: 7588732231590437988}
   m_Layer: 0
-  m_Name: fireball
+  m_Name: GameWin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1594092744638689753
+--- !u!4 &1342350053276512232
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7996141452789112437}
+  m_GameObject: {fileID: 1008460132550891683}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.4387097, y: 0.1625042, z: -0.043947168}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 78.47, y: 15.2, z: 0}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7630183257061754497
+--- !u!212 &1326811574501771574
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7996141452789112437}
+  m_GameObject: {fileID: 1008460132550891683}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -79,49 +79,27 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 273877465
-  m_SortingLayer: 4
+  m_SortingLayerID: -1959552793
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 2c961366528f28c458c619797d0bbb2f, type: 3}
+  m_Sprite: {fileID: -8187355101989356663, guid: 27a107940057e8743a507269b18a691a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.2, y: 0.66}
+  m_Size: {x: 0.42, y: 0.42}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &2082969862835872240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7996141452789112437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0f4c87368e59f569abb6fc07a79a31c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 5
-  damageLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  knockbackForce: 6
-  speed: 10
-  resetTime: 2.5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 512
---- !u!61 &4651510667890611847
+--- !u!61 &8347909378281939045
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7996141452789112437}
+  m_GameObject: {fileID: 1008460132550891683}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -149,15 +127,28 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.010646135, y: -0.06121341}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.2, y: 0.66}
-    newSize: {x: 1.2, y: 0.66}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.42, y: 0.42}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.2, y: 0.66}
+  m_Size: {x: 0.39514464, y: 0.5175732}
   m_EdgeRadius: 0
+--- !u!114 &7588732231590437988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008460132550891683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8088e3d28bcba5548a0cd3467da533d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WinZone
+  levelName: Level1

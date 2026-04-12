@@ -28,10 +28,7 @@ public class SoundManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            // Event aboneliği
-            SceneManager.sceneLoaded += OnSceneLoaded;
-
+            
             // Ayarları yükle (Doğru anahtarlarla)
             LoadAllSettings();
         }

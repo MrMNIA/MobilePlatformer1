@@ -9,12 +9,8 @@ public class Coin : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            // Zorluk çarpanını al
-            float multiplier = DifficultyManager.Instance.GetCoinMultiplier();
-            int finalValue = Mathf.RoundToInt(baseValue * multiplier);
-
             // Parayı ekle
-            MoneyManager.Instance.AddCoins(finalValue);
+            MoneyManager.Instance.AddCoins(baseValue);
             // Ses efektini çal
             SoundManager.Instance.PlaySound(coinPickupSound);
 

@@ -1,11 +1,10 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class WinZone : MonoBehaviour
 {
     private bool isWon = false;
-    [Header("Level Settings")]
-    public string levelName = "Level1"; // Her level için farklı isim ver (örn: Level2, Level3)
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && !isWon)
@@ -22,11 +21,11 @@ public class WinZone : MonoBehaviour
         int baseAmount = MoneyManager.Instance.currentLevelCoins;
 
         // ÖNEMLİ: Daha parayı finalize etmeden "ilk bitirme mi?" kontrolünü yapıyoruz
-        string levelKey = levelName + "_Completed";
+        string levelKey = "Level" + SceneManager.GetActiveScene().buildIndex + "_Completed";
         bool isFirstClear = PlayerPrefs.GetInt(levelKey, 0) == 0;
 
         // 1. Muhasebe işlemini yap (Veritabanına/Prefs'e kaydeder)
-        MoneyManager.Instance.FinalizeLevelCoins(levelName);
+        MoneyManager.Instance.FinalizeLevelCoins(SceneManager.GetActiveScene().name);
 
         // 2. UI Ekranını aç (isFirstClear bilgisini de gönderiyoruz)
         if (UIManager.instance != null)

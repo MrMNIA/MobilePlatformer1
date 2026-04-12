@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject gameOverPanel;
     public GameObject winPanel;
+    public GameObject tutorialPanel; // Tutorial panelleri için dizi
+    public GameObject closeTutorialButton; // Tutorial kapatma butonu
 
     [Header("HUD Elements")]
     public GameObject pauseButton;
@@ -36,6 +38,14 @@ public class UIManager : MonoBehaviour
         pausePanel.SetActive(false);
         gameOverPanel.SetActive(false);
         winPanel.SetActive(false);
+
+        tutorialPanel.SetActive(false);
+        for (int i = 0; i < tutorialPanel.transform.childCount; i++)
+        {
+            tutorialPanel.transform.GetChild(i).gameObject.SetActive(false); // Tüm tutorial panellerini gizle
+        }
+        closeTutorialButton.SetActive(false);
+
         UpdateCurrentLevelCoinUI(0);
     }
 
@@ -61,6 +71,23 @@ public class UIManager : MonoBehaviour
         pauseButton.SetActive(true); // Pause butonu geri gelsin
     }
 
+    public void ShowTutorial(int tutorialNumber)
+    {
+        tutorialPanel.SetActive(true);
+        foreach (Transform child in tutorialPanel.transform)
+        {
+            child.gameObject.SetActive(false); // Tüm tutorial panellerini gizle
+        }
+        tutorialPanel.transform.GetChild(tutorialNumber).gameObject.SetActive(true);
+        closeTutorialButton.SetActive(true);
+    }
+    public void CloseTutorial()
+    {
+        SoundManager.Instance.PlaybuttonClickSound();
+        tutorialPanel.SetActive(false);
+        closeTutorialButton.SetActive(false); // Kapatma butonunu gizle
+
+    }
     public void RestartGame()
     {
         // ÇOK ÖNEMLİ: Zamanı tekrar akıtmalısın! 
