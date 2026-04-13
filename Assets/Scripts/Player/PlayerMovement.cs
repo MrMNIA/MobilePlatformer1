@@ -145,16 +145,18 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!playerEnergy.tryUseEnergy(10f)) return;
 
+        float currentEnergyPercentage = playerEnergy.GetEnergyPercentage();
+
         if (onWall() && !onGround())
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, 0);
-            body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX * 50, wallJumpY * 50));
+            body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX * 50, (wallJumpY + (2 * currentEnergyPercentage)) * 50));
             ExecuteJumpEffects();
         }
         else if (onGround())
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, 0);
-            body.AddForce(new Vector2(0, jumpPower * 50));
+            body.AddForce(new Vector2(0, (jumpPower + (3 * currentEnergyPercentage)) * 50));
             ExecuteJumpEffects();
         }
         jumpTimer = jumpCooldown;

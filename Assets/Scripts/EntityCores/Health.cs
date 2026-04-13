@@ -48,7 +48,6 @@ public class Health : MonoBehaviour
 
         if (gameObject.CompareTag("Player"))
         {
-            maximumHealth += PlayerPrefs.GetInt("HealthLevel", 0) * 10; // Mağazadan alınan sağlık geliştirmesi etkisi
             currentHealth = maximumHealth;
         }
     }
@@ -69,10 +68,17 @@ public class Health : MonoBehaviour
 
         if (currentHealth > 0)
         {
-            anim.SetTrigger("hurt");
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Player_MeleeAttack"))
+            {
+                anim.SetTrigger("hurt");
+            }
+            HurtAffect();
             SoundManager.Instance.PlaySound(hurtSound);
             Knockback(attackerPosition, knockbackForce);
-            StartCoroutine(Immunity(immunityTime));
+            if (immunityTime > 0)
+            {
+                StartCoroutine(Immunity(immunityTime));
+            }
         }
         else
         {
@@ -162,6 +168,13 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maximumHealth);
     }
 
+    private IEnumerator HurtAffect()
+    {
+        Color defaultColor = spriteRenderer.color;
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = defaultColor;
+    }
     private IEnumerator Immunity(float immunityTime)
     {
         if (immunityTime <= 0) yield break;
@@ -171,9 +184,6 @@ public class Health : MonoBehaviour
         Color flashColor = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0.35f);
         float blinkDuration = 0.25f;
         float colorTimer = 0f;
-
-        spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
 
         while (colorTimer < immunityTime - 0.1f)
         {

@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
     public Text finalCoinText;
     public Text addText; // Seviye sonu kazançlarını göstermek için (isteğe bağlı)
 
+    [SerializeField] private MovementJoystick movementJoystick;
+    [SerializeField] private AttackJoystick attackJoystick;
+
     [Header("Audio")]
     public AudioClip gameOverSound;
     public AudioClip winSound;
@@ -80,44 +83,65 @@ public class UIManager : MonoBehaviour
         }
         tutorialPanel.transform.GetChild(tutorialNumber).gameObject.SetActive(true);
         closeTutorialButton.SetActive(true);
+
+        attackJoystick.ChangeAbleToAttack(); // Saldırı joystickini devre dışı bırak
+        movementJoystick.ChangeAbleToMove(); // Hareket joystickini devre dışı bırak
     }
     public void CloseTutorial()
     {
         SoundManager.Instance.PlaybuttonClickSound();
         tutorialPanel.SetActive(false);
         closeTutorialButton.SetActive(false); // Kapatma butonunu gizle
-
+        Time.timeScale = 1f; // Tutorial kapatıldığında zamanı tekrar akıt
+        attackJoystick.ChangeAbleToAttack(); // Saldırı joystickini tekrar aktif yap
+        movementJoystick.ChangeAbleToMove(); // Hareket joystickini tekrar aktif yap
     }
+    // RESTART
     public void RestartGame()
     {
-        // ÇOK ÖNEMLİ: Zamanı tekrar akıtmalısın! 
-        // Yoksa sahne yüklendiğinde oyun 0 hızında (donuk) başlar.
-        Time.timeScale = 1f;
+        StartCoroutine(RestartRoutine());
+    }
 
-        // Mevcut aktif sahnenin adını veya index'ini alıp tekrar yüklüyoruz
+    private IEnumerator RestartRoutine()
+    {
+        Time.timeScale = 1f; // Sahne yüklenmeden zamanı açmalıyız
+        yield return StartCoroutine(SceneFader.Instance.ManualFadeOut());
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    // NEXT LEVEL
     public void LoadNextLevel()
     {
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
 
-        // Eğer bir sonraki sahne build settings'de varsa yükle
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
-            Time.timeScale = 1f; // Zamanı normalleştir
-            SceneManager.LoadScene(nextSceneIndex);
+            StartCoroutine(LoadLevelRoutine(nextSceneIndex));
         }
         else
         {
-            // Eğer sonraki seviye yoksa ana menüye dön
             GotoMainMenu();
         }
     }
 
+    private IEnumerator LoadLevelRoutine(int index)
+    {
+        Time.timeScale = 1f;
+        yield return StartCoroutine(SceneFader.Instance.ManualFadeOut());
+        SceneManager.LoadScene(index);
+    }
+
+    // MAIN MENU
     public void GotoMainMenu()
     {
-        Time.timeScale = 1f; // Ana menüye giderken zamanı normalleştir
-        SceneManager.LoadScene(0); // Ana menü sahnesinin adını kullanarak yükle
+        StartCoroutine(MainMenuRoutine());
+    }
+
+    private IEnumerator MainMenuRoutine()
+    {
+        Time.timeScale = 1f;
+        yield return StartCoroutine(SceneFader.Instance.ManualFadeOut());
+        SceneManager.LoadScene(0);
     }
 
 

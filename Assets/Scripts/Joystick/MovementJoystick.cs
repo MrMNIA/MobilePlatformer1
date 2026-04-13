@@ -1,41 +1,43 @@
 using UnityEngine;
-using UnityEngine.EventSystems; //dokunma olaylarýný kullanabilmek için gereken kütüphane
+using UnityEngine.EventSystems; //dokunma olaylarï¿½nï¿½ kullanabilmek iï¿½in gereken kï¿½tï¿½phane
 
-public class MovementJoystick : MonoBehaviour,IDragHandler, IPointerUpHandler, IPointerDownHandler//ekrana dokunulurken ve ekran býrakýldýðýnda durumlarý için
-                                                                               //gerekli metotlarý kullanabilmek için eklediðimiz interfaceler
+public class MovementJoystick : MonoBehaviour,IDragHandler, IPointerUpHandler, IPointerDownHandler//ekrana dokunulurken ve ekran bï¿½rakï¿½ldï¿½ï¿½ï¿½nda durumlarï¿½ iï¿½in
+                                                                               //gerekli metotlarï¿½ kullanabilmek iï¿½in eklediï¿½imiz interfaceler
 {
-    [SerializeField] private float maxRange = 75f; //joystickin uzaklaþabileceði max mesafe
+    [SerializeField] private float maxRange = 75f; //joystickin uzaklaï¿½abileceï¿½i max mesafe
 
     private RectTransform joystickThumb;
-    private RectTransform joystickBackground; //background ve thumbýn UI konum bilgileri
+    private RectTransform joystickBackground; //background ve thumbï¿½n UI konum bilgileri
+    private bool ableToMove = true; //joystickin hareket edip edemeyeceï¿½ini kontrol eden deï¿½iï¿½ken
     public float Horizontal { get; private set; }
-    public float Vertical { get; private set; } //joystickten gelen yatay ve dikey verileri bu deðerlerden okuyacaðýz
+    public float Vertical { get; private set; } //joystickten gelen yatay ve dikey verileri bu deï¿½erlerden okuyacaï¿½ï¿½z
 
-    private void Awake() //script çaðrýldýðý anda ilk çalýþan metottur. burada referans atamalarý yapýlýr.
+    private void Awake() //script ï¿½aï¿½rï¿½ldï¿½ï¿½ï¿½ anda ilk ï¿½alï¿½ï¿½an metottur. burada referans atamalarï¿½ yapï¿½lï¿½r.
     {
-        joystickBackground = GetComponent<RectTransform>(); //atandýðý objenin ReckTransform bileþenini bu nesneye ata
-        joystickThumb = transform.GetChild(0).GetComponent<RectTransform>(); //transform.GetChild(0); bu objenin ÝLK CHÝLD'INDAN okur (yani thumb)
-        ResetValues(); //x,y ve thumb konumunu sýfýrlayan yardýmcý metotumuz. aþaðýda tanýmlayacaðýz
+        joystickBackground = GetComponent<RectTransform>(); //atandï¿½ï¿½ï¿½ objenin ReckTransform bileï¿½enini bu nesneye ata
+        joystickThumb = transform.GetChild(0).GetComponent<RectTransform>(); //transform.GetChild(0); bu objenin ï¿½LK CHï¿½LD'INDAN okur (yani thumb)
+        ResetValues(); //x,y ve thumb konumunu sï¿½fï¿½rlayan yardï¿½mcï¿½ metotumuz. aï¿½aï¿½ï¿½da tanï¿½mlayacaï¿½ï¿½z
     }
-    public void OnDrag(PointerEventData eventData) //obje üzerinde dokunulan konumun bilgisi, PointerEventData ile eventData'ya akatrýlýr
+    public void OnDrag(PointerEventData eventData) //obje ï¿½zerinde dokunulan konumun bilgisi, PointerEventData ile eventData'ya akatrï¿½lï¿½r
     {
-        Vector2 position; //dokunulan konumun joysticke göre yönünü ve boyunu belirlemek için kullandýðýmýz vektör
+        if (!ableToMove) { return; } //hareket engellendiyse dokunma olaylarï¿½nï¿½ iï¿½leme, sadece joystickin sï¿½fï¿½rlanmasï¿½nï¿½ yap
+        Vector2 position; //dokunulan konumun joysticke gï¿½re yï¿½nï¿½nï¿½ ve boyunu belirlemek iï¿½in kullandï¿½ï¿½ï¿½mï¿½z vektï¿½r
 
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle( //kontrol ve dokunulan konum için geri dönüþ aldýðýmýz metot
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle( //kontrol ve dokunulan konum iï¿½in geri dï¿½nï¿½ï¿½ aldï¿½ï¿½ï¿½mï¿½z metot
             joystickBackground,
             eventData.position,
             eventData.pressEventCamera,
             out position))
         {
-            position = position / (joystickBackground.sizeDelta * 0.5f); //gelen deðeri [-1,1] aralýðýna indirmek için joystick yarýçapýna bölüyoruz
+            position = position / (joystickBackground.sizeDelta * 0.5f); //gelen deï¿½eri [-1,1] aralï¿½ï¿½ï¿½na indirmek iï¿½in joystick yarï¿½ï¿½apï¿½na bï¿½lï¿½yoruz
 
-            if (position.magnitude > 1f) //vektörün boyutu 1'den büyükse (þeklimizin sýnýrýný aþýyorsa)
+            if (position.magnitude > 1f) //vektï¿½rï¿½n boyutu 1'den bï¿½yï¿½kse (ï¿½eklimizin sï¿½nï¿½rï¿½nï¿½ aï¿½ï¿½yorsa)
             {
-                position = position.normalized; //vektörün boyutunu 1'e indirmek için normalized olarak ayarlýyoruz
+                position = position.normalized; //vektï¿½rï¿½n boyutunu 1'e indirmek iï¿½in normalized olarak ayarlï¿½yoruz
             }
             
-            joystickThumb.anchoredPosition = position * maxRange; //thumbý konuma ata
-            Horizontal = position.x; //vektörün x deðerini al
+            joystickThumb.anchoredPosition = position * maxRange; //thumbï¿½ konuma ata
+            Horizontal = position.x; //vektï¿½rï¿½n x deï¿½erini al
             Vertical = position.y;
         }
     }
@@ -55,5 +57,14 @@ public class MovementJoystick : MonoBehaviour,IDragHandler, IPointerUpHandler, I
         joystickThumb.anchoredPosition = Vector2.zero;
         Horizontal = 0f;
         Vertical = 0f;
+    }
+
+    public void ChangeAbleToMove()
+    {
+        ableToMove = !ableToMove;
+        if (!ableToMove)
+        {
+            ResetValues(); //hareket engellendiinde joystick de sfrlanr
+        }
     }
 }

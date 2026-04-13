@@ -6,14 +6,15 @@ using System.Collections;
 
 public class AttackJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-    // Piksel hesabý yerine 0 ile 1 arasý oran kullanmak daha saðlýklýdýr.
-    // 0.2f = Joystick'in %20'si kadar çekilmiþse saldýr.
+    // Piksel hesabï¿½ yerine 0 ile 1 arasï¿½ oran kullanmak daha saï¿½lï¿½klï¿½dï¿½r.
+    // 0.2f = Joystick'in %20'si kadar ï¿½ekilmiï¿½se saldï¿½r.
     [SerializeField] private float fireThreshold = 0.2f;
 
     private RectTransform joystickThumb;
     private RectTransform joystickBackground;
     [SerializeField] private Image cooldownImage;
 
+    private bool ableToAttack = true;
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
 
@@ -28,6 +29,7 @@ public class AttackJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!ableToAttack) { return; }
         Vector2 position;
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
             joystickBackground,
@@ -38,13 +40,13 @@ public class AttackJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
             // Pozisyonu joystick boyutuna oranla
             position = position / (joystickBackground.sizeDelta * 0.5f);
 
-            // Çemberin dýþýna çýkýyorsa 1'e sabitle (Normalize)
+            // ï¿½emberin dï¿½ï¿½ï¿½na ï¿½ï¿½kï¿½yorsa 1'e sabitle (Normalize)
             if (position.magnitude > 1f)
             {
                 position = position.normalized;
             }
 
-            // Thumb'ý hareket ettir ve deðerleri ata
+            // Thumb'ï¿½ hareket ettir ve deï¿½erleri ata
             joystickThumb.anchoredPosition = position * (joystickBackground.sizeDelta * 0.5f);
             Horizontal = position.x;
             Vertical = position.y;
@@ -53,21 +55,21 @@ public class AttackJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // ÖNEMLÝ DEÐÝÞÝKLÝK:
-        // Dokunduðun an, sanki sürüklemiþsin gibi OnDrag'ý tetikliyoruz.
-        // Böylece top direkt parmaðýnýn altýna geliyor ve deðerler doluyor.
+        // ï¿½NEMLï¿½ DEï¿½ï¿½ï¿½ï¿½KLï¿½K:
+        // Dokunduï¿½un an, sanki sï¿½rï¿½klemiï¿½sin gibi OnDrag'ï¿½ tetikliyoruz.
+        // Bï¿½ylece top direkt parmaï¿½ï¿½nï¿½n altï¿½na geliyor ve deï¿½erler doluyor.
         OnDrag(eventData);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        // ESKÝ MANTIK: (Býrakýlan Yer - Baþlanan Yer) -> Kenara basýnca 0 çýkýyordu.
-        // YENÝ MANTIK: Direkt (Horizontal, Vertical) büyüklüðüne bakýyoruz.
-        // Çünkü bu deðerler zaten Merkeze olan uzaklýðý veriyor.
+        // ESKï¿½ MANTIK: (Bï¿½rakï¿½lan Yer - Baï¿½lanan Yer) -> Kenara basï¿½nca 0 ï¿½ï¿½kï¿½yordu.
+        // YENï¿½ MANTIK: Direkt (Horizontal, Vertical) bï¿½yï¿½klï¿½ï¿½ï¿½ne bakï¿½yoruz.
+        // ï¿½ï¿½nkï¿½ bu deï¿½erler zaten Merkeze olan uzaklï¿½ï¿½ï¿½ veriyor.
 
         Vector2 inputVector = new Vector2(Horizontal, Vertical);
 
-        // Eðer joystick merkezinden yeterince uzaksa (Örn: %20 çekilmiþse)
+        // Eï¿½er joystick merkezinden yeterince uzaksa (ï¿½rn: %20 ï¿½ekilmiï¿½se)
         if (inputVector.magnitude >= fireThreshold)
         {
             if (OnJoystickReleased != null)
@@ -86,7 +88,7 @@ public class AttackJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
         Vertical = 0f;
     }
 
-    // Cooldown kodlarýn aynen kalabilir...
+    // Cooldown kodlarï¿½n aynen kalabilir...
     public void CooldownCounter(float value)
     {
         StartCoroutine(UpdateCooldownImage(value));
@@ -103,5 +105,14 @@ public class AttackJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IP
             yield return null;
         }
         cooldownImage.fillAmount = 0f;
+    }
+
+    public void ChangeAbleToAttack()
+    {
+        ableToAttack = !ableToAttack;
+        if (!ableToAttack)
+        {
+            ResetValues(); //saldï¿½rï¿½ engellendiinde joystick de sfrlanr
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
 using System;
 
 public class PlayerMelee : MonoBehaviour
@@ -7,7 +6,7 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] public AttackJoystick attackJoystick;
     [SerializeField] public MovementJoystick movementJoystick;
     [SerializeField] private Animator anim;
-    private Transform attackCenter;
+    [SerializeField] private Transform attackCenter;
     public LayerMask enemyLayer;
     [SerializeField] private BoxCollider2D attackCollider;
     [SerializeField] private SpriteRenderer attackRange;
@@ -21,29 +20,19 @@ public class PlayerMelee : MonoBehaviour
     public bool isAttacking = false;
     private Vector2 lastValidDirection = Vector2.right;
 
-    private void Awake()
-    {
-        attackCenter = transform.GetChild(0);
-
-        attackCollider = attackCenter.GetChild(0).GetComponent<BoxCollider2D>();
-        attackRange = attackCenter.GetChild(0).GetComponent<SpriteRenderer>();
-
-        attackCollider.enabled = false;
-        attackRange.enabled = false;
-
-        anim = GetComponent<Animator>();
-        attackTimer = 0;
-
-    }
     private void Start() // Awake yerine Start kullanın, daha güvenlidir.
     {
-        damage += PlayerPrefs.GetInt("AttackLevel", 0) * 4; // Mağazadan alınan hasar geliştirmesi etkisi
+        damage += PlayerPrefs.GetInt("AttackLevel", 0) * 5; // Mağazadan alınan hasar geliştirmesi etkisi
 
         // 1. Olayı dinlemeye başla (Abone olma)
         if (attackJoystick != null)
         {
             attackJoystick.OnJoystickReleased += meleeAttack;
         }
+
+        attackCollider.enabled = false;
+        attackRange.enabled = false;
+        attackTimer = 0;
     }
     private void Update()
     {
@@ -92,13 +81,13 @@ public class PlayerMelee : MonoBehaviour
 
     private void meleeAttack()
     {
-        if (attackTimer <= 0)
+        if (attackTimer <= 0 && !isAttacking)
         {
-            attackTimer = attackCooldown;
             isAttacking = true;
-            FlipCharacterToDirection(lastValidDirection.x);
+            attackTimer = attackCooldown;
+            anim.SetBool("isAttacking", true);
             playerMove.isRotationOverridden = true;
-
+            FlipCharacterToDirection(lastValidDirection.x);
 
             SetDirection(lastValidDirection);
 
@@ -121,7 +110,7 @@ public class PlayerMelee : MonoBehaviour
         attackCollider.enabled = true;
         attackRange.enabled = true;
         Vector2 point = attackCollider.bounds.center;
-        Vector2 size = attackCollider.size; // Kutunun boyutları
+        Vector2 size = attackCollider.bounds.size; // Kutunun boyutları
         float angle = attackCenter.eulerAngles.z; // O anki dönüş açımız
 
         // 2. O kutunun içindeki düşmanları bul (OverlapBox)
@@ -144,8 +133,21 @@ public class PlayerMelee : MonoBehaviour
         attackCollider.enabled = false;
         attackRange.enabled = false;
         playerMove.isRotationOverridden = false;
+        anim.SetBool("isAttacking", false);
         isAttacking = false;
     }
 
+    private void OnDrawGizmos()
+    {
+        if (attackCollider == null) return;
+
+        // Gizmos Matrix'ini collider'ın transformuyla eşle
+        Gizmos.color = Color.red;
+        Matrix4x4 rotationMatrix = attackCollider.transform.localToWorldMatrix;
+        Gizmos.matrix = rotationMatrix;
+
+        // Offset'i ve Size'ı kullanarak çiz
+        Gizmos.DrawWireCube(attackCollider.offset, attackCollider.size);
+    }
 
 }

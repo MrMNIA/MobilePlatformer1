@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MenuManager : MonoBehaviour
 {
@@ -15,12 +16,18 @@ public class MenuManager : MonoBehaviour
     public GameObject[] difficultyButtons = new GameObject[3];// Zorluk butonları
     public Text difficultyInfoText; // Zorluk seçildiğinde bilgi göstermek için
 
+    [Header("Audio UI References")]
+    public Text menuMusicText; // Inspector'dan o sahnedeki Text'i sürükle
+    public Text menuSfxText;   // Inspector'dan o sahnedeki Text'i sürükle
+
     private int selectedLevelName;
 
     void Start()
     {
+        Application.targetFrameRate = 60;
         ShowMainMenu();
         SelectDifficulty((int)DifficultyManager.Instance.currentDifficulty); // Mevcut zorluğu göster
+        StartCoroutine(SceneFader.Instance.ManualFadeIn());
     }
 
     public void ShowMainMenu()
@@ -35,10 +42,25 @@ public class MenuManager : MonoBehaviour
     public void ShowOptions()
     {
         mainMenuPanel.SetActive(false);
-        SoundManager.Instance.UpdateDisplay();
         optionsPanel.SetActive(true);
+        SoundManager.Instance.UpdateDisplay(menuMusicText, menuSfxText);
+
         SoundManager.Instance.PlaybuttonClickSound();
         shopPanel.SetActive(false); // Mağaza panelini kapat
+    }
+
+    public void ChangeMusicVolume(int amount)
+    {
+        // Önce sesi değiştir
+        SoundManager.Instance.AdjustMusic(amount);
+        // Sonra bu sahnedeki taze metin kutularını güncelle
+        SoundManager.Instance.UpdateDisplay(menuMusicText, menuSfxText);
+    }
+
+    public void ChangeSFXVolume(int amount)
+    {
+        SoundManager.Instance.AdjustSFX(amount);
+        SoundManager.Instance.UpdateDisplay(menuMusicText, menuSfxText);
     }
 
     public void OpenLevelSelect()
@@ -109,12 +131,6 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
-    {
-        SoundManager.Instance.PlaybuttonClickSound();
-        SceneManager.LoadScene(selectedLevelName);
-    }
-
     public void OpenShop()
     {
         mainMenuPanel.SetActive(false);
@@ -125,9 +141,36 @@ public class MenuManager : MonoBehaviour
         SoundManager.Instance.PlaybuttonClickSound();
     }
 
+    public void StartGame()
+    {
+        SoundManager.Instance.PlaybuttonClickSound();
+        StartCoroutine(StartGameRoutine());
+    }
+
+    private IEnumerator StartGameRoutine()
+    {
+        // Kararmayı bekle
+        yield return StartCoroutine(SceneFader.Instance.ManualFadeOut());
+        // Sahneyi yükle
+        SceneManager.LoadScene(selectedLevelName);
+    }
+
+    // OYUN KAPATILDIĞINDA FADE OUT
     public void QuitGame()
     {
         SoundManager.Instance.PlaybuttonClickSound();
+        StartCoroutine(QuitGameRoutine());
+    }
+
+    private IEnumerator QuitGameRoutine()
+    {
+        // Kararmayı bekle
+        yield return StartCoroutine(SceneFader.Instance.ManualFadeOut());
+
+        Debug.Log("Oyun kapatılıyor...");
         Application.Quit();
     }
+
+    
+
 }

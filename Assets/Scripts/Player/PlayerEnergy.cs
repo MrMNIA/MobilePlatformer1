@@ -42,4 +42,9 @@ public class PlayerEnergy : MonoBehaviour
             currentEnergy = Mathf.Min(currentEnergy, maxEnergy); // Enerjinin maksimumu aşmamasını sağla
         }
     }
+
+    public float GetEnergyPercentage()
+    {
+        return currentEnergy / maxEnergy; // Enerjinin yüzde olarak değeri
+    }
 }

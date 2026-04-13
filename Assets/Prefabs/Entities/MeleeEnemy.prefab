@@ -234,12 +234,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1536
-  detectionRange: {x: 5, y: 2}
+  detectionRange: {x: 9, y: 1.75}
   stopDistanceX: 1.5
-  stopDistanceY: 2
+  stopDistanceY: 1.75
   attackRangeX: 1.5
-  attackRangeY: 1
-  damage: 5
+  attackRangeY: 1.5
+  damage: 10
   attackCooldown: 1
   attackSize: {x: 2, y: 1.5}
   distance: 1.5

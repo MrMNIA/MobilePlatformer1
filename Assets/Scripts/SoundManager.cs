@@ -115,18 +115,19 @@ public class SoundManager : MonoBehaviour
         PlayerPrefs.SetInt(prefKey, current);
         source.volume = current / 100f; // Ses seviyesini 0.0 - 1.0 arasına çeker
 
-        UpdateDisplay(); // Opsiyonel: Ayarları ekranda güncellemek için çağırabilirsiniz
+        UpdateDisplay(musicVolumeText, sfxVolumeText); // Opsiyonel: Ayarları ekranda güncellemek için çağırabilirsiniz
 
         PlaybuttonClickSound();
     }
 
-    public void UpdateDisplay()
+    public void UpdateDisplay(Text musicText, Text sfxText)
     {
-        if (musicVolumeText != null)
-            musicVolumeText.text = PlayerPrefs.GetInt("MusicVol", 100).ToString();
+        // Artık referansları dışarıdan (MenuManager'dan) alıyoruz
+        if (musicText != null)
+            musicText.text = PlayerPrefs.GetInt("MusicVol", 100).ToString();
 
-        if (sfxVolumeText != null)
-            sfxVolumeText.text = PlayerPrefs.GetInt("SFXVol", 100).ToString();
+        if (sfxText != null)
+            sfxText.text = PlayerPrefs.GetInt("SFXVol", 100).ToString();
     }
     private void LoadAllSettings()
     {

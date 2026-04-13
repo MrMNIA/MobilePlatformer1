@@ -66,6 +66,7 @@ public class EnemyAI : MonoBehaviour
         {
             case State.Patrol:
                 HandlePatrol(isBlocked);
+                Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true); // Kendi katmanıyla çarpışmayı kapat
                 if (PlayerInSight) { state = State.Chase; }
                 break;
             case State.Idle:
@@ -74,10 +75,11 @@ public class EnemyAI : MonoBehaviour
                 break;
             case State.Chase:
                 float distanceX = Mathf.Abs(transform.position.x - player.position.x);
+                Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, false); // Kendi katmanıyla çarpışmayı aç
                 HandleChase(distanceX);
                 if (!PlayerInSight && !isAggressive)
                 {
-                    state = State.Patrol;
+                    state = State.Idle;
                 }
                 break;
         }
