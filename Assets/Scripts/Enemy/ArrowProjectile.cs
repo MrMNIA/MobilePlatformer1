@@ -42,10 +42,10 @@ public class ArrowProjectile : Dealingdamage
         }
     }
 
-    protected override void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnTriggerStay2D(Collider2D collision)
     {
         // 1. Dealingdamage içindeki hasar verme mantığını çalıştır (damageLayer kontrolü oradadır)
-        base.OnTriggerEnter2D(collision);
+        base.OnTriggerStay2D(collision);
 
         // 2. LayerMask kontrolleri
         // Çarptığımız objenin layer'ı damageLayer (Player) veya groundLayer içinde mi?

@@ -35,6 +35,7 @@ public class EnemyAI : MonoBehaviour
     protected State state;
     protected bool isAggressive = false;
 
+    public bool canFallOffWhileChasing = false; // Müfettişten ayarlanabilir
     protected virtual void Awake()
     {
         rib = GetComponent<Rigidbody2D>();
@@ -56,7 +57,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        bool isBlocked = CheckIsBlocked();
+        bool isBlocked = CheckIsBlocked(false);
         // Chase durumundaysak algılama mesafesini %50 artır (Düşman daha zor pes eder)
         float detectionMultiplier = (state == State.Chase) ? 1.5f : 1f;
 
@@ -132,7 +133,7 @@ public class EnemyAI : MonoBehaviour
         bool shouldStop = (distanceX <= stopDistanceX) && (distanceY <= stopDistanceY);
 
         // 3. Önüm kapalı mı?
-        bool isBlockedAhead = CheckIsBlocked();
+        bool isBlockedAhead = CheckIsBlocked(canFallOffWhileChasing);
 
         if (!shouldStop && !isBlockedAhead)
         {
@@ -154,8 +155,9 @@ public class EnemyAI : MonoBehaviour
             Attack();
         }
     }
-    protected bool CheckIsBlocked()
+    protected bool CheckIsBlocked(bool ignoreLedges)
     {
+        // 1. Önce rayOrigin için gerekli hesaplamaları yapıyoruz (Bunlar silinmiş olabilir)
         float OffsetX = boxCollider.bounds.extents.x + 0.1f;
         if (!movingRight) OffsetX *= -1;
 
@@ -164,9 +166,17 @@ public class EnemyAI : MonoBehaviour
             boxCollider.bounds.center.y - boxCollider.bounds.extents.y
         );
 
-        RaycastHit2D groundInfo = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, groundLayer);
+        // 2. Duvar kontrolü (Her durumda lazım)
         RaycastHit2D wallInfo = Physics2D.Raycast(boxCollider.bounds.center, new Vector2(transform.localScale.x, 0), boxCollider.bounds.extents.x + 0.2f, groundLayer);
 
+        // 3. Eğer uçurumlardan düşebiliyorsak (ignoreLedges == true), sadece duvara bak
+        if (ignoreLedges)
+        {
+            return wallInfo.collider != null;
+        }
+
+        // 4. Eğer düşmememiz gerekiyorsa uçurumu (groundInfo) kontrol et
+        RaycastHit2D groundInfo = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, groundLayer);
         return (groundInfo.collider == false || wallInfo.collider == true);
     }
 

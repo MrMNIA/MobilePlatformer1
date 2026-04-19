@@ -16,22 +16,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallJumpX;
     [SerializeField] private float wallJumpY;
 
+    [Header("Coyote Time")]
+    [SerializeField] private float coyoteTime = 0.15f; // Havada ne kadar süre zıplama hakkı tanınsın?
+    private float coyoteTimeCounter;
+
     [Header("Joysticks & References")]
-    [SerializeField] private MovementJoystick movementJoystick;
-    [SerializeField] private AttackJoystick attackJoystick;
+    [SerializeField] private MovementJoystick move;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask oneWayLayer;
 
-    private Coroutine disableCollisionCoroutine;
+    private Coroutine crouchCoroutine;
     private BoxCollider2D boxCollider;
     private Rigidbody2D body;
     private Animator anim;
-
-    private float horizontalInput;
-    private float verticalInput;
     private float currentAcceleration;
     private float jumpTimer;
     private bool isRunning;
+    private bool knockbacked = false;
 
     private void Awake()
     {
@@ -43,27 +44,29 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        horizontalInput = movementJoystick.Horizontal;
-        verticalInput = movementJoystick.Vertical;
-
         anim.SetBool("onGround", onGround());
         isRunning = (onGround() && Mathf.Abs(body.linearVelocity.x) >= 0.2f);
         anim.SetBool("isRunning", isRunning);
 
+        if (onGround())
+        {
+            coyoteTimeCounter = coyoteTime; // Yerdeyken sayacı tazele
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime; // Havadaysak süreyi azalt
+        }
+
         if (jumpTimer > 0f)
             jumpTimer -= Time.deltaTime;
 
-        if (verticalInput >= 0.6f && jumpTimer <= 0f)
+        if ((move.IsJumping || Input.GetKeyDown(KeyCode.Space)) && jumpTimer <= 0f) //joystick ya da space basıldığında
             Jump();
 
-        if (verticalInput <= -0.6f && onGround())
+        if (move.IsCrouching && onGround())
         {
-            // Eğer ayağımızın altındaki obje "OneWay" katmanındaysa düşmeyi başlat
-            if (IsOnOneWayPlatform())
-            {
-                if (disableCollisionCoroutine == null)
-                    disableCollisionCoroutine = StartCoroutine(DisableCollision());
-            }
+            if (crouchCoroutine == null)      
+                crouchCoroutine = StartCoroutine(DisablePlatform());
         }
 
         // Duvar sürtünmesi (Wall Slide)
@@ -73,74 +76,96 @@ public class PlayerMovement : MonoBehaviour
             body.gravityScale = 2.0f;
 
         // Karakter Yönü Çevirme
-        if (!isRotationOverridden && Mathf.Abs(horizontalInput) >= 0.2f)
+        if (!isRotationOverridden && move.Horizontal != 0)
         {
-            transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
+            transform.localScale = new Vector3(Mathf.Sign(move.Horizontal), 1, 1);
         }
     }
 
-    private void FixedUpdate()
+    private IEnumerator DisablePlatform()
     {
-        // Hareket ve Hız Kontrolü
-        if (Mathf.Abs(horizontalInput) >= 0.25f)
-        {
-            currentAcceleration = onGround() ? accelerationForce : (accelerationForce / 2);
-            body.AddForce(new Vector2(horizontalInput * currentAcceleration, 0));
-        }
-        else if (Mathf.Abs(body.linearVelocity.x) > 0.1f)
-        {
-            body.AddForce(new Vector2(-body.linearVelocity.x * 20f, 0));
-        }
-        else
-        {
-            body.linearVelocity = new Vector2(0, body.linearVelocity.y);
-        }
-
-        // Azami Hız Sınırı
-        if (Mathf.Abs(body.linearVelocity.x) > maxSpeed)
-        {
-            body.linearVelocity = new Vector2(Mathf.Sign(body.linearVelocity.x) * maxSpeed, body.linearVelocity.y);
-        }
-    }
-
-    // Yeni: Tek yönlü platformda olup olmadığımızı kontrol eden metod
-    // YENİ: Sadece OneWay platformda mı duruyoruz?
-    private bool IsOnOneWayPlatform()
-    {
-        Vector2 boxCenter = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
-        Vector2 boxSize = new Vector2(boxCollider.bounds.size.x * 0.8f, 0.1f);
-        RaycastHit2D hit = Physics2D.BoxCast(boxCenter, boxSize, 0, Vector2.down, 0.1f, oneWayLayer);
-        return hit.collider != null;
-    }
-
-    // YENİ: Çarpışmayı geçici olarak kapatan Coroutine
-    private IEnumerator DisableCollision()
-    {
-        Vector2 boxCenter = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
-        Vector2 boxSize = new Vector2(boxCollider.bounds.size.x * 0.8f, 0.1f);
-
-        // Tilemap üzerindeki collider'ı buluyoruz
-        RaycastHit2D hit = Physics2D.BoxCast(boxCenter, boxSize, 0, Vector2.down, 0.1f, oneWayLayer);
+        // 1. Karakterin tam altındaki platformu bulalım
+        // (BoxCast kullanarak karakterin bastığı objeyi alıyoruz)
+        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.5f, oneWayLayer);
 
         if (hit.collider != null)
         {
             Collider2D platformCollider = hit.collider;
 
-            // TilemapCollider2D veya CompositeCollider2D ile çarpışmayı keser
+            // 2. Karakterin collider'ı ile platformun collider'ı arasındaki çarpışmayı devre dışı bırak
             Physics2D.IgnoreCollision(boxCollider, platformCollider, true);
+            Debug.Log("Collision disabled for: " + platformCollider.name);
 
-            // 0.4 saniye platformun içinden geçmek için yeterlidir
-            yield return new WaitForSeconds(0.4f);
+            // 3. Karakteri aşağı doğru it (Yerçekimini tetiklemek için)
+            body.linearVelocity = new Vector2(body.linearVelocity.x, -3f);
 
-            if (platformCollider != null)
+            // 4. Kısa bir süre bekle (Platformun içine girmesi için)
+            yield return new WaitForSeconds(0.2f);
+
+            // 5. Karakter platformdan tamamen çıkana kadar bekle
+            // Burada hala IsInsidePlatform() kullanabilirsin
+            while (IsInsidePlatform())
             {
-                Physics2D.IgnoreCollision(boxCollider, platformCollider, false);
+                yield return null;
             }
+
+            // 6. Çarpışmayı tekrar aç
+            Physics2D.IgnoreCollision(boxCollider, platformCollider, false);
+            Debug.Log("Collision re-enabled.");
         }
 
-        disableCollisionCoroutine = null;
+        crouchCoroutine = null;
+    }
+    private bool IsInsidePlatform()
+    {
+        return Physics2D.OverlapBox(boxCollider.bounds.center, boxCollider.bounds.size, 0, oneWayLayer);
+    }
+    private void FixedUpdate()
+    {
+        if(knockbacked) return;
+        // 1. Hedef Hızı Belirle: Tuşa basılıyorsa maxSpeed, basılmıyorsa 0.
+        float targetSpeed = move.Horizontal * maxSpeed;
+
+        // 2. İvme/Yavaşlama Hızını Belirle
+        float currentAccel;
+        
+        if (move.Horizontal != 0)
+        {
+            // Hareket halindeyken (Yerdeyken tam güç, havadayken yarım güç)
+            currentAccel = onGround() ? accelerationForce : (accelerationForce / 2f);
+        }
+        else
+        {
+            // Dururken (Sürtünme etkisi gibi düşün)
+            // Eğer yerdeysek hızlı dur (20f), havadaysak yavaş dur (2f)
+            currentAccel = onGround() ? 20f : 5f; 
+        }
+
+        // 3. Mevcut hızı, hedef hıza (targetSpeed) 'currentAccel' hızıyla yaklaştır
+        // MoveTowards asla hedefi aşmaz, bu yüzden "tampon kuvvet" gibi ters itme yapmaz.
+        float newX = Mathf.MoveTowards(body.linearVelocity.x, targetSpeed, currentAccel * Time.fixedDeltaTime);
+
+        // 4. Yeni hızı uygula (Y eksenindeki hızı/yerçekimini koruyoruz)
+        body.linearVelocity = new Vector2(newX, body.linearVelocity.y);
     }
 
+    public void SpeedBoost(float duration)
+    {
+        maxSpeed *= 1.5f; // Örneğin, hızı %50 artırabilirsiniz
+        Invoke(nameof(ResetSpeed), duration);
+    }
+
+    private void ResetSpeed()
+    {
+        maxSpeed /= 1.5f;
+    }
+
+    public IEnumerator PlayerKnockbackRoutine(float duration)
+    {
+        knockbacked = true; // Hareket kodlarını kilitler
+        yield return new WaitForSeconds(duration);
+        knockbacked = false; // Hareket kodlarını tekrar açar
+    }
     private void Jump()
     {
         if (!playerEnergy.tryUseEnergy(10f)) return;
@@ -150,14 +175,17 @@ public class PlayerMovement : MonoBehaviour
         if (onWall() && !onGround())
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, 0);
-            body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX * 50, (wallJumpY + (2 * currentEnergyPercentage)) * 50));
+            body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX * 50, (wallJumpY + (4 * currentEnergyPercentage)) * 50));
             ExecuteJumpEffects();
         }
-        else if (onGround())
+        else if (coyoteTimeCounter > 0f) 
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, 0);
-            body.AddForce(new Vector2(0, (jumpPower + (3 * currentEnergyPercentage)) * 50));
+            body.AddForce(new Vector2(0, (jumpPower + (5 * currentEnergyPercentage)) * 50));
             ExecuteJumpEffects();
+            
+            // Zıpladıktan sonra tekrar havada zıplayamasın diye sayacı sıfırla
+            coyoteTimeCounter = 0f; 
         }
         jumpTimer = jumpCooldown;
     }
@@ -186,14 +214,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (boxCollider == null) boxCollider = GetComponent<BoxCollider2D>();
-        if (boxCollider == null) return;
+        if (boxCollider != null)
+        {
+            Vector2 boxCenter = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
+            Vector2 boxSize = new Vector2(boxCollider.bounds.size.x * 0.8f, 0.1f);
 
-        Gizmos.color = onGround() ? Color.green : Color.red;
-        Vector2 boxCenter = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
-        Vector2 boxSize = new Vector2(boxCollider.bounds.size.x * 0.8f, 0.1f);
-        Vector3 drawCenter = new Vector3(boxCenter.x, boxCenter.y - 0.05f, 0);
-
-        Gizmos.DrawWireCube(drawCenter, new Vector3(boxSize.x, boxSize.y, 0));
+            Gizmos.color = Color.red;
+            // BoxCast'in başladığı ve bittiği alanı simüle eder
+            Gizmos.DrawWireCube(boxCenter + Vector2.down * 0.05f, boxSize);
+        }
     }
 }

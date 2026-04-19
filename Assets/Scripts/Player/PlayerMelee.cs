@@ -3,80 +3,54 @@ using System;
 
 public class PlayerMelee : MonoBehaviour
 {
-    [SerializeField] public AttackJoystick attackJoystick;
-    [SerializeField] public MovementJoystick movementJoystick;
+    [Header("Components")]
+    [SerializeField] public AttackJoystick attackButton;
     [SerializeField] private Animator anim;
-    [SerializeField] private Transform attackCenter;
-    public LayerMask enemyLayer;
-    [SerializeField] private BoxCollider2D attackCollider;
-    [SerializeField] private SpriteRenderer attackRange;
     [SerializeField] private PlayerMovement playerMove;
+
+    [Header("Attack Area (The Rectangle)")]
+    [SerializeField] private Transform attackCenter; // Player altındaki boş obje
+    [SerializeField] private BoxCollider2D attackCollider; // attackCenter altındaki dikdörtgen collider
+    [SerializeField] private SpriteRenderer attackRange; // attackCenter altındaki görsel dikdörtgen
+
+    [Header("Settings")]
+    public LayerMask enemyLayer;
     [SerializeField] private float damage;
-
+    private float effectiveDamage;
     [SerializeField] private AudioClip meleeSound;
-
     public float attackCooldown = 1f;
+
     private float attackTimer;
-    public bool isAttacking = false;
-    private Vector2 lastValidDirection = Vector2.right;
+    public bool isAttacking { get; private set; }
 
-    private void Start() // Awake yerine Start kullanın, daha güvenlidir.
+    private void Start()
     {
-        damage += PlayerPrefs.GetInt("AttackLevel", 0) * 5; // Mağazadan alınan hasar geliştirmesi etkisi
+        damage += PlayerPrefs.GetInt("AttackLevel", 0) * 5;
+        effectiveDamage = damage;
 
-        // 1. Olayı dinlemeye başla (Abone olma)
-        if (attackJoystick != null)
+        if (attackButton != null)
         {
-            attackJoystick.OnJoystickReleased += meleeAttack;
+            attackButton.OnAttackPressed += meleeAttack;
         }
 
+        // Başlangıçta her şeyi kapat
         attackCollider.enabled = false;
         attackRange.enabled = false;
-        attackTimer = 0;
+
+        // ÖNEMLİ: Artık manuel açı hesaplaması yapmayacağımız için 
+        // attackCenter'ın rotation'ını sıfırlıyoruz.
+        attackCenter.localRotation = Quaternion.identity;
     }
+
     private void Update()
     {
-        if (attackTimer > 0) { attackTimer -= Time.deltaTime; }
-
-        if (isAttacking) { return; }
-
-        Vector2 targetDirection = new Vector2(attackJoystick.Horizontal, attackJoystick.Vertical);
-
-        if (targetDirection.sqrMagnitude >= 0.2f)
-        {
-            SetDirection(targetDirection);
-            lastValidDirection = targetDirection;
-            attackRange.enabled = true;
-        }
-        else
-        {
-            attackRange.enabled = false;
-        }
-
+        if (attackTimer > 0) attackTimer -= Time.deltaTime;
     }
 
-    private void SetDirection(Vector2 direction)
-    {
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        if (transform.localScale.x < 0)
-        {
-            angle = 180 - angle;
-        }
-
-        // KRİTİK: localRotation'ı kullanmaya devam edin ve flipOffset'ları kaldırın.
-        attackCenter.localRotation = Quaternion.Euler(0f, 0f, angle);
-    }
-
-
-
-    // 2. Oyundan çıkıldığında dinlemeyi bırak (Bellek sızıntısını önler)
     private void OnDisable()
     {
-        if (attackJoystick != null)
-        {
-            attackJoystick.OnJoystickReleased -= meleeAttack;
-        }
+        if (attackButton != null)
+            attackButton.OnAttackPressed -= meleeAttack;
     }
 
     private void meleeAttack()
@@ -84,70 +58,77 @@ public class PlayerMelee : MonoBehaviour
         if (attackTimer <= 0 && !isAttacking)
         {
             isAttacking = true;
-            attackTimer = attackCooldown;
-            anim.SetBool("isAttacking", true);
-            playerMove.isRotationOverridden = true;
-            FlipCharacterToDirection(lastValidDirection.x);
 
-            SetDirection(lastValidDirection);
+            anim.SetBool("isAttacking", true);
+            playerMove.isRotationOverridden = true; // Saldırı anında dönüşü kilitle
 
             anim.SetTrigger("meleeAttack");
-            attackJoystick.CooldownCounter(attackCooldown);
-            SoundManager.Instance.PlaySound(meleeSound);
+
+            attackTimer = attackCooldown;
+            if (attackButton != null)
+                attackButton.StartCooldown(attackCooldown);
+
+            if (SoundManager.Instance != null)
+                SoundManager.Instance.PlaySound(meleeSound);
         }
     }
 
-    // PlayerMelee.cs (Yeni yardımcı metot)
-    private void FlipCharacterToDirection(float xDirection)
-    {
-        if (xDirection > 0)
-            transform.localScale = new Vector3(1, 1, 1); // Sağa çevir
-        else if (xDirection < 0)
-            transform.localScale = new Vector3(-1, 1, 1); // Sola çevir
-    }
+    // Animasyon Event'i tarafından çağrılır
     public void DealMeleeDamage()
     {
         attackCollider.enabled = true;
-        attackRange.enabled = true;
-        Vector2 point = attackCollider.bounds.center;
-        Vector2 size = attackCollider.bounds.size; // Kutunun boyutları
-        float angle = attackCenter.eulerAngles.z; // O anki dönüş açımız
+        attackRange.enabled = true; // Vuruş anında dikdörtgen görünsün
 
-        // 2. O kutunun içindeki düşmanları bul (OverlapBox)
-        Collider2D[] hits = Physics2D.OverlapBoxAll(point, size, angle, enemyLayer);
+        // OverlapBox ile vuruş algılama
+        // Not: attackCenter zaten Player ile beraber döndüğü için world rotation'ı kullanıyoruz
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            attackCollider.bounds.center,
+            attackCollider.bounds.size,
+            attackCenter.eulerAngles.z,
+            enemyLayer
+        );
 
         foreach (Collider2D hit in hits)
         {
-            // Health scriptini bul
             Health enemyHealth = hit.GetComponent<Health>();
             if (enemyHealth != null)
             {
-                // Hasar Ver
-                enemyHealth.TakeDamage(damage, transform.position, 8f);
+                enemyHealth.TakeDamage(effectiveDamage, transform.position, 8f);
             }
         }
     }
 
+    // Animasyon sonunda çağrılır
     public void EndMelee()
     {
         attackCollider.enabled = false;
         attackRange.enabled = false;
-        playerMove.isRotationOverridden = false;
+
+        if (playerMove != null)
+            playerMove.isRotationOverridden = false;
+
         anim.SetBool("isAttacking", false);
         isAttacking = false;
+    }
+
+    public void AttackBoost(float duration)
+    {
+        effectiveDamage = damage * 1.5f; // Örneğin, hasarı %50 artırabilirsiniz
+        Invoke(nameof(ResetAttack), duration);
+    }
+
+    private void ResetAttack()
+    {
+        effectiveDamage = damage;
     }
 
     private void OnDrawGizmos()
     {
         if (attackCollider == null) return;
-
-        // Gizmos Matrix'ini collider'ın transformuyla eşle
         Gizmos.color = Color.red;
+        // Collider'ın dünyadaki konumunu ve dönüşünü çizmek için matris kullanıyoruz
         Matrix4x4 rotationMatrix = attackCollider.transform.localToWorldMatrix;
         Gizmos.matrix = rotationMatrix;
-
-        // Offset'i ve Size'ı kullanarak çiz
         Gizmos.DrawWireCube(attackCollider.offset, attackCollider.size);
     }
-
 }

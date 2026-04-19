@@ -3,19 +3,31 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private AttackJoystick attackJoystick;
+    public static CameraController Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        currentTarget = playerPosition;
+        smoothSave = smoothTime;
+    }
+    
+    [SerializeField] private Transform defaultTarget;
+    [SerializeField] private CameraJoystick camera;
     [SerializeField] private Transform playerPosition;
     [SerializeField] private float joystickOffset;
     Vector3 control = Vector3.zero;
     public float smoothTime;
     private float smoothSave;
     private Transform currentTarget;
-
-    private void Awake()
-    {
-        currentTarget = playerPosition;
-        smoothSave = smoothTime;
-    }
     private void LateUpdate()
     {
         Vector3 cameraTarget;
@@ -24,10 +36,10 @@ public class CameraController : MonoBehaviour
         {
             cameraTarget = playerPosition.position;
 
-            if (Mathf.Abs(attackJoystick.Horizontal) >= 0.3f)
-                cameraTarget.x += attackJoystick.Horizontal * joystickOffset;
-            if (Mathf.Abs(attackJoystick.Vertical) >= 0.3f)
-                cameraTarget.y += attackJoystick.Vertical * joystickOffset;
+            if (Mathf.Abs(camera.Horizontal) >= 0.3f)
+                cameraTarget.x += camera.Horizontal * joystickOffset;
+            if (Mathf.Abs(camera.Vertical) >= 0.3f)
+                cameraTarget.y += camera.Vertical * joystickOffset;
         }
         else
         {

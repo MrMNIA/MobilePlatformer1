@@ -19,14 +19,13 @@ public class ShopItem : MonoBehaviour
 
     [Header("Geliştirme Ayarları")]
     public string statName = "Health";
-    public int baseValue = 100;
-    public int additionPerLevel = 10;
+    public float baseValue = 100;
+    public float additionPerLevel = 10;
     public int maxLevel = 20;
 
     [Header("Maliyet Ayarları")]
     public int initialCost = 20;
-
-
+    public int costMultiplier = 10; // Her seviye için maliyeti ne kadar artırmak istediğinizi belirleyin
     private int currentLevel;
 
     void Awake()
@@ -48,7 +47,7 @@ public class ShopItem : MonoBehaviour
     void UpdateUI()
     {
         levelText.text = "Lv. " + currentLevel;
-        int totalValue = baseValue + (currentLevel * additionPerLevel);
+        float totalValue = baseValue + (currentLevel * additionPerLevel);
         currentValueText.text = totalValue.ToString();
 
         // TOPLAM COIN GÜNCELLEME: MoneyManager'dan alıp child text'e yazıyoruz
@@ -76,7 +75,9 @@ public class ShopItem : MonoBehaviour
     {
         int n = currentLevel;
         
-        int cost = Mathf.RoundToInt((2.5f * n * n)) + (10 * n) + 20;
+        int cost = Mathf.RoundToInt((costMultiplier/4) * n * n) + (costMultiplier * n) + initialCost;
+
+        cost = Mathf.RoundToInt(cost / 10f) * 10;
 
         return cost;
     }

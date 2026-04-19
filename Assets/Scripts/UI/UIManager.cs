@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
         pauseButton.SetActive(true); // Pause butonu geri gelsin
     }
 
-    public void ShowTutorial(int tutorialNumber)
+    public void ShowTutorial(int tutorialNumber, Transform newTarget = null)
     {
         tutorialPanel.SetActive(true);
         foreach (Transform child in tutorialPanel.transform)
@@ -84,8 +84,11 @@ public class UIManager : MonoBehaviour
         tutorialPanel.transform.GetChild(tutorialNumber).gameObject.SetActive(true);
         closeTutorialButton.SetActive(true);
 
-        attackJoystick.ChangeAbleToAttack(); // Saldırı joystickini devre dışı bırak
-        movementJoystick.ChangeAbleToMove(); // Hareket joystickini devre dışı bırak
+        attackJoystick.ChangeAbleToAttack(false); // Saldırı joystickini devre dışı bırak
+        movementJoystick.ChangeAbleToMove(false); // Hareket joystickini devre dışı bırak
+
+        if (newTarget != null)
+            CameraController.Instance.StartCinematicFocus(newTarget, 0.5f); // Kamerayı yeni hedefe odakla
     }
     public void CloseTutorial()
     {
@@ -93,8 +96,10 @@ public class UIManager : MonoBehaviour
         tutorialPanel.SetActive(false);
         closeTutorialButton.SetActive(false); // Kapatma butonunu gizle
         Time.timeScale = 1f; // Tutorial kapatıldığında zamanı tekrar akıt
-        attackJoystick.ChangeAbleToAttack(); // Saldırı joystickini tekrar aktif yap
-        movementJoystick.ChangeAbleToMove(); // Hareket joystickini tekrar aktif yap
+        attackJoystick.ChangeAbleToAttack(true); // Saldırı joystickini tekrar aktif yap
+        movementJoystick.ChangeAbleToMove(true); // Hareket joystickini tekrar aktif yap
+
+        CameraController.Instance.EndCinematicFocus(); // Kamerayı varsayılan hedefe döndür
     }
     // RESTART
     public void RestartGame()

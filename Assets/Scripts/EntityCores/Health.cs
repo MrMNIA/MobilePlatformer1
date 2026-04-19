@@ -9,6 +9,7 @@ public class Health : MonoBehaviour
     public float maximumHealth = 100;
     public float currentHealth { get; private set; }
 
+    public float damageReduction = 0f; // Hasar azaltma yüzdesi (örneğin, 0.2f = %20 hasar azaltma)
     public static event Action<Health> imDead;
 
 
@@ -24,7 +25,7 @@ public class Health : MonoBehaviour
     [SerializeField] private Behaviour[] components;
     private Rigidbody2D rb;
     private Animator anim;
-    private bool isDead = false;
+    public bool isDead = false;
 
     public AudioClip hurtSound;
     public AudioClip dieSound;
@@ -40,7 +41,7 @@ public class Health : MonoBehaviour
 
         if (gameObject.CompareTag("Enemy"))
         {
-            maximumHealth += SceneManager.GetActiveScene().buildIndex * 10; // Örneğin, her sahne için düşmanların canını 10 artırabilirsiniz.
+            maximumHealth += SceneManager.GetActiveScene().buildIndex * 10; // 
             float multiplier = DifficultyManager.Instance.GetStatsMultiplier();
             maximumHealth *= multiplier;
             currentHealth = maximumHealth;
@@ -48,21 +49,22 @@ public class Health : MonoBehaviour
 
         if (gameObject.CompareTag("Player"))
         {
+            maximumHealth += PlayerPrefs.GetInt("HealthLevel", 0) * 10; // Mağazadan alınan can geliştirmesi etkisi
             currentHealth = maximumHealth;
         }
-    }
-
-    private void Start()
-    {
-        // --- ZORLUK SİSTEMİ ENTEGRASYONU ---
-        // Eğer bu obje bir düşmansa, zorluğa göre canını artırıyoruz.
-        
     }
 
     public void TakeDamage(float damage, Vector3 attackerPosition, float knockbackForce)
     {
         if (isImmune) return;
 
+        isImmune = true; // Hasar aldıktan sonra geçici olarak dokunulmaz yap
+        if (immunityTime == 0)
+        {
+            isImmune = false; // Eğer immunityTime 0 ise, dokunulmazlığı hemen kaldır
+        }
+
+            damage *= (1f - damageReduction); // Hasarı azalt
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maximumHealth);
 
@@ -88,6 +90,7 @@ public class Health : MonoBehaviour
 
     private void Knockback(Vector3 attackerPosition, float knockbackForce)
     {
+        Debug.DrawLine(attackerPosition, transform.position, Color.red, 2f);
 
         if (rb != null)
         {
@@ -100,14 +103,25 @@ public class Health : MonoBehaviour
                 enemyAICoroutine = StartCoroutine(DisableEnemyAI(0.25f));
             }
 
-            Vector2 knockbackDirection;
-            knockbackDirection.x = Mathf.Sign(transform.position.x - attackerPosition.x);
-            knockbackDirection.y = 0.5f;
-            knockbackDirection = knockbackDirection.normalized;
+            if (CompareTag("Player"))
+            {
+                PlayerMovement pm = GetComponent<PlayerMovement>();
+                if (pm != null)
+                {
+                    StartCoroutine(pm.PlayerKnockbackRoutine(0.25f));
+                }
+            }
 
-            rb.linearVelocity = Vector2.zero;
+            // --- ÖNEMLİ DEĞİŞİKLİK BURADA ---
+            // Sadece X farkına bakmak yerine yön vektörünü hesaplıyoruz
+            Vector2 knockbackDirection = (transform.position - attackerPosition).normalized;
 
-            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+            // Eğer sadece yatayda (ve biraz yukarı) itmek istiyorsan:
+            float directionX = (transform.position.x - attackerPosition.x) > 0 ? 1f : -1f;
+            Vector2 finalDirection = new Vector2(directionX, 0.5f).normalized;
+            Vector2 knockbackVelocity = finalDirection * knockbackForce;
+
+            rb.linearVelocity = knockbackVelocity;
         }
     }
 
@@ -177,9 +191,7 @@ public class Health : MonoBehaviour
     }
     private IEnumerator Immunity(float immunityTime)
     {
-        if (immunityTime <= 0) yield break;
         isImmune = true;
-
         Color defaultColor = spriteRenderer.color;
         Color flashColor = new Color(defaultColor.r, defaultColor.g, defaultColor.b, 0.35f);
         float blinkDuration = 0.25f;
@@ -202,6 +214,17 @@ public class Health : MonoBehaviour
 
         isImmune = false;
 
+    }
+
+    public void ShieldBoost(float duration)
+    {
+        damageReduction = 0.5f; // Örneğin, %50 hasar azaltma
+        Invoke(nameof(ResetShield), duration);
+    }
+
+    private void ResetShield()
+    {
+        damageReduction = 0f;
     }
 
     private void Deactivate()

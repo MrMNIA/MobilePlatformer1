@@ -3,116 +3,73 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using UnityEngine.Events;
 
-public class AttackJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
+public class AttackJoystick : MonoBehaviour
 {
-    // Piksel hesab� yerine 0 ile 1 aras� oran kullanmak daha sa�l�kl�d�r.
-    // 0.2f = Joystick'in %20'si kadar �ekilmi�se sald�r.
-    [SerializeField] private float fireThreshold = 0.2f;
-
-    private RectTransform joystickThumb;
-    private RectTransform joystickBackground;
+    [Header("Visuals")]
     [SerializeField] private Image cooldownImage;
 
     private bool ableToAttack = true;
-    public float Horizontal { get; private set; }
-    public float Vertical { get; private set; }
 
-    public event Action OnJoystickReleased;
+    // JoystickReleased yerine daha uygun bir isim
+    public event Action OnAttackPressed;
 
     private void Awake()
     {
-        joystickBackground = GetComponent<RectTransform>();
-        joystickThumb = transform.GetChild(1).GetComponent<RectTransform>();
-        ResetValues();
+        // Başlangıçta cooldown resmini sıfırla
+        if (cooldownImage != null)
+            cooldownImage.fillAmount = 0f;
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public void TryToAttack()
     {
-        if (!ableToAttack) { return; }
-        Vector2 position;
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            joystickBackground,
-            eventData.position,
-            eventData.pressEventCamera,
-            out position))
+        if (ableToAttack)
         {
-            // Pozisyonu joystick boyutuna oranla
-            position = position / (joystickBackground.sizeDelta * 0.5f);
+            Attack();
+        }
+    }
+    private void Attack()
+    {
+        // Event'i dinleyen (Karakter scripti vb.) varsa tetikle
+        OnAttackPressed?.Invoke();
 
-            // �emberin d���na ��k�yorsa 1'e sabitle (Normalize)
-            if (position.magnitude > 1f)
+        // Örnek: Butona basıldığında otomatik cooldown başlatmak istersen burayı kullanabilirsin.
+        // Eğer cooldown süresini karakter scriptinden yönetiyorsan burayı boş bırakabilirsin.
+    }
+
+    // Karakter scriptinden bu fonksiyon çağrılarak cooldown başlatılır
+    public void StartCooldown(float duration)
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(UpdateCooldownImage(duration));
+        }
+    }
+
+    private IEnumerator UpdateCooldownImage(float duration)
+    {
+        ableToAttack = false;
+        float timer = duration;
+
+        if (cooldownImage != null)
+        {
+            cooldownImage.fillAmount = 1f;
+            while (timer > 0f)
             {
-                position = position.normalized;
+                timer -= Time.deltaTime;
+                cooldownImage.fillAmount = timer / duration;
+                yield return null;
             }
-
-            // Thumb'� hareket ettir ve de�erleri ata
-            joystickThumb.anchoredPosition = position * (joystickBackground.sizeDelta * 0.5f);
-            Horizontal = position.x;
-            Vertical = position.y;
-        }
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        // �NEML� DE����KL�K:
-        // Dokundu�un an, sanki s�r�klemi�sin gibi OnDrag'� tetikliyoruz.
-        // B�ylece top direkt parma��n�n alt�na geliyor ve de�erler doluyor.
-        OnDrag(eventData);
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        // ESK� MANTIK: (B�rak�lan Yer - Ba�lanan Yer) -> Kenara bas�nca 0 ��k�yordu.
-        // YEN� MANTIK: Direkt (Horizontal, Vertical) b�y�kl���ne bak�yoruz.
-        // ��nk� bu de�erler zaten Merkeze olan uzakl��� veriyor.
-
-        Vector2 inputVector = new Vector2(Horizontal, Vertical);
-
-        // E�er joystick merkezinden yeterince uzaksa (�rn: %20 �ekilmi�se)
-        if (inputVector.magnitude >= fireThreshold)
-        {
-            if (OnJoystickReleased != null)
-            {
-                OnJoystickReleased.Invoke();
-            }
+            cooldownImage.fillAmount = 0f;
         }
 
-        ResetValues();
+        ableToAttack = true;
     }
 
-    private void ResetValues()
+    // Dışarıdan saldırı yeteneğini tamamen açıp kapatmak için (Örn: Menü açıldığında)
+    public void ChangeAbleToAttack(bool status)
     {
-        joystickThumb.anchoredPosition = Vector2.zero;
-        Horizontal = 0f;
-        Vertical = 0f;
-    }
-
-    // Cooldown kodlar�n aynen kalabilir...
-    public void CooldownCounter(float value)
-    {
-        StartCoroutine(UpdateCooldownImage(value));
-    }
-
-    private IEnumerator UpdateCooldownImage(float value)
-    {
-        float timer = value;
-        cooldownImage.fillAmount = 1;
-        while (timer > 0f)
-        {
-            timer -= Time.deltaTime;
-            cooldownImage.fillAmount = timer / value;
-            yield return null;
-        }
-        cooldownImage.fillAmount = 0f;
-    }
-
-    public void ChangeAbleToAttack()
-    {
-        ableToAttack = !ableToAttack;
-        if (!ableToAttack)
-        {
-            ResetValues(); //sald�r� engellendiinde joystick de sfrlanr
-        }
+        ableToAttack = status;
     }
 }

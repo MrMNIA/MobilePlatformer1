@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4108787576356654595}
   - component: {fileID: 7409295421905777576}
   - component: {fileID: 670448566212692119}
+  - component: {fileID: 3688450473597583103}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -135,7 +136,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9924d9e449659ab4a932bf521b1ab412, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -183,19 +184,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077c9a342e7282e4fa2a39e958dbea71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationForce: 50
-  maxSpeed: 8
-  jumpPower: 12
+  accelerationForce: 40
+  maxSpeed: 5.5
+  jumpPower: 10
   jumpCooldown: 0.25
-  isRotationOverridden: 0
+  playerEnergy: {fileID: 3688450473597583103}
   jumpSound: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
-  movementJoystick: {fileID: 0}
-  attackJoystick: {fileID: 0}
-  wallJumpX: 13
-  wallJumpY: 9
+  isRotationOverridden: 0
+  wallJumpX: 9
+  wallJumpY: 7
+  coyoteTime: 0.15
+  move: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 512
+  oneWayLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!95 &4108787576356654595
 Animator:
   serializedVersion: 7
@@ -230,7 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b7913de63fddc046b06c92eddee27f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumHealth: 200
+  maximumHealth: 100
   immunityTime: 1
   components:
   - {fileID: 2547317792614927641}
@@ -249,19 +254,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62453ef5234e97c409fc95a0207f5dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackJoystick: {fileID: 0}
-  movementJoystick: {fileID: 0}
+  attackButton: {fileID: 0}
   anim: {fileID: 4108787576356654595}
+  playerMove: {fileID: 2547317792614927641}
+  attackCenter: {fileID: 5673614993429499958}
+  attackCollider: {fileID: 4633273941090879221}
+  attackRange: {fileID: 7205825424861969978}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 2048
-  attackCollider: {fileID: 4633273941090879221}
-  attackRange: {fileID: 7205825424861969978}
-  playerMove: {fileID: 2547317792614927641}
-  damage: 50
+  damage: 25
   meleeSound: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
   attackCooldown: 1
-  isAttacking: 0
+--- !u!114 &3688450473597583103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2799232613191483647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d73684f51ea929346961ec1060d25309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergy
+  maxEnergy: 100
+  playerSpeed: {fileID: 1791227259166024010}
+  energyRegenRate: 5
 --- !u!1 &5421595885532092423
 GameObject:
   m_ObjectHideFlags: 0

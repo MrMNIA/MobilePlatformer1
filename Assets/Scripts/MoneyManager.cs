@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class MoneyManager : MonoBehaviour
 {
     public static MoneyManager Instance;
@@ -43,7 +43,13 @@ public class MoneyManager : MonoBehaviour
     {
         // 1. Temel miktar (Seviye içinde toplanan)
         float earnedAmount = currentLevelCoins;
+        // seviye numarasına göre ilave para
+        int index = SceneManager.GetActiveScene().buildIndex;
+        int levelNum = 10 + index * 5; // Örneğin, her seviye için 10 + (seviye numarası * 5) ekleyebilirsiniz.
+        if (index % 10 == 0)
+            levelNum += 50 * (index / 10); // Her 10. seviyede ekstra bonus
 
+        earnedAmount += levelNum;
         // 2. Zorluk Çarpanını uygula (Sadece seviye kazancına)
         if (DifficultyManager.Instance != null)
         {
