@@ -24,8 +24,10 @@ public class AttackJoystick : MonoBehaviour
 
     public void TryToAttack()
     {
+        Debug.Log("TryToAttack");
         if (ableToAttack)
         {
+            Debug.Log("Attack");
             Attack();
         }
     }
@@ -33,6 +35,7 @@ public class AttackJoystick : MonoBehaviour
     {
         // Event'i dinleyen (Karakter scripti vb.) varsa tetikle
         OnAttackPressed?.Invoke();
+        Debug.Log("AttackInvoked");
 
         // Örnek: Butona basıldığında otomatik cooldown başlatmak istersen burayı kullanabilirsin.
         // Eğer cooldown süresini karakter scriptinden yönetiyorsan burayı boş bırakabilirsin.

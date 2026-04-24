@@ -1,0 +1,1742 @@
+fileFormatVersion: 2
+guid: bca5bba0f9325fc40acdd355df77621a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4486914195982579301
+    second: john_stick_0
+  - first:
+      213: 2204000876090679382
+    second: john_stick_1
+  - first:
+      213: -4404687038960062396
+    second: john_stick_2
+  - first:
+      213: -2303161122539478371
+    second: john_stick_3
+  - first:
+      213: -1639661167689406827
+    second: john_stick_4
+  - first:
+      213: 3491004551865667889
+    second: john_stick_5
+  - first:
+      213: 8930798672878691287
+    second: john_stick_6
+  - first:
+      213: -4274917104842814470
+    second: john_stick_7
+  - first:
+      213: -5348802051958422965
+    second: john_stick_8
+  - first:
+      213: -7486205252260100664
+    second: john_stick_9
+  - first:
+      213: -9122605441184013018
+    second: john_stick_10
+  - first:
+      213: -985827556648583205
+    second: john_stick_11
+  - first:
+      213: 1170362121667008568
+    second: john_stick_12
+  - first:
+      213: 7323776585532752641
+    second: john_stick_13
+  - first:
+      213: -4023949968335804603
+    second: john_stick_14
+  - first:
+      213: 3392830584559914898
+    second: john_stick_15
+  - first:
+      213: -1791461994907824897
+    second: john_stick_16
+  - first:
+      213: 2627220154551864664
+    second: john_stick_17
+  - first:
+      213: 4812302683276001859
+    second: john_stick_18
+  - first:
+      213: -5026263407294636477
+    second: john_stick_19
+  - first:
+      213: 3179593258231117013
+    second: john_stick_20
+  - first:
+      213: -4127975765693260628
+    second: john_stick_21
+  - first:
+      213: 2840150169075200
+    second: john_stick_22
+  - first:
+      213: -6778080906161804473
+    second: john_stick_23
+  - first:
+      213: 5069339771837859959
+    second: john_stick_24
+  - first:
+      213: 5793779695212076461
+    second: john_stick_25
+  - first:
+      213: -4107227707026743485
+    second: john_stick_26
+  - first:
+      213: 6816181158087458819
+    second: john_stick_27
+  - first:
+      213: -2240527569648191483
+    second: john_stick_28
+  - first:
+      213: 6953135901117165247
+    second: john_stick_29
+  - first:
+      213: 3595122684715300277
+    second: john_stick_30
+  - first:
+      213: 848027045640043553
+    second: john_stick_31
+  - first:
+      213: -7002016385445042830
+    second: john_stick_32
+  - first:
+      213: 6148131896350093182
+    second: john_stick_33
+  - first:
+      213: 4122662067482269142
+    second: john_stick_34
+  - first:
+      213: -5831776310634074544
+    second: john_stick_35
+  - first:
+      213: 8882138783987376589
+    second: john_stick_36
+  - first:
+      213: 1238793125043527837
+    second: john_stick_37
+  - first:
+      213: 1901025175011063437
+    second: john_stick_38
+  - first:
+      213: -5814431650138762999
+    second: john_stick_39
+  - first:
+      213: 6194569333993177165
+    second: john_stick_40
+  - first:
+      213: 1487834118700963528
+    second: john_stick_41
+  - first:
+      213: 3894780812838418374
+    second: john_stick_42
+  - first:
+      213: -2900599185501103643
+    second: john_stick_43
+  - first:
+      213: -4210714633873155791
+    second: john_stick_44
+  - first:
+      213: 376035209876885134
+    second: john_stick_45
+  - first:
+      213: 4319426946921622242
+    second: john_stick_46
+  - first:
+      213: -6121656356066774859
+    second: john_stick_47
+  - first:
+      213: -6456595376769352863
+    second: john_stick_48
+  - first:
+      213: 6325994869015322907
+    second: john_stick_49
+  - first:
+      213: -1992107042007805641
+    second: john_stick_50
+  - first:
+      213: 7116522513414963724
+    second: john_stick_51
+  - first:
+      213: -1276525385622784467
+    second: john_stick_52
+  - first:
+      213: 3157116586115339134
+    second: john_stick_53
+  - first:
+      213: 5134894893578363384
+    second: john_stick_54
+  - first:
+      213: -4455147421178192888
+    second: john_stick_55
+  - first:
+      213: -42178074610773473
+    second: john_stick_56
+  - first:
+      213: -8698188081592357707
+    second: john_stick_57
+  - first:
+      213: 7346746034024602989
+    second: john_stick_58
+  - first:
+      213: -4094006528572100487
+    second: john_stick_59
+  - first:
+      213: -4509929833714418268
+    second: john_stick_60
+  - first:
+      213: -407835456733703252
+    second: john_stick_61
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: john_stick_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1851
+        width: 283
+        height: 197
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 566f23540b8b44e30800000000000000
+      internalID: 4486914195982579301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_1
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 1854
+        width: 285
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 650e8089e1f269e10800000000000000
+      internalID: 2204000876090679382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_2
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 1871
+        width: 259
+        height: 177
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 440b400a9786fd2c0800000000000000
+      internalID: -4404687038960062396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_3
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 1897
+        width: 383
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d926b8669278900e0800000000000000
+      internalID: -2303161122539478371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_4
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 1896
+        width: 385
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 596eed3fad0ce39e0800000000000000
+      internalID: -1639661167689406827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_5
+      rect:
+        serializedVersion: 2
+        x: 1582
+        y: 1882
+        width: 348
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 131993fc42a827030800000000000000
+      internalID: 3491004551865667889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_6
+      rect:
+        serializedVersion: 2
+        x: 1927
+        y: 1855
+        width: 285
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d3e679531290fb70800000000000000
+      internalID: 8930798672878691287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_7
+      rect:
+        serializedVersion: 2
+        x: 2209
+        y: 1817
+        width: 285
+        height: 231
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afb4a99ea817ca4c0800000000000000
+      internalID: -4274917104842814470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_8
+      rect:
+        serializedVersion: 2
+        x: 2491
+        y: 1809
+        width: 284
+        height: 239
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4243277fdc35c5b0800000000000000
+      internalID: -5348802051958422965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_9
+      rect:
+        serializedVersion: 2
+        x: 2772
+        y: 1808
+        width: 281
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c58f579cf7ab1890800000000000000
+      internalID: -7486205252260100664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_10
+      rect:
+        serializedVersion: 2
+        x: 3051
+        y: 1808
+        width: 280
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6256e245faef56180800000000000000
+      internalID: -9122605441184013018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_11
+      rect:
+        serializedVersion: 2
+        x: 3328
+        y: 1808
+        width: 279
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdf7b247f03a152f0800000000000000
+      internalID: -985827556648583205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_12
+      rect:
+        serializedVersion: 2
+        x: 3605
+        y: 1810
+        width: 275
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 838d8881626fd3010800000000000000
+      internalID: 1170362121667008568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1605
+        width: 280
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 103c003600843a560800000000000000
+      internalID: 7323776585532752641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_14
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 1599
+        width: 285
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5476667d2de0828c0800000000000000
+      internalID: -4023949968335804603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_15
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 1594
+        width: 1133
+        height: 217
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29f46cfc071c51f20800000000000000
+      internalID: 3392830584559914898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_16
+      rect:
+        serializedVersion: 2
+        x: 1691
+        y: 1676
+        width: 343
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffc08e4aec27327e0800000000000000
+      internalID: -1791461994907824897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_17
+      rect:
+        serializedVersion: 2
+        x: 2031
+        y: 1711
+        width: 377
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85d8fca9fc2c57420800000000000000
+      internalID: 2627220154551864664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_18
+      rect:
+        serializedVersion: 2
+        x: 2405
+        y: 1709
+        width: 377
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34243543bcbb8c240800000000000000
+      internalID: 4812302683276001859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_19
+      rect:
+        serializedVersion: 2
+        x: 2780
+        y: 1628
+        width: 272
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34e98a4bf002f3ab0800000000000000
+      internalID: -5026263407294636477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_20
+      rect:
+        serializedVersion: 2
+        x: 3050
+        y: 1624
+        width: 277
+        height: 187
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d4b71fd83f202c20800000000000000
+      internalID: 3179593258231117013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_21
+      rect:
+        serializedVersion: 2
+        x: 3325
+        y: 1626
+        width: 274
+        height: 185
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cac9e6c79eb76b6c0800000000000000
+      internalID: -4127975765693260628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_22
+      rect:
+        serializedVersion: 2
+        x: 3596
+        y: 1597
+        width: 280
+        height: 214
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00ebfedf9171a0000800000000000000
+      internalID: 2840150169075200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1382
+        width: 281
+        height: 213
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74b2e51e35b6fe1a0800000000000000
+      internalID: -6778080906161804473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_24
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 1385
+        width: 284
+        height: 211
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 778c72af9a9e95640800000000000000
+      internalID: 5069339771837859959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_25
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 1350
+        width: 179
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dad9cff9fe3a76050800000000000000
+      internalID: 5793779695212076461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_26
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 1350
+        width: 193
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34f570759223007c0800000000000000
+      internalID: -4107227707026743485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_27
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 1350
+        width: 196
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 300838c46a0f79e50800000000000000
+      internalID: 6816181158087458819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_28
+      rect:
+        serializedVersion: 2
+        x: 1119
+        y: 1398
+        width: 285
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50876a5db0c08e0e0800000000000000
+      internalID: -2240527569648191483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_29
+      rect:
+        serializedVersion: 2
+        x: 1402
+        y: 1400
+        width: 284
+        height: 197
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbeaa1543408e7060800000000000000
+      internalID: 6953135901117165247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_30
+      rect:
+        serializedVersion: 2
+        x: 1683
+        y: 1406
+        width: 282
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b57762b80174e130800000000000000
+      internalID: 3595122684715300277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_31
+      rect:
+        serializedVersion: 2
+        x: 1962
+        y: 1403
+        width: 283
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12c7c4fda1cc4cb00800000000000000
+      internalID: 848027045640043553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_32
+      rect:
+        serializedVersion: 2
+        x: 2242
+        y: 1400
+        width: 284
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 275651a1237d3de90800000000000000
+      internalID: -7002016385445042830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_33
+      rect:
+        serializedVersion: 2
+        x: 2524
+        y: 1399
+        width: 284
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7f2232b26d825550800000000000000
+      internalID: 6148131896350093182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_34
+      rect:
+        serializedVersion: 2
+        x: 2805
+        y: 1405
+        width: 281
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d5124dbe43a63930800000000000000
+      internalID: 4122662067482269142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_35
+      rect:
+        serializedVersion: 2
+        x: 3083
+        y: 1407
+        width: 281
+        height: 190
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05e2e13f75e511fa0800000000000000
+      internalID: -5831776310634074544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_36
+      rect:
+        serializedVersion: 2
+        x: 3361
+        y: 1408
+        width: 281
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc1a9491a22b34b70800000000000000
+      internalID: 8882138783987376589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_37
+      rect:
+        serializedVersion: 2
+        x: 3639
+        y: 1494
+        width: 377
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d906a68a8c3113110800000000000000
+      internalID: 1238793125043527837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_38
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1169
+        width: 327
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d86fb99135cc16a10800000000000000
+      internalID: 1901025175011063437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_39
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 1135
+        width: 174
+        height: 217
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 901d0ba683dfe4fa0800000000000000
+      internalID: -5814431650138762999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_40
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 1112
+        width: 274
+        height: 241
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4001313df787f550800000000000000
+      internalID: 6194569333993177165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_41
+      rect:
+        serializedVersion: 2
+        x: 892
+        y: 1063
+        width: 181
+        height: 290
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c690e18f39d5a410800000000000000
+      internalID: 1487834118700963528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_42
+      rect:
+        serializedVersion: 2
+        x: 1071
+        y: 1062
+        width: 174
+        height: 290
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c7bd3b838a0d0630800000000000000
+      internalID: 3894780812838418374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_43
+      rect:
+        serializedVersion: 2
+        x: 1242
+        y: 1062
+        width: 176
+        height: 290
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e95b68a8600fb7d0800000000000000
+      internalID: -2900599185501103643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_44
+      rect:
+        serializedVersion: 2
+        x: 1415
+        y: 1068
+        width: 183
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 139937d89598095c0800000000000000
+      internalID: -4210714633873155791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_45
+      rect:
+        serializedVersion: 2
+        x: 1595
+        y: 1111
+        width: 225
+        height: 242
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8e40c3f702f73500800000000000000
+      internalID: 376035209876885134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_46
+      rect:
+        serializedVersion: 2
+        x: 1817
+        y: 1115
+        width: 275
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ea63844cefa1fb30800000000000000
+      internalID: 4319426946921622242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_47
+      rect:
+        serializedVersion: 2
+        x: 2089
+        y: 1166
+        width: 285
+        height: 187
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b0b0a36af18b0ba0800000000000000
+      internalID: -6121656356066774859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_48
+      rect:
+        serializedVersion: 2
+        x: 2371
+        y: 1154
+        width: 567
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16bbb3d96b09566a0800000000000000
+      internalID: -6456595376769352863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_49
+      rect:
+        serializedVersion: 2
+        x: 2935
+        y: 1153
+        width: 284
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b112a9a11d27ac750800000000000000
+      internalID: 6325994869015322907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_50
+      rect:
+        serializedVersion: 2
+        x: 3217
+        y: 1162
+        width: 569
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 731129e233d9a54e0800000000000000
+      internalID: -1992107042007805641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_51
+      rect:
+        serializedVersion: 2
+        x: 3784
+        y: 1155
+        width: 284
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c024b206587f2c260800000000000000
+      internalID: 7116522513414963724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_52
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 1096
+        width: 284
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d267f23dceed84ee0800000000000000
+      internalID: -1276525385622784467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_53
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 866
+        width: 283
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7316e5dec450db20800000000000000
+      internalID: 3157116586115339134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_54
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 874
+        width: 289
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f1a4ba23bfc24740800000000000000
+      internalID: 5134894893578363384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_55
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 873
+        width: 568
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80c1daa56032c22c0800000000000000
+      internalID: -4455147421178192888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_56
+      rect:
+        serializedVersion: 2
+        x: 1132
+        y: 871
+        width: 284
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f12d38db3472a6ff0800000000000000
+      internalID: -42178074610773473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_57
+      rect:
+        serializedVersion: 2
+        x: 1413
+        y: 868
+        width: 285
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5bca6275604d94780800000000000000
+      internalID: -8698188081592357707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_58
+      rect:
+        serializedVersion: 2
+        x: 1696
+        y: 740
+        width: 119
+        height: 323
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6ddb0dd792e4f560800000000000000
+      internalID: 7346746034024602989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_59
+      rect:
+        serializedVersion: 2
+        x: 1813
+        y: 740
+        width: 121
+        height: 323
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9707454d0ca2f27c0800000000000000
+      internalID: -4094006528572100487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_60
+      rect:
+        serializedVersion: 2
+        x: 1932
+        y: 741
+        width: 129
+        height: 323
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4adf38bf5b28961c0800000000000000
+      internalID: -4509929833714418268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: john_stick_61
+      rect:
+        serializedVersion: 2
+        x: 2059
+        y: 741
+        width: 129
+        height: 323
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca3149a10d3175af0800000000000000
+      internalID: -407835456733703252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      john_stick_0: 4486914195982579301
+      john_stick_1: 2204000876090679382
+      john_stick_10: -9122605441184013018
+      john_stick_11: -985827556648583205
+      john_stick_12: 1170362121667008568
+      john_stick_13: 7323776585532752641
+      john_stick_14: -4023949968335804603
+      john_stick_15: 3392830584559914898
+      john_stick_16: -1791461994907824897
+      john_stick_17: 2627220154551864664
+      john_stick_18: 4812302683276001859
+      john_stick_19: -5026263407294636477
+      john_stick_2: -4404687038960062396
+      john_stick_20: 3179593258231117013
+      john_stick_21: -4127975765693260628
+      john_stick_22: 2840150169075200
+      john_stick_23: -6778080906161804473
+      john_stick_24: 5069339771837859959
+      john_stick_25: 5793779695212076461
+      john_stick_26: -4107227707026743485
+      john_stick_27: 6816181158087458819
+      john_stick_28: -2240527569648191483
+      john_stick_29: 6953135901117165247
+      john_stick_3: -2303161122539478371
+      john_stick_30: 3595122684715300277
+      john_stick_31: 848027045640043553
+      john_stick_32: -7002016385445042830
+      john_stick_33: 6148131896350093182
+      john_stick_34: 4122662067482269142
+      john_stick_35: -5831776310634074544
+      john_stick_36: 8882138783987376589
+      john_stick_37: 1238793125043527837
+      john_stick_38: 1901025175011063437
+      john_stick_39: -5814431650138762999
+      john_stick_4: -1639661167689406827
+      john_stick_40: 6194569333993177165
+      john_stick_41: 1487834118700963528
+      john_stick_42: 3894780812838418374
+      john_stick_43: -2900599185501103643
+      john_stick_44: -4210714633873155791
+      john_stick_45: 376035209876885134
+      john_stick_46: 4319426946921622242
+      john_stick_47: -6121656356066774859
+      john_stick_48: -6456595376769352863
+      john_stick_49: 6325994869015322907
+      john_stick_5: 3491004551865667889
+      john_stick_50: -1992107042007805641
+      john_stick_51: 7116522513414963724
+      john_stick_52: -1276525385622784467
+      john_stick_53: 3157116586115339134
+      john_stick_54: 5134894893578363384
+      john_stick_55: -4455147421178192888
+      john_stick_56: -42178074610773473
+      john_stick_57: -8698188081592357707
+      john_stick_58: 7346746034024602989
+      john_stick_59: -4094006528572100487
+      john_stick_6: 8930798672878691287
+      john_stick_60: -4509929833714418268
+      john_stick_61: -407835456733703252
+      john_stick_7: -4274917104842814470
+      john_stick_8: -5348802051958422965
+      john_stick_9: -7486205252260100664
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

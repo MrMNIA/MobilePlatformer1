@@ -115,7 +115,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 45.271496, y: 14.64434}
+  m_AnchoredPosition: {x: 44.551, y: 14.438}
   m_SizeDelta: {x: 5.12, y: 2.56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &6665311041553793484
@@ -286,6 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumHealth: 40
   damageReduction: 0
+  playerRespawn: {fileID: 0}
   immunityTime: 0
   components:
   - {fileID: 2962976227545328672}

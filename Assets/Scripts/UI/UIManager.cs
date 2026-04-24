@@ -8,8 +8,8 @@ public class UIManager : MonoBehaviour
     [Header("Menu Panels")]
     public GameObject pausePanel;
     public GameObject gameOverPanel;
+    public GameObject almostGameOverpanel; // Can azaldığında gösterilecek panel
     public GameObject winPanel;
-    public GameObject tutorialPanel; // Tutorial panelleri için dizi
     public GameObject closeTutorialButton; // Tutorial kapatma butonu
 
     [Header("HUD Elements")]
@@ -18,13 +18,18 @@ public class UIManager : MonoBehaviour
     public Text finalCoinText;
     public Text addText; // Seviye sonu kazançlarını göstermek için (isteğe bağlı)
 
+    [Header ("Almost Game Over")]
+    public Text collectedCoinsText; // Toplanan coin miktarını göstermek için
+    public Text respawnTimerText; // Yeniden doğma süresini göstermek için
+    public GameObject respawnButton; // Joysticklerin bulunduğu canvas
+
     [SerializeField] private MovementJoystick movementJoystick;
     [SerializeField] private AttackJoystick attackJoystick;
+    [SerializeField] private PlayerRespawn playerRespawn; // PlayerRespawn referansı
 
     [Header("Audio")]
     public AudioClip gameOverSound;
     public AudioClip winSound;
-
 
     public static UIManager instance;
 
@@ -40,16 +45,25 @@ public class UIManager : MonoBehaviour
         pauseButton.SetActive(true);
         pausePanel.SetActive(false);
         gameOverPanel.SetActive(false);
+        almostGameOverpanel.SetActive(false);
         winPanel.SetActive(false);
-
-        tutorialPanel.SetActive(false);
-        for (int i = 0; i < tutorialPanel.transform.childCount; i++)
-        {
-            tutorialPanel.transform.GetChild(i).gameObject.SetActive(false); // Tüm tutorial panellerini gizle
-        }
         closeTutorialButton.SetActive(false);
-
+        UpdateLayout();
         UpdateCurrentLevelCoinUI(0);
+    }
+
+    private void UpdateLayout()
+    {
+        SettingsManager.Instance.LoadLayout();
+
+        // 2. Sahnedeki tüm HUD elementlerini bul
+        HUDElementController[] allElements = FindObjectsOfType<HUDElementController>();
+
+        // 3. Hepsine "Pozisyonunu dosyaya göre güncelle" emrini ver
+        foreach (var element in allElements)
+        {
+            element.ApplyMySettings();
+        }
     }
 
     public void UpdateCurrentLevelCoinUI(int amount)
@@ -73,34 +87,6 @@ public class UIManager : MonoBehaviour
         pausePanel.SetActive(false);
         pauseButton.SetActive(true); // Pause butonu geri gelsin
     }
-
-    public void ShowTutorial(int tutorialNumber, Transform newTarget = null)
-    {
-        tutorialPanel.SetActive(true);
-        foreach (Transform child in tutorialPanel.transform)
-        {
-            child.gameObject.SetActive(false); // Tüm tutorial panellerini gizle
-        }
-        tutorialPanel.transform.GetChild(tutorialNumber).gameObject.SetActive(true);
-        closeTutorialButton.SetActive(true);
-
-        attackJoystick.ChangeAbleToAttack(false); // Saldırı joystickini devre dışı bırak
-        movementJoystick.ChangeAbleToMove(false); // Hareket joystickini devre dışı bırak
-
-        if (newTarget != null)
-            CameraController.Instance.StartCinematicFocus(newTarget, 0.5f); // Kamerayı yeni hedefe odakla
-    }
-    public void CloseTutorial()
-    {
-        SoundManager.Instance.PlaybuttonClickSound();
-        tutorialPanel.SetActive(false);
-        closeTutorialButton.SetActive(false); // Kapatma butonunu gizle
-        Time.timeScale = 1f; // Tutorial kapatıldığında zamanı tekrar akıt
-        attackJoystick.ChangeAbleToAttack(true); // Saldırı joystickini tekrar aktif yap
-        movementJoystick.ChangeAbleToMove(true); // Hareket joystickini tekrar aktif yap
-
-        CameraController.Instance.EndCinematicFocus(); // Kamerayı varsayılan hedefe döndür
-    }
     // RESTART
     public void RestartGame()
     {
@@ -117,6 +103,8 @@ public class UIManager : MonoBehaviour
     // NEXT LEVEL
     public void LoadNextLevel()
     {
+        DifficultyManager.Instance.UsePowerup();
+
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
 
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
@@ -139,6 +127,7 @@ public class UIManager : MonoBehaviour
     // MAIN MENU
     public void GotoMainMenu()
     {
+        DifficultyManager.Instance.UsePowerup();
         StartCoroutine(MainMenuRoutine());
     }
 
@@ -149,6 +138,17 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    public void LockJoysticks()
+    {
+        movementJoystick.ChangeAbleToMove(false);
+        attackJoystick.ChangeAbleToAttack(false);
+    }
+
+    public void UnlockJoysticks()
+    {
+        movementJoystick.ChangeAbleToMove(true);
+        attackJoystick.ChangeAbleToAttack(true);
+    }
 
     // 3. Oyun Sonu (Ölünce çağrılır)
     public void ShowGameOver()
@@ -156,10 +156,58 @@ public class UIManager : MonoBehaviour
         SoundManager.Instance.PlaySound(gameOverSound);
         SoundManager.Instance.PauseMusic();
         Time.timeScale = 0f;
+        DifficultyManager.Instance.UsePowerup();
+        almostGameOverpanel.SetActive(false); // Eğer can azaldığında gösterilen panel açıksa kapat
         gameOverPanel.SetActive(true);
         pauseButton.SetActive(false);
     }
 
+    public void ShowAlmostGameOver()
+    {
+        almostGameOverpanel.SetActive(true);
+        pauseButton.SetActive(false);
+        Time.timeScale = 0f; // Zamanı durdur
+        collectedCoinsText.text = MoneyManager.Instance.currentLevelCoins.ToString(); // Toplanan coin miktarını göster
+        StartCoroutine(AlmostGameOverTimer());
+    }
+
+    private IEnumerator AlmostGameOverTimer()
+    {
+        float timer = 5f; // Örnek süre, istediğiniz gibi ayarlayabilirsiniz
+        while (timer > 0)
+        {
+            if (playerRespawn.IsRespawned())
+            {
+                Respawn(); // Eğer oyuncu yeniden doğduysa, respawn işlemini gerçekleştir
+                yield break; // Coroutine'i sonlandır
+            }
+            timer -= Time.unscaledDeltaTime; // Zaman durduğu için unscaledDeltaTime kullanıyoruz
+            respawnTimerText.text = timer.ToString("F1"); // Kalan süreyi göster
+            float progress = 1f - (timer / 5f);
+
+            // Lerp ile 30/255'ten 100/255'e geçiş yapıyoruz
+            float startAlpha = 0.2f;
+            float endAlpha = 0.7f;
+
+            float currentAlpha = Mathf.Lerp(startAlpha, endAlpha, progress);
+
+            Color color = almostGameOverpanel.GetComponent<Image>().color;
+            color.a = currentAlpha; // Alpha değerini güncelle
+            almostGameOverpanel.GetComponent<Image>().color = color; // Yeni rengi uygula
+            yield return null;
+        }
+        ShowGameOver(); // Süre dolunca Game Over panelini göster
+    }
+
+    public void Respawn()
+    {
+        playerRespawn.Respawn();
+        almostGameOverpanel.SetActive(false);
+        pauseButton.SetActive(true);
+        StopCoroutine(AlmostGameOverTimer());
+        Time.timeScale = 1f; // Zamanı tekrar aç
+        UnlockJoysticks();
+    }
     // 4. Kazanma (Win Zone'a girince çağrılır)
     public IEnumerator ShowWinScreen(int baseAmount, bool isFirstClear)
     {

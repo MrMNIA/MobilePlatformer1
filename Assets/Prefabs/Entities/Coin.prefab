@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Coin
   baseValue: 1
-  coinPickupSound: {fileID: 8300000, guid: 657578e4be6b64dbf9b09deada272e55, type: 3}
+  coinPickupSound: {fileID: 8300000, guid: cb62ffdb98918484d9a88022eb5c693e, type: 3}
 --- !u!61 &5392695734057307409
 BoxCollider2D:
   m_ObjectHideFlags: 0

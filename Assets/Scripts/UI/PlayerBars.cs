@@ -6,6 +6,7 @@ public class PlayerBars : MonoBehaviour
     [SerializeField] private Health playerHealth;
     [SerializeField] private PlayerEnergy playerEnergy;
     [SerializeField] private Image healthBar;
+    [SerializeField] private Image criticalImage;
     [SerializeField] private Text healthText;
     [SerializeField] private Image energyBar;
     [SerializeField] private Text energyText;
@@ -41,6 +42,21 @@ public class PlayerBars : MonoBehaviour
         }
 
         healthText.text = Mathf.RoundToInt(current) + " / " + Mathf.RoundToInt(cachedMaxHealth);
+
+        float healthPercent = current / cachedMaxHealth;
+
+        if (healthPercent <= 0.5f)
+        {
+            Color c = criticalImage.color;
+            c.a = 0.7f * (1-healthPercent);
+            criticalImage.color = c;
+        }
+        else
+        {
+            Color c = criticalImage.color;
+            c.a = 0f;
+            criticalImage.color = c;
+        }
 
         if (cachedMaxEnergy > 0)
         {

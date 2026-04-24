@@ -26,8 +26,6 @@ public class LavaGenerator : MonoBehaviour
         // 1. Mevcut Ground tilemap'inin sınırlarını (en sol, sağ, aşağı) buluyoruz
         BoundsInt bounds = groundTilemap.cellBounds;
 
-        lavaTilemap.ClearAllTiles();
-
         // 2. Başlangıç ve bitiş noktalarını hesaplıyoruz
         int startX = bounds.xMin - horizontalOffset;
         int endX = bounds.xMax + horizontalOffset;

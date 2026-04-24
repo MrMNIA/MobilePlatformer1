@@ -149,4 +149,33 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    [ContextMenu("Tüm Levelleri Aç")]
+    public void TumLevelleriAc()
+    {
+        int levelCounter = 1;
+        // Toplam level sayısını bulmak için hiyerarşiyi tara
+        foreach (Transform chapter in levelsContainer)
+        {
+            foreach (Transform levelObj in chapter)
+            {
+                // Her level için "Completed" anahtarını 1 yap
+                string currentLevelKey = "Level" + levelCounter + "_Completed";
+                PlayerPrefs.SetInt(currentLevelKey, 1);
+                levelCounter++;
+            }
+        }
+
+        PlayerPrefs.Save(); // Verileri kaydet
+        ButonKilitleriniGuncelle(); // Görseli anında yenile
+        Debug.Log("<color=green>Tüm bölümlerin kilitleri açıldı!</color>");
+    }
+
+    [ContextMenu("Kilitleri Sıfırla")]
+    public void KilitleriSifirla()
+    {
+        PlayerPrefs.DeleteAll();
+        ButonKilitleriniGuncelle();
+        Debug.Log("<color=red>Tüm ilerleme sıfırlandı.</color>");
+    }
 }

@@ -1,11 +1,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
+
 public class MoneyManager : MonoBehaviour
 {
     public static MoneyManager Instance;
 
     [Header("Level İçi Para")]
     public int currentLevelCoins = 0;
+
+    public GameObject shopWalletUI; // Marketteki cüzdan UI'ı (varsa)
+
+    private Image coinImage;           // Renk değişimi için (varsa Image bileşeni)
+    private Vector3 originalCoinPos;   // Titreme sonrası eski yerine dönmek için
 
     [Header("SFX")]
     public AudioClip moneyspendSound;
@@ -23,10 +31,30 @@ public class MoneyManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Eğer objenin kendisinde veya child'ında bir görsel varsa rengini değiştirebilmek için alalım
+        coinImage = shopWalletUI.GetComponent<Image>();
+        originalCoinPos = shopWalletUI.transform.localPosition;
+    }
+
+    public void SetShopWallet(GameObject wallet)
+    {
+        shopWalletUI = wallet;
+        UpdateCoins(shopWalletUI); // UI'ı güncelle
     }
 
     // --- PARA KAZANMA VE SEVİYE SONU ---
 
+    public void UpdateCoins(GameObject uiObject)
+    {
+        if (uiObject == null) return;
+
+        Text shopWalletText = uiObject.GetComponentInChildren<Text>();
+        if (shopWalletText != null)
+        {
+            shopWalletText.text = GetTotalCoins().ToString();
+        }
+    }
     public void AddCoins(int amount)
     {
         currentLevelCoins += amount;
@@ -85,23 +113,70 @@ public class MoneyManager : MonoBehaviour
     }
 
     // Harcama yapma fonksiyonu
-    public bool TrySpendCoins(int amount)
-    {
-        int total = GetTotalCoins();
 
-        if (total >= amount)
+    public bool CheckEnoughCoins(int amount)
+    {
+        if (GetTotalCoins() >= amount)
         {
-            total -= amount;
-            SaveTotalCoins(total);
-            SoundManager.Instance.PlaySound(moneyspendSound);
-            PlayerPrefs.Save();
             return true;
         }
         else
         {
-            SoundManager.Instance.PlaySound(notenoughSound);
             return false;
         }
+    }
+
+    public void SpendCoins(int amount)
+    {
+        int total = GetTotalCoins();
+        total -= amount;
+        SaveTotalCoins(total);
+        PlayerPrefs.Save();
+    }
+
+    public void WatchADSCoin()
+    {
+        SoundManager.Instance.PlaySound(moneyspendSound);
+        SaveTotalCoins(GetTotalCoins() + 100); // Örneğin, reklam izleyince 100 coin verelim
+        PlayerPrefs.Save();
+        UpdateCoins(shopWalletUI); // UI'ı güncelle
+    }
+
+    public IEnumerator ShakeAndRedFlash(GameObject uiObject)
+    {
+        float duration = 0.4f;
+        float magnitude = 5f;
+        float elapsed = 0f;
+
+        SoundManager.Instance.PlaySound(notenoughSound);
+
+        RectTransform rectTransform = uiObject.GetComponent<RectTransform>();
+        Vector2 startAnchoredPos = rectTransform.anchoredPosition;
+
+        // Sabit bir coinImage yerine, gönderilen objenin içindeki Image'ı buluyoruz
+        Image targetImage = uiObject.GetComponentInChildren<Image>();
+        Color originalColor = Color.white;
+        if (targetImage != null) originalColor = targetImage.color;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            rectTransform.anchoredPosition = startAnchoredPos + new Vector2(x, y);
+
+            if (targetImage != null)
+            {
+                float lerpVal = Mathf.PingPong(elapsed * 10, 1);
+                targetImage.color = Color.Lerp(originalColor, Color.red, lerpVal);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        rectTransform.anchoredPosition = startAnchoredPos;
+        if (targetImage != null) targetImage.color = originalColor;
     }
 
     // Parayı kaydeder ve UI'ı (varsa) bilgilendirir

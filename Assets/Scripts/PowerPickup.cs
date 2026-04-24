@@ -9,9 +9,12 @@ public class PowerPickup : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player"))
         {
-            SoundManager.Instance.PlaySound(pickupSound);
-            powerup.GetPowerup(type);
-            gameObject.SetActive(false);
+            bool gotPowerup = powerup.TryGetPowerup(type);
+            if (gotPowerup)
+            {
+                SoundManager.Instance.PlaySound(pickupSound);
+                gameObject.SetActive(false);
+            }
         }
     }
 }

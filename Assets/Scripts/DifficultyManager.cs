@@ -5,8 +5,9 @@ public class DifficultyManager : MonoBehaviour
     public static DifficultyManager Instance;
 
     public enum Difficulty { Easy, Medium, Hard }
+    public enum CurrentPowerup { Speed, Attack, Shield, None}
     public Difficulty currentDifficulty;
-
+    public CurrentPowerup selectedPowerup;
     private void Awake()
     {
         // Singleton Yapısı: Sahneler arası geçişte bu objeyi korur
@@ -33,6 +34,27 @@ public class DifficultyManager : MonoBehaviour
         PlayerPrefs.Save();
 
         Debug.Log("Zorluk Ayarlandı: " + currentDifficulty);
+    }
+
+    public void SetPowerupDifficulty(int powerupIndex)
+    {
+        selectedPowerup = (CurrentPowerup)powerupIndex;
+
+        // Seçimi kalıcı hafızaya kaydet
+        PlayerPrefs.SetInt("SelectedPowerup", powerupIndex);
+        PlayerPrefs.Save();
+
+        Debug.Log("Powerup Zorluğu Ayarlandı: " + selectedPowerup);
+    }
+
+    public void UsePowerup()
+    {
+        if (selectedPowerup == CurrentPowerup.None) return;
+
+        selectedPowerup = CurrentPowerup.None;
+        PlayerPrefs.SetInt("SelectedPowerup", 3);
+        PlayerPrefs.Save();
+        MoneyManager.Instance.SpendCoins(50);
     }
 
     private void LoadDifficulty()

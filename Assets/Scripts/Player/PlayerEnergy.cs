@@ -47,4 +47,9 @@ public class PlayerEnergy : MonoBehaviour
     {
         return currentEnergy / maxEnergy; // Enerjinin yüzde olarak değeri
     }
+
+    public void FillEnergy(float amount)
+    {
+        currentEnergy = Mathf.Min(currentEnergy + amount, maxEnergy); // Enerjiyi doldur ve maksimumu aşmamasını sağla
+    }
 }

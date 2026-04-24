@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 
 public class PlayerMelee : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class PlayerMelee : MonoBehaviour
 
     private void Start()
     {
-        damage += PlayerPrefs.GetInt("AttackLevel", 0) * 5;
+        damage += PlayerPrefs.GetInt("AttackLevel", 0) * 4;
         effectiveDamage = damage;
 
         if (attackButton != null)
@@ -47,6 +48,12 @@ public class PlayerMelee : MonoBehaviour
         if (attackTimer > 0) attackTimer -= Time.deltaTime;
     }
 
+    private void OnEnable() 
+    {
+        if (attackButton != null)
+            attackButton.OnAttackPressed += meleeAttack;
+    }
+
     private void OnDisable()
     {
         if (attackButton != null)
@@ -59,10 +66,14 @@ public class PlayerMelee : MonoBehaviour
         {
             isAttacking = true;
 
-            anim.SetBool("isAttacking", true);
             playerMove.isRotationOverridden = true; // Saldırı anında dönüşü kilitle
 
             anim.SetTrigger("meleeAttack");
+            anim.SetBool("isAttacking", true);
+
+
+            // Failsafe: 1 saniye sonra hala isAttacking true ise zorla kapat
+            StartCoroutine(EmergencyReset(1.0f));
 
             attackTimer = attackCooldown;
             if (attackButton != null)
@@ -70,6 +81,15 @@ public class PlayerMelee : MonoBehaviour
 
             if (SoundManager.Instance != null)
                 SoundManager.Instance.PlaySound(meleeSound);
+        }
+    }
+
+    IEnumerator EmergencyReset(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (isAttacking)
+        {
+            EndMelee();
         }
     }
 

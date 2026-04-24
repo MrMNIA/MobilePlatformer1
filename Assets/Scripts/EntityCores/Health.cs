@@ -6,11 +6,15 @@ using System;
 
 public class Health : MonoBehaviour
 {
+    [Header("Health Settings")]
     public float maximumHealth = 100;
     public float currentHealth { get; private set; }
-
     public float damageReduction = 0f; // Hasar azaltma yüzdesi (örneğin, 0.2f = %20 hasar azaltma)
     public static event Action<Health> imDead;
+
+
+    [Header("Player Respawn")]
+    public PlayerRespawn playerRespawn; // PlayerRespawn referansı
 
 
     [Header("Immunity")]
@@ -64,7 +68,7 @@ public class Health : MonoBehaviour
             isImmune = false; // Eğer immunityTime 0 ise, dokunulmazlığı hemen kaldır
         }
 
-            damage *= (1f - damageReduction); // Hasarı azalt
+        damage *= (1f - damageReduction); // Hasarı azalt
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maximumHealth);
 
@@ -139,6 +143,9 @@ public class Health : MonoBehaviour
         isDead = true;
 
         anim.SetTrigger("die");
+        anim.SetBool("isFalling", false); // Düşme şartını zorla kapat
+        anim.SetBool("isRunning", false); 
+        anim.SetBool("isSliding", false); 
         SoundManager.Instance.PlaySound(dieSound);
 
         // --- COIN SİSTEMİ ENTEGRASYONU ---
@@ -164,9 +171,13 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void GameOver()
+    public void PlayerDown()
     {
-        if (gameObject.CompareTag("Player"))
+        if(playerRespawn != null && !playerRespawn.IsRespawned())
+        {
+            UIManager.instance.ShowAlmostGameOver();
+        }
+        else
         {
             UIManager.instance.ShowGameOver();
         }
@@ -215,16 +226,40 @@ public class Health : MonoBehaviour
         isImmune = false;
 
     }
+    
+    public void StartRespawn()
+    {
+        gameObject.SetActive(true);
+        anim.SetTrigger("Respawn");
+        currentHealth = maximumHealth;
+        isDead = false;
+    }
+
+    public void EndRespawn()
+    {
+        foreach (var item in components)
+        {
+            item.enabled = true;
+        }
+        if (rb != null)
+        {
+            rb.simulated = true; // Fizik etkileşimini tekrar aç
+        }
+        StartCoroutine(Immunity(2.5f)); // Kısa süreli dokunulmazlık ver (örneğin, 1 saniye)
+    }
 
     public void ShieldBoost(float duration)
     {
         damageReduction = 0.5f; // Örneğin, %50 hasar azaltma
+        anim.SetBool("haveShield",true);
         Invoke(nameof(ResetShield), duration);
     }
 
     private void ResetShield()
     {
         damageReduction = 0f;
+        anim.SetBool("haveShield", false);
+
     }
 
     private void Deactivate()

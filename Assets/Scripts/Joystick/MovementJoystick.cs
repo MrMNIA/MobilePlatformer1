@@ -63,13 +63,6 @@ public class MovementJoystick : MonoBehaviour
         }
     }
 
-    public IEnumerator TemporaryDisable(float duration)
-    {
-        ChangeAbleToMove(false);
-        yield return new WaitForSeconds(duration);
-        ChangeAbleToMove(true);
-    }
-
     private void ResetInputs()
     {
         leftPressed = false;

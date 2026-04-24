@@ -28,15 +28,6 @@ public class ShopItem : MonoBehaviour
     public int costMultiplier = 10; // Her seviye için maliyeti ne kadar artırmak istediğinizi belirleyin
     private int currentLevel;
 
-    void Awake()
-    {
-        // Child objedeki Text'i otomatik bulalım
-        coinText = currentCoinsObj.GetComponentInChildren<Text>();
-        // Eğer objenin kendisinde veya child'ında bir görsel varsa rengini değiştirebilmek için alalım
-        coinImage = currentCoinsObj.GetComponent<Image>();
-        originalCoinPos = currentCoinsObj.transform.localPosition;
-    }
-
     void Start()
     {
         currentLevel = PlayerPrefs.GetInt(statName + "Level", 0);
@@ -50,12 +41,8 @@ public class ShopItem : MonoBehaviour
         float totalValue = baseValue + (currentLevel * additionPerLevel);
         currentValueText.text = totalValue.ToString();
 
-        // TOPLAM COIN GÜNCELLEME: MoneyManager'dan alıp child text'e yazıyoruz
-        if (coinText != null)
-        {
-            coinText.text = MoneyManager.Instance.GetTotalCoins().ToString();
-        }
-
+        MoneyManager.Instance.UpdateCoins(MoneyManager.Instance.shopWalletUI); // Cüzdan UI'ını güncelle
+        
         if (currentLevel >= maxLevel)
         {
             plusValueText.gameObject.SetActive(false);
@@ -75,7 +62,7 @@ public class ShopItem : MonoBehaviour
     {
         int n = currentLevel;
         
-        int cost = Mathf.RoundToInt((costMultiplier/4) * n * n) + (costMultiplier * n) + initialCost;
+        int cost = Mathf.RoundToInt((costMultiplier/4f) * n * n) + (costMultiplier * n) + initialCost;
 
         cost = Mathf.RoundToInt(cost / 10f) * 10;
 
@@ -86,48 +73,23 @@ public class ShopItem : MonoBehaviour
     {
         int cost = CalculateCost();
 
-        if (MoneyManager.Instance.TrySpendCoins(cost))
+        if (MoneyManager.Instance.CheckEnoughCoins(cost))
         {
+            MoneyManager.Instance.SpendCoins(cost);
+            SoundManager.Instance.PlaySound(MoneyManager.Instance.moneyspendSound);
+
             currentLevel++;
             PlayerPrefs.SetInt(statName + "Level", currentLevel);
             PlayerPrefs.Save();
+            
             UpdateUI();
         }
         else
         {
-            // PARA YETMEZSE: Efekti başlat
-            StopAllCoroutines(); // Eğer zaten titriyorsa çakışmasın
-            StartCoroutine(ShakeAndRedFlash());
+            StartCoroutine(MoneyManager.Instance.ShakeAndRedFlash(MoneyManager.Instance.shopWalletUI));
         }
     }
 
     // TİTREME VE KIRMIZI YANMA EFEKTİ
-    IEnumerator ShakeAndRedFlash()
-    {
-        float duration = 0.4f; // Efekt süresi
-        float magnitude = 5f;  // Titreme şiddeti
-        float elapsed = 0f;
-
-        Color originalColor = Color.white; // Varsayılan renk
-        if (coinImage != null) originalColor = coinImage.color;
-
-        while (elapsed < duration)
-        {
-            // Rastgele hafif pozisyon değiştir (Titreme)
-            float x = Random.Range(-1f, 1f) * magnitude;
-            float y = Random.Range(-1f, 1f) * magnitude;
-            currentCoinsObj.transform.localPosition = new Vector3(originalCoinPos.x + x, originalCoinPos.y + y, originalCoinPos.z);
-
-            // Rengi kırmızıya yaklaştır
-            if (coinImage != null)
-                coinImage.color = Color.Lerp(originalColor, Color.red, Mathf.PingPong(elapsed * 10, 1));
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        // Her şeyi eski haline döndür
-        currentCoinsObj.transform.localPosition = originalCoinPos;
-        if (coinImage != null) coinImage.color = originalColor;
-    }
+    
 }

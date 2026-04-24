@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private PlayerEnergy playerEnergy;
     [SerializeField] private AudioClip jumpSound;
     [HideInInspector] public bool isRotationOverridden = false;
+    [SerializeField] public PlayerRespawn playerRespawn;
 
     [Header("WallJump")]
     [SerializeField] private float wallJumpX;
@@ -44,22 +45,28 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        anim.SetBool("onGround", onGround());
         isRunning = (onGround() && Mathf.Abs(body.linearVelocity.x) >= 0.2f);
         anim.SetBool("isRunning", isRunning);
 
         if (onGround())
         {
+            anim.SetBool("onGround", true);
+            playerRespawn.GetLastValidPosition(transform.position); // Geçerli pozisyonu kaydet
             coyoteTimeCounter = coyoteTime; // Yerdeyken sayacı tazele
         }
         else
         {
+            anim.SetBool("onGround", false);
             coyoteTimeCounter -= Time.deltaTime; // Havadaysak süreyi azalt
         }
 
+        if (!onGround() && body.linearVelocity.y < 0.2f)
+            anim.SetBool("isFalling", true);
+        else
+            anim.SetBool("isFalling", false);
+
         if (jumpTimer > 0f)
             jumpTimer -= Time.deltaTime;
-
         if ((move.IsJumping || Input.GetKeyDown(KeyCode.Space)) && jumpTimer <= 0f) //joystick ya da space basıldığında
             Jump();
 
@@ -71,9 +78,15 @@ public class PlayerMovement : MonoBehaviour
 
         // Duvar sürtünmesi (Wall Slide)
         if (!onGround() && onWall() && body.linearVelocity.y < 0f)
+        {
             body.gravityScale = 0.3f;
+            anim.SetBool("isSliding", true);
+        }
         else
+        {
             body.gravityScale = 2.0f;
+            anim.SetBool("isSliding", false);
+        }
 
         // Karakter Yönü Çevirme
         if (!isRotationOverridden && move.Horizontal != 0)
@@ -176,6 +189,7 @@ public class PlayerMovement : MonoBehaviour
         {
             body.linearVelocity = new Vector2(body.linearVelocity.x, 0);
             body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX * 50, (wallJumpY + (4 * currentEnergyPercentage)) * 50));
+            transform.localScale = new Vector3(transform.localScale.x * -1f, 1, 1);
             ExecuteJumpEffects();
         }
         else if (coyoteTimeCounter > 0f) 
@@ -208,20 +222,31 @@ public class PlayerMovement : MonoBehaviour
 
     private bool onWall()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.2f, groundLayer);
+        // Karakterin baktığı yöne göre küçük bir ofset belirliyoruz
+        float direction = transform.localScale.x;
+        Vector2 rayDirection = new Vector2(direction, 0);
+
+        // BoxCast'i karakterin biraz dışından başlatmak veya mesafeyi netleştirmek gerekir
+        // 0.1f veya 0.2f mesafe (distance) duvarı algılamak için idealdir.
+        RaycastHit2D hit = Physics2D.BoxCast(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size * 0.9f, // Kutuyu hafif küçültüyoruz ki tavan/tabana çarpmasın
+            0f,
+            rayDirection,
+            0.2f,
+            groundLayer
+        );
+
         return hit.collider != null;
     }
 
+
     private void OnDrawGizmos()
     {
-        if (boxCollider != null)
-        {
-            Vector2 boxCenter = new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
-            Vector2 boxSize = new Vector2(boxCollider.bounds.size.x * 0.8f, 0.1f);
-
-            Gizmos.color = Color.red;
-            // BoxCast'in başladığı ve bittiği alanı simüle eder
-            Gizmos.DrawWireCube(boxCenter + Vector2.down * 0.05f, boxSize);
-        }
+        if (boxCollider == null) return;
+        Gizmos.color = Color.red;
+        // BoxCast'in gittiği yeri sahnede kutu olarak çizer
+        Gizmos.DrawWireCube(boxCollider.bounds.center + new Vector3(transform.localScale.x * 0.2f, 0, 0), boxCollider.bounds.size * 0.9f);
     }
+
 }

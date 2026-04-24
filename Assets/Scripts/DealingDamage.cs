@@ -7,6 +7,7 @@ public class Dealingdamage : MonoBehaviour
     [SerializeField] protected LayerMask damageLayer; // Inspector'da ayarlanacak
     [SerializeField] protected bool instaKiller = false; // Eğer true ise, hasar değeri ne olursa olsun anında öldürür.
     [SerializeField] protected float knockbackForce = 10f;
+    
     protected virtual void OnTriggerStay2D(Collider2D collision)
     {
         // Layer kontrolü
