@@ -10,7 +10,7 @@ public class Coin : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             // Parayı ekle
-            MoneyManager.Instance.AddCoins(baseValue);
+            MoneyManager.Instance.AddCoinsToCurrentWallet(baseValue);
             // Ses efektini çal
             SoundManager.Instance.PlaySound(coinPickupSound);
 

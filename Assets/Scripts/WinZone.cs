@@ -19,6 +19,7 @@ public class WinZone : MonoBehaviour
         if (MoneyManager.Instance == null) return;
 
         int baseAmount = MoneyManager.Instance.currentLevelCoins;
+        baseAmount += MoneyManager.Instance.AdditionalCoinsForLevelNumber();
 
         // ÖNEMLİ: Daha parayı finalize etmeden "ilk bitirme mi?" kontrolünü yapıyoruz
         string levelKey = "Level" + SceneManager.GetActiveScene().buildIndex + "_Completed";

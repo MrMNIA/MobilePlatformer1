@@ -42,10 +42,13 @@ public class Health : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         enemyAI = GetComponent<EnemyAI>();
+    }
+
+    private void Start() {
 
         if (gameObject.CompareTag("Enemy"))
         {
-            maximumHealth += SceneManager.GetActiveScene().buildIndex * 10; // 
+            maximumHealth += SceneManager.GetActiveScene().buildIndex * 5; // 
             float multiplier = DifficultyManager.Instance.GetStatsMultiplier();
             maximumHealth *= multiplier;
             currentHealth = maximumHealth;
@@ -143,9 +146,6 @@ public class Health : MonoBehaviour
         isDead = true;
 
         anim.SetTrigger("die");
-        anim.SetBool("isFalling", false); // Düşme şartını zorla kapat
-        anim.SetBool("isRunning", false); 
-        anim.SetBool("isSliding", false); 
         SoundManager.Instance.PlaySound(dieSound);
 
         // --- COIN SİSTEMİ ENTEGRASYONU ---
@@ -154,7 +154,7 @@ public class Health : MonoBehaviour
         {
             // EnemyAI scriptindeki baseCoinReward değerini kullanıyoruz
 
-            MoneyManager.Instance.AddCoins(enemyAI.baseCoinReward);
+            MoneyManager.Instance.AddCoinsToCurrentWallet(enemyAI.baseCoinReward);
             imDead?.Invoke(this);
         }
 

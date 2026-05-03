@@ -187,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accelerationForce: 40
   maxSpeed: 5.5
-  jumpPower: 10
+  jumpPower: 10.5
   jumpCooldown: 0.25
   playerEnergy: {fileID: 3688450473597583103}
   jumpSound: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
@@ -240,7 +240,7 @@ MonoBehaviour:
   maximumHealth: 100
   damageReduction: 0
   playerRespawn: {fileID: 0}
-  immunityTime: 1
+  immunityTime: 0.25
   components:
   - {fileID: 2547317792614927641}
   - {fileID: 8151190432319713610}

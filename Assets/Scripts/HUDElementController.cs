@@ -13,6 +13,7 @@ public class HUDElementController : MonoBehaviour
 
     public void ApplyMySettings()
     {
+        if (rect == null) rect = GetComponent<RectTransform>();
         // Manager'daki listede beni bul
         var myData = SettingsManager.Instance.currentSettings.elements.Find(x => x.elementID == elementID);
 

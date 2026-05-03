@@ -153,6 +153,7 @@ public class UIManager : MonoBehaviour
     // 3. Oyun Sonu (Ölünce çağrılır)
     public void ShowGameOver()
     {
+        StopCoroutine(AlmostGameOverTimer());
         SoundManager.Instance.PlaySound(gameOverSound);
         SoundManager.Instance.PauseMusic();
         Time.timeScale = 0f;
@@ -173,15 +174,26 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator AlmostGameOverTimer()
     {
+        SoundManager.Instance.musicSource.pitch = 0.6f;
         float timer = 5f; // Örnek süre, istediğiniz gibi ayarlayabilirsiniz
         while (timer > 0)
         {
+            // REKLAM İZLENİYORSA SAYACI DURDUR
+            // ServiceManager'da IsAdShowing gibi bir bool olduğunu varsayalım
+            if (ServiceManager.Instance.isAdShowing)
+            {
+                yield return null; // Hiçbir işlem yapma, sonraki frame'i bekle
+                continue;
+            }
+
             if (playerRespawn.IsRespawned())
             {
-                Respawn(); // Eğer oyuncu yeniden doğduysa, respawn işlemini gerçekleştir
-                yield break; // Coroutine'i sonlandır
+                SoundManager.Instance.musicSource.pitch = 1f;
+                Respawn();
+                yield break;
             }
-            timer -= Time.unscaledDeltaTime; // Zaman durduğu için unscaledDeltaTime kullanıyoruz
+
+            timer -= Time.unscaledDeltaTime;
             respawnTimerText.text = timer.ToString("F1"); // Kalan süreyi göster
             float progress = 1f - (timer / 5f);
 
@@ -196,9 +208,14 @@ public class UIManager : MonoBehaviour
             almostGameOverpanel.GetComponent<Image>().color = color; // Yeni rengi uygula
             yield return null;
         }
+        SoundManager.Instance.musicSource.pitch = 1f;
         ShowGameOver(); // Süre dolunca Game Over panelini göster
     }
 
+    public void CallADSForRespawn()
+    {
+        ServiceManager.Instance.WatchADSRespawn();
+    }
     public void Respawn()
     {
         playerRespawn.Respawn();
@@ -265,7 +282,7 @@ public class UIManager : MonoBehaviour
         // 3. AŞAMA: İlk Bitirme Bonusu
         if (isFirstClear)
         {
-            addText.text = "First Clear Bonus: x2"; // Alt satıra geçmesi için \n ekledim
+            addText.text = "First Clear Bonus: x2";
             addText.color = Color.green;
             baseAmount = Mathf.RoundToInt(baseAmount * 2);
 

@@ -3,20 +3,35 @@ using System.Collections;
 
 public class Saw : MonoBehaviour
 {
+    [Header("Hareket Ayarları")]
     public float movementSpeed = 2f;
     public float maxDistance = 5f;
     public float idleDuration = 1f;
-    public float rotationSpeed = 500f; // Dönme hızı
-    public float startDelay = 0f; // Başlangıçta bekleme süresi
+
+    [Range(0f, 360f)]
+    public float movementAngle = 0f; // Müfettişten ayarlanabilen açı
+
+    [Header("Görsel Ayarlar")]
+    public float rotationSpeed = 500f;
+    public float startDelay = 0f;
 
     private bool isIdling = true;
-    private bool isMovingRight = true;
+    private bool isMovingForward = true;
     private float currentDistance = 0f;
     private Vector3 startPosition;
 
+    // Açıyı yön vektörüne çeviren yardımcı özellik
+    private Vector3 MoveDirection
+    {
+        get
+        {
+            float rad = movementAngle * Mathf.Deg2Rad;
+            return new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0).normalized;
+        }
+    }
+
     private void Start()
     {
-        // Başlangıç pozisyonunu gizmos için kaydediyoruz
         startPosition = transform.position;
 
         if (startDelay > 0f)
@@ -31,32 +46,35 @@ public class Saw : MonoBehaviour
 
     private void Update()
     {
-        // 1. DÖNME HAREKETİ (Kod ile)
+        // 1. KENDİ ETRAFINDA DÖNME
         transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
 
         if (isIdling) return;
 
-        // 2. İLERLEME HAREKETİ
-        if (isMovingRight)
+        // 2. BELİRLENEN AÇIDA İLERLEME HAREKETİ
+        float speedWithDifficulty = movementSpeed * DifficultyManager.Instance.GetStatsMultiplier();
+        Vector3 direction = MoveDirection;
+
+        if (isMovingForward)
         {
-            transform.position += Vector3.right * movementSpeed * DifficultyManager.Instance.GetStatsMultiplier() * Time.deltaTime;
-            currentDistance += movementSpeed * DifficultyManager.Instance.GetStatsMultiplier() * Time.deltaTime;
+            transform.position += direction * speedWithDifficulty * Time.deltaTime;
+            currentDistance += speedWithDifficulty * Time.deltaTime;
 
             if (currentDistance >= maxDistance)
             {
                 StartCoroutine(Idle(idleDuration));
-                isMovingRight = false;
+                isMovingForward = false;
             }
         }
         else
         {
-            transform.position += Vector3.left * movementSpeed * DifficultyManager.Instance.GetStatsMultiplier() * Time.deltaTime;
-            currentDistance -= movementSpeed * DifficultyManager.Instance.GetStatsMultiplier() * Time.deltaTime;
+            transform.position -= direction * speedWithDifficulty * Time.deltaTime;
+            currentDistance -= speedWithDifficulty * Time.deltaTime;
 
             if (currentDistance <= -maxDistance)
             {
                 StartCoroutine(Idle(idleDuration));
-                isMovingRight = true;
+                isMovingForward = true;
             }
         }
     }
@@ -75,15 +93,21 @@ public class Saw : MonoBehaviour
 
         // Oyun çalışmıyorsa o anki pozisyonu, çalışıyorsa başlangıç pozisyonunu baz al
         Vector3 center = Application.isPlaying ? startPosition : transform.position;
+        Vector3 direction = MoveDirection;
 
-        Vector3 leftPoint = center + Vector3.left * maxDistance;
-        Vector3 rightPoint = center + Vector3.right * maxDistance;
+        // Belirlenen açıya göre uç noktaları hesapla
+        Vector3 point1 = center + direction * maxDistance;
+        Vector3 point2 = center - direction * maxDistance;
 
         // Menzil çizgisini çiz
-        Gizmos.DrawLine(leftPoint, rightPoint);
+        Gizmos.DrawLine(point1, point2);
 
         // Uç noktalara küçük küreler koy
-        Gizmos.DrawWireSphere(leftPoint, 0.3f);
-        Gizmos.DrawWireSphere(rightPoint, 0.3f);
+        Gizmos.DrawWireSphere(point1, 0.3f);
+        Gizmos.DrawWireSphere(point2, 0.3f);
+
+        // Başlangıç noktasını belirtmek için küçük bir mavi küre (opsiyonel)
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(center, 0.1f);
     }
 }

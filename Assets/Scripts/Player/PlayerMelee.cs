@@ -113,7 +113,7 @@ public class PlayerMelee : MonoBehaviour
             Health enemyHealth = hit.GetComponent<Health>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(effectiveDamage, transform.position, 8f);
+                enemyHealth.TakeDamage(effectiveDamage, transform.position, 6f);
             }
         }
     }
