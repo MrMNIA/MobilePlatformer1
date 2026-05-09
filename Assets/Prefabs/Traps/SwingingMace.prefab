@@ -248,7 +248,7 @@ MonoBehaviour:
   damage: 10
   damageLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 2304
   instaKiller: 0
   knockbackForce: 10
 --- !u!58 &1383924518553390850

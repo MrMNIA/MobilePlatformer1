@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class SoundManager : MonoBehaviour
 {
@@ -71,6 +72,21 @@ public class SoundManager : MonoBehaviour
             ChangeMusic(chapterMusic[1]);
         else if (index >= 21 && index <= 30)
             ChangeMusic(chapterMusic[2]);
+    }
+
+    public void ChangeMusicWithWait(AudioClip newClip, float waitTime)
+    {
+        musicSource.Stop();
+        StartCoroutine(WaitAndChange(newClip, waitTime));
+    }
+
+    private IEnumerator WaitAndChange(AudioClip newClip, float waitTime)
+    {
+        // Belirtilen saniye kadar bekle
+        yield return new WaitForSeconds(waitTime);
+
+        // Müziği değiştir ve çal
+        ChangeMusic(newClip);
     }
     public void ChangeMusic(AudioClip newClip)
     {

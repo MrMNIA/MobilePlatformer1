@@ -214,7 +214,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9924d9e449659ab4a932bf521b1ab412, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -307,18 +307,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseCoinReward: 5
+  canAttackFromOneWay: 0
+  oneWayPlatformLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  startInStasis: 0
   moveSpeed: 2.5
   chaseSpeed: 4
   idleDuration: 1.25
   rayDistance: 1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1536
-  detectionRange: {x: 9, y: 1.75}
+    m_Bits: 512
+  detectionRange: {x: 7, y: 1.75}
+  memoryDuration: 1.5
+  accelerationForce: 50
+  airAcceleration: 20
+  frictionForce: 40
+  deadzoneX: 0.3
+  canFlee: 0
+  canJump: 1
+  jumpForce: 7
   stopDistanceX: 1.5
   stopDistanceY: 1.75
   attackRangeX: 1.5
   attackRangeY: 1.5
+  isAttacking: 0
   canFallOffWhileChasing: 1
   damage: 10
   attackCooldown: 1
@@ -503,7 +517,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8952163361210427124
 MonoBehaviour:
   m_ObjectHideFlags: 0

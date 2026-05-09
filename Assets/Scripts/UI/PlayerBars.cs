@@ -11,57 +11,51 @@ public class PlayerBars : MonoBehaviour
     [SerializeField] private Image energyBar;
     [SerializeField] private Text energyText;
 
-    private float cachedMaxHealth;
-    private float cachedMaxEnergy;
-
-    private void Start()
-    {
-        // Değeri bir kez alıyoruz
-        cachedMaxHealth = playerHealth.maximumHealth;
-        cachedMaxEnergy = playerEnergy.maxEnergy;
-
-        // Oyun açılır açılmaz barın doğru görünmesi için bir kez tetikliyoruz
-        UpdateUI();
-    }
+    // cachedMax değişkenlerini sildik veya sadece referans amaçlı bıraktık
+    // Çünkü değerler oyun başında Health scripti tarafından değiştiriliyor.
 
     private void Update()
     {
-        // Update içinde UpdateUI fonksiyonunu çağırıyoruz
         UpdateUI();
     }
 
     private void UpdateUI()
     {
-        float current = playerHealth.currentHealth;
-        float energyCurrent = playerEnergy.currentEnergy;
+        // Health ve Energy scriptlerinden GÜNCEL maximum değerleri alıyoruz
+        float maxH = playerHealth.maximumHealth;
+        float curH = playerHealth.currentHealth;
 
-        // Bölme işlemi (0'a bölme hatasına karşı küçük bir önlem)
-        if (cachedMaxHealth > 0)
+        float maxE = playerEnergy.maxEnergy;
+        float curE = playerEnergy.currentEnergy;
+
+        // Can Barı Güncelleme
+        if (maxH > 0)
         {
-            healthBar.fillAmount = current / cachedMaxHealth;
+            healthBar.fillAmount = curH / maxH;
+            healthText.text = Mathf.RoundToInt(curH) + " / " + Mathf.RoundToInt(maxH);
+
+            float healthPercent = curH / maxH;
+
+            // Kritik Sağlık Görseli (Ekran kenarı kızarması vb.)
+            if (healthPercent <= 0.5f)
+            {
+                Color c = criticalImage.color;
+                c.a = 0.7f * (1 - healthPercent);
+                criticalImage.color = c;
+            }
+            else
+            {
+                Color c = criticalImage.color;
+                c.a = 0f;
+                criticalImage.color = c;
+            }
         }
 
-        healthText.text = Mathf.RoundToInt(current) + " / " + Mathf.RoundToInt(cachedMaxHealth);
-
-        float healthPercent = current / cachedMaxHealth;
-
-        if (healthPercent <= 0.5f)
+        // Enerji Barı Güncelleme
+        if (maxE > 0)
         {
-            Color c = criticalImage.color;
-            c.a = 0.7f * (1-healthPercent);
-            criticalImage.color = c;
+            energyBar.fillAmount = curE / maxE;
+            energyText.text = Mathf.RoundToInt(curE) + " / " + Mathf.RoundToInt(maxE);
         }
-        else
-        {
-            Color c = criticalImage.color;
-            c.a = 0f;
-            criticalImage.color = c;
-        }
-
-        if (cachedMaxEnergy > 0)
-        {
-            energyBar.fillAmount = energyCurrent / cachedMaxEnergy;
-        }
-        energyText.text = Mathf.RoundToInt(energyCurrent) + " / " + Mathf.RoundToInt(cachedMaxEnergy);
     }
 }

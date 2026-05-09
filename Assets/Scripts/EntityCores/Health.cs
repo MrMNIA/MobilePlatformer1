@@ -22,6 +22,8 @@ public class Health : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private bool isImmune = false;
 
+    [Range(0f, 100f)] public float knockbackResist = 0f; // %0 = Tam etkilenir, %100 = Hiç kıpırdamaz
+
     [Header("Enemy")] //d��manlar i�in
     private EnemyAI enemyAI;
     private Coroutine enemyAICoroutine;
@@ -48,9 +50,19 @@ public class Health : MonoBehaviour
 
         if (gameObject.CompareTag("Enemy"))
         {
-            maximumHealth += SceneManager.GetActiveScene().buildIndex * 5; // 
+            // Bölme işleminden gelen küsüratı engellemek için geçici bir hesaplama yapalım
+            float levelBonus = SceneManager.GetActiveScene().buildIndex * (maximumHealth / 8f);
             float multiplier = DifficultyManager.Instance.GetStatsMultiplier();
-            maximumHealth *= multiplier;
+
+            // Toplam canı hesapla
+            float totalHealth = (maximumHealth + levelBonus) * multiplier;
+
+            // Sonucu en yakın tam sayıya yuvarla (Örn: 12.4 -> 12, 12.6 -> 13)
+            maximumHealth = Mathf.Round(totalHealth);
+
+            // VEYA her zaman yukarı yuvarla (Örn: 12.1 bile olsa 13 yapar, düşmanlar zayıf kalmasın dersen)
+            // maximumHealth = Mathf.Ceil(totalHealth);
+
             currentHealth = maximumHealth;
         }
 
@@ -97,39 +109,30 @@ public class Health : MonoBehaviour
 
     private void Knockback(Vector3 attackerPosition, float knockbackForce)
     {
-        Debug.DrawLine(attackerPosition, transform.position, Color.red, 2f);
+        if (rb == null || knockbackResist >= 100f) return; // %100 direnç varsa hiç hesaplama yapma
 
-        if (rb != null)
+        // Direnç miktarını uygula (Örn: Resist 90 ise kuvveti 0.1 ile çarp)
+        float effectiveForce = knockbackForce * (1f - (knockbackResist / 100f));
+
+        if (effectiveForce <= 0.1f) return; // Kuvvet çok küçükse itmeye değmez
+
+        if (enemyAI != null)
         {
-            if (enemyAI != null)
-            {
-                if (enemyAICoroutine != null)
-                {
-                    StopCoroutine(enemyAICoroutine);
-                }
-                enemyAICoroutine = StartCoroutine(DisableEnemyAI(0.25f));
-            }
-
-            if (CompareTag("Player"))
-            {
-                PlayerMovement pm = GetComponent<PlayerMovement>();
-                if (pm != null)
-                {
-                    StartCoroutine(pm.PlayerKnockbackRoutine(0.25f));
-                }
-            }
-
-            // --- ÖNEMLİ DEĞİŞİKLİK BURADA ---
-            // Sadece X farkına bakmak yerine yön vektörünü hesaplıyoruz
-            Vector2 knockbackDirection = (transform.position - attackerPosition).normalized;
-
-            // Eğer sadece yatayda (ve biraz yukarı) itmek istiyorsan:
-            float directionX = (transform.position.x - attackerPosition.x) > 0 ? 1f : -1f;
-            Vector2 finalDirection = new Vector2(directionX, 0.5f).normalized;
-            Vector2 knockbackVelocity = finalDirection * knockbackForce;
-
-            rb.linearVelocity = knockbackVelocity;
+            if (enemyAICoroutine != null) StopCoroutine(enemyAICoroutine);
+            enemyAICoroutine = StartCoroutine(DisableEnemyAI(0.25f));
         }
+
+        if (CompareTag("Player"))
+        {
+            PlayerMovement pm = GetComponent<PlayerMovement>();
+            if (pm != null) StartCoroutine(pm.PlayerKnockbackRoutine(0.25f));
+        }
+
+        float directionX = (transform.position.x - attackerPosition.x) > 0 ? 1f : -1f;
+        Vector2 finalDirection = new Vector2(directionX, 0.5f).normalized;
+
+        // Rigidbody'ye direnç uygulanmış kuvveti ver
+        rb.linearVelocity = finalDirection * effectiveForce;
     }
 
     private IEnumerator DisableEnemyAI(float duration)
@@ -265,6 +268,11 @@ public class Health : MonoBehaviour
     private void Deactivate()
     {
         gameObject.SetActive(false);
+    }
+
+    public float GetCurrentHealthPercent()
+    {
+        return currentHealth / maximumHealth;
     }
 
 }

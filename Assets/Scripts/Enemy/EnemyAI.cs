@@ -1,28 +1,46 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-    protected enum State { Patrol, Idle, Chase }
+    protected enum State { Stasis, Patrol, Idle, Chase }
 
-    [Header("Economy & Combat Settings")] // --- YENİ EKLENEN KISIM ---
-    public int baseCoinReward = 10; // Öldüğünde vereceği temel coin miktarı
+    [Header("Economy & Combat Settings")]
+    public int baseCoinReward = 10;
+
+    [Header("One-Way Platform Settings")]
+    public bool canAttackFromOneWay = false;
+    public LayerMask oneWayPlatformLayer;
+
     [Header("AI Movement Settings")]
+    public bool startInStasis = false;
     public float moveSpeed = 2f;
     public float chaseSpeed = 3f;
     public float idleDuration = 1f;
     protected float idleTimer;
 
-    [Header("Detection Settings")]
+    [Header("Detection & Memory Settings")]
     public float rayDistance = 1f;
     public LayerMask groundLayer;
     public Vector2 detectionRange = new Vector2(5f, 2f);
+    public float memoryDuration = 1.5f;
+    protected float memoryTimer;
+
+    [Header("Advanced Movement")]
+    public float accelerationForce = 50f;
+    public float airAcceleration = 20f;
+    public float frictionForce = 40f;
+    [SerializeField] protected float deadzoneX = 0.3f;
+    private float stuckTimer;
+
+    [Header("Special Behaviors")]
+    public bool canFlee = false;
+    public bool canJump = false;
+    public float jumpForce = 8f;
 
     [Header("Range Settings")]
-    // Düşmanın durup bekleyeceği mesafe (Oyuncunun içine girmemesi için)
     public float stopDistanceX = 1.5f;
     public float stopDistanceY = 2.0f;
-
-    // Düşmanın saldırıya başlayabileceği gerçek menzil
     public float attackRangeX = 5f;
     public float attackRangeY = 2f;
 
@@ -32,152 +50,183 @@ public class EnemyAI : MonoBehaviour
     protected Animator anim;
 
     protected bool movingRight = true;
+    public bool isAttacking = false;
     protected State state;
     protected bool isAggressive = false;
+    public bool canFallOffWhileChasing = false;
 
-    public bool canFallOffWhileChasing = false; // Müfettişten ayarlanabilir
+    protected LayerMask combinedLayer => groundLayer | oneWayPlatformLayer;
+
     protected virtual void Awake()
     {
         rib = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
-        state = State.Patrol;
-
+        state = startInStasis ? State.Stasis : State.Patrol;
         GameObject temp = GameObject.FindGameObjectWithTag("Player");
         if (temp != null) player = temp.transform;
     }
 
     protected virtual void Update()
     {
+        if (state == State.Stasis) return;
+
         if (player == null || !player.gameObject.activeSelf)
         {
-            rib.linearVelocity = Vector2.zero;
+            ApplyMovement(0);
             anim.SetBool("isRunning", false);
             state = State.Patrol;
             return;
         }
 
         bool isBlocked = CheckIsBlocked(false);
-        // Chase durumundaysak algılama mesafesini %50 artır (Düşman daha zor pes eder)
         float detectionMultiplier = (state == State.Chase) ? 1.5f : 1f;
+        bool playerInSight = CheckPlayer(detectionMultiplier) || isAggressive;
 
-        bool PlayerInSight = CheckPlayer(detectionMultiplier) || isAggressive;
+        if (playerInSight) memoryTimer = memoryDuration;
+        else memoryTimer -= Time.deltaTime;
+
+        bool shouldChase = memoryTimer > 0;
 
         switch (state)
         {
             case State.Patrol:
                 HandlePatrol(isBlocked);
-                Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true); // Kendi katmanıyla çarpışmayı kapat
-                if (PlayerInSight) { state = State.Chase; }
+                Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
+                if (shouldChase) state = State.Chase;
                 break;
             case State.Idle:
                 HandleIdle(isBlocked);
-                if (PlayerInSight) { state = State.Chase; }
+                if (shouldChase) state = State.Chase;
                 break;
             case State.Chase:
-                float distanceX = Mathf.Abs(transform.position.x - player.position.x);
-                Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, false); // Kendi katmanıyla çarpışmayı aç
-                HandleChase(distanceX);
-                if (!PlayerInSight && !isAggressive)
+                Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, false);
+                HandleChase();
+                if (!shouldChase)
                 {
                     state = State.Idle;
+                    idleTimer = idleDuration;
                 }
                 break;
         }
     }
 
-    protected bool CheckPlayer(float multiplier = 1f)
-{
-    float distX = Mathf.Abs(transform.position.x - player.position.x);
-    float distY = Mathf.Abs(transform.position.y - player.position.y);
-
-    // Çarpanı (multiplier) burada kullanıyoruz
-    if (distX < detectionRange.x * multiplier && distY < detectionRange.y)
+    protected void HandleChase()
     {
-        Vector2 startPos = boxCollider.bounds.center;
-        Vector2 endPos = new Vector2(player.position.x, player.position.y + 0.5f); 
-
-        RaycastHit2D hit = Physics2D.Linecast(startPos, endPos, groundLayer);
-        
-        if (hit.collider == null) 
-        {
-            Debug.DrawLine(startPos, endPos, Color.green);
-            return true; 
-        }
-        else 
-        {
-            Debug.DrawLine(startPos, endPos, Color.red);
-            return false; // Duvara çarptığı için görmüyor
-        }
-    }
-    return false;
-}
-
-    protected void HandleChase(float distanceX)
-    {
+        float distanceX = Mathf.Abs(transform.position.x - player.position.x);
         float distanceY = Mathf.Abs(player.position.y - transform.position.y);
         float xDiff = player.position.x - transform.position.x;
 
-        // Yön değiştirme (Flip)
-        if (Mathf.Abs(xDiff) > 0.2f)
+        // 1. Hareket Yönü Kararı
+        float moveDir = xDiff > 0 ? 1f : -1f;
+        bool isTooClose = (distanceX <= stopDistanceX) && (distanceY <= stopDistanceY);
+
+        if (canFlee && isTooClose) moveDir *= -1f;
+
+        // 2. Bakış Yönü (Sadece saldırmıyorken yürüdüğü yöne baksın)
+        if (!isAttacking && distanceX > deadzoneX)
         {
-            if (xDiff > 0 && !movingRight) Flip();
-            else if (xDiff < 0 && movingRight) Flip();
+            if (moveDir > 0 && !movingRight) Flip();
+            else if (moveDir < 0 && movingRight) Flip();
         }
 
-        // MANTIK AYRIMI:
-        // 1. Saldırı yapabilir miyim? (Attack Range içinde mi?)
-        bool canAttack = (distanceX <= attackRangeX) && (distanceY <= attackRangeY);
+        // 3. Durma ve Hız Hesaplama
+        bool shouldStop = (!canFlee && isTooClose) || isAttacking || CheckIsBlocked(canFallOffWhileChasing);
+        float targetSpeed = shouldStop ? 0 : (chaseSpeed * moveDir);
 
-        // 2. Durmalı mıyım? (Stop Distance içinde mi?)
-        bool shouldStop = (distanceX <= stopDistanceX) && (distanceY <= stopDistanceY);
+        // 4. Zıplama ve Sıkışma
+        bool isGrounded = IsGrounded();
+        bool isBlockedAhead = CheckIsBlocked(true);
 
-        // 3. Önüm kapalı mı?
-        bool isBlockedAhead = CheckIsBlocked(canFallOffWhileChasing);
-
-        if (!shouldStop && !isBlockedAhead)
-        {
-            // Durma mesafesinde değilsek ve önümüz boşsa yürümeye devam et
-            anim.SetBool("isRunning", true);
-            float direction = movingRight ? 1f : -1f;
-            rib.linearVelocity = new Vector2(chaseSpeed * direction, rib.linearVelocity.y);
-        }
+        if (Mathf.Abs(targetSpeed) > 0.1f && rib.linearVelocity.magnitude < 0.2f && isBlockedAhead)
+            stuckTimer += Time.deltaTime;
         else
+            stuckTimer = 0;
+
+        if (canJump && isBlockedAhead && (isGrounded || stuckTimer > 0.2f))
         {
-            // Durma mesafesine girdik veya önümüz kapandı, dur.
-            rib.linearVelocity = new Vector2(0, rib.linearVelocity.y);
-            anim.SetBool("isRunning", false);
+            rib.linearVelocity = new Vector2(rib.linearVelocity.x, jumpForce);
+            stuckTimer = 0;
         }
 
-        // Eğer saldırı menzilindeysek saldır (Durup durmamaktan bağımsız)
-        if (canAttack)
+        ApplyMovement(targetSpeed);
+
+        // 5. Saldırı (Sadece alt sınıf hazırsa oyuncuya dön ve vur)
+        bool canAttackMenzil = (distanceX <= attackRangeX) && (distanceY <= attackRangeY);
+        if (canAttackMenzil && ReadyToAttack())
         {
+            FacePlayer();
             Attack();
         }
     }
+
+    // Alt sınıflar kendi cooldown'larına göre burayı dolduracak
+    protected virtual bool ReadyToAttack()
+    {
+        return !isAttacking;
+    }
+
+    protected void ApplyMovement(float targetSpeed)
+    {
+        float currentAccel;
+        bool grounded = IsGrounded();
+
+        if (Mathf.Abs(targetSpeed) > 0.1f)
+            currentAccel = grounded ? accelerationForce : airAcceleration * 1.5f;
+        else
+            currentAccel = grounded ? frictionForce : 5f;
+
+        float newX = Mathf.MoveTowards(rib.linearVelocity.x, targetSpeed, currentAccel * Time.deltaTime);
+        rib.linearVelocity = new Vector2(newX, rib.linearVelocity.y);
+
+        anim.SetBool("isRunning", Mathf.Abs(newX) > 0.1f && !isAttacking);
+    }
+
+    protected void FacePlayer()
+    {
+        if (player == null) return;
+        float xDiff = player.position.x - transform.position.x;
+        if (xDiff > 0 && !movingRight) Flip();
+        else if (xDiff < 0 && movingRight) Flip();
+    }
+
     protected bool CheckIsBlocked(bool ignoreLedges)
     {
-        // 1. Önce rayOrigin için gerekli hesaplamaları yapıyoruz (Bunlar silinmiş olabilir)
-        float OffsetX = boxCollider.bounds.extents.x + 0.1f;
-        if (!movingRight) OffsetX *= -1;
+        float direction = movingRight ? 1f : -1f;
+        RaycastHit2D wallInfo = Physics2D.Raycast(boxCollider.bounds.center, Vector2.right * direction, boxCollider.bounds.extents.x + 0.3f, combinedLayer);
+        if (ignoreLedges) return wallInfo.collider != null;
 
-        Vector2 rayOrigin = new Vector2(
-            boxCollider.bounds.center.x + OffsetX,
-            boxCollider.bounds.center.y - boxCollider.bounds.extents.y
-        );
+        float OffsetX = (boxCollider.bounds.extents.x + 0.1f) * direction;
+        Vector2 rayOrigin = new Vector2(boxCollider.bounds.center.x + OffsetX, boxCollider.bounds.center.y - boxCollider.bounds.extents.y);
+        RaycastHit2D groundInfo = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, combinedLayer);
+        return (groundInfo.collider == null || wallInfo.collider != null);
+    }
 
-        // 2. Duvar kontrolü (Her durumda lazım)
-        RaycastHit2D wallInfo = Physics2D.Raycast(boxCollider.bounds.center, new Vector2(transform.localScale.x, 0), boxCollider.bounds.extents.x + 0.2f, groundLayer);
+    protected void HandlePatrol(bool isBlocked)
+    {
+        if (isBlocked) { ApplyMovement(0); state = State.Idle; idleTimer = idleDuration; }
+        else ApplyMovement(movingRight ? moveSpeed : -moveSpeed);
+    }
 
-        // 3. Eğer uçurumlardan düşebiliyorsak (ignoreLedges == true), sadece duvara bak
-        if (ignoreLedges)
+    protected void HandleIdle(bool isBlocked)
+    {
+        ApplyMovement(0);
+        idleTimer -= Time.deltaTime;
+        if (idleTimer <= 0) { Flip(); state = State.Patrol; }
+    }
+
+    protected bool CheckPlayer(float multiplier = 1f)
+    {
+        if (player == null) return false;
+        float distX = Mathf.Abs(transform.position.x - player.position.x);
+        float distY = Mathf.Abs(player.position.y - transform.position.y);
+        if (distX < detectionRange.x * multiplier && distY < detectionRange.y)
         {
-            return wallInfo.collider != null;
+            LayerMask visionMask = canAttackFromOneWay ? groundLayer : combinedLayer;
+            RaycastHit2D hit = Physics2D.Linecast(boxCollider.bounds.center, (Vector2)player.position + Vector2.up * 0.5f, visionMask);
+            return hit.collider == null;
         }
-
-        // 4. Eğer düşmememiz gerekiyorsa uçurumu (groundInfo) kontrol et
-        RaycastHit2D groundInfo = Physics2D.Raycast(rayOrigin, Vector2.down, rayDistance, groundLayer);
-        return (groundInfo.collider == false || wallInfo.collider == true);
+        return false;
     }
 
     protected void Flip()
@@ -188,61 +237,29 @@ public class EnemyAI : MonoBehaviour
         transform.localScale = temp;
     }
 
-    protected void HandlePatrol(bool isBlocked)
+    protected virtual bool IsGrounded()
     {
-        if (isBlocked)
-        {
-            rib.linearVelocity = Vector2.zero;
-            state = State.Idle;
-            idleTimer = idleDuration;
-        }
-        else
-        {
-            anim.SetBool("isRunning", true);
-            if (IsGrounded())
-                rib.linearVelocity = new Vector2(movingRight ? moveSpeed : -moveSpeed, rib.linearVelocity.y);
-        }
-    }
-
-    protected void HandleIdle(bool isBlocked)
-    {
-        anim.SetBool("isRunning", false);
-        if (!isBlocked)
-        {
-            state = State.Patrol;
-            return;
-        }
-        idleTimer -= Time.deltaTime;
-        if (idleTimer <= 0)
-        {
-            Flip();
-            state = State.Patrol;
-        }
-    }
-
-    protected bool IsGrounded()
-    {
-        Vector2 boxSize = new Vector2(boxCollider.bounds.size.x * 0.9f, 0.1f);
-        float distance = boxCollider.bounds.extents.y + 0.1f;
-        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxSize, 0f, Vector2.down, distance, groundLayer);
+        Vector2 boxSize = new Vector2(boxCollider.bounds.size.x * 0.8f, 0.1f);
+        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxSize, 0f, Vector2.down, boxCollider.bounds.extents.y + 0.1f, combinedLayer);
         return hit.collider != null;
     }
 
-    protected virtual void OnDrawGizmosSelected()
+    public virtual void Attack()
     {
-        // 1. Algılama Menzili (SARI)
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, new Vector3(detectionRange.x * 2, detectionRange.y * 2, 0));
-
-        // 2. Gerçek Saldırı Menzili (KIRMIZI)
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, new Vector3(attackRangeX * 2, attackRangeY * 2, 0));
-
-        // 3. Durma/Fren Mesafesi (MAVİ)
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(transform.position, new Vector3(stopDistanceX * 2, stopDistanceY * 2, 0));
+        if (isAttacking) return;
+        isAttacking = true;
+        rib.linearVelocity = new Vector2(0, rib.linearVelocity.y);
     }
 
+    public void WakeUp() { if (state == State.Stasis) state = State.Idle; }
+    public void MakeAggressive() => isAggressive = true;
+    public void ShowIntro() { ApplyMovement(0); anim.SetTrigger("intro"); Invoke(nameof(EndIntro), 1f); }
+    public void EndIntro() { }
 
-    public virtual void Attack() { }
+    protected virtual void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow; Gizmos.DrawWireCube(transform.position, new Vector3(detectionRange.x * 2, detectionRange.y * 2, 0));
+        Gizmos.color = Color.red; Gizmos.DrawWireCube(transform.position, new Vector3(attackRangeX * 2, attackRangeY * 2, 0));
+        Gizmos.color = Color.blue; Gizmos.DrawWireCube(transform.position, new Vector3(stopDistanceX * 2, stopDistanceY * 2, 0));
+    }
 }

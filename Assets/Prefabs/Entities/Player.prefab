@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7409295421905777576}
   - component: {fileID: 670448566212692119}
   - component: {fileID: 3688450473597583103}
+  - component: {fileID: 4713465253971725389}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -124,7 +125,7 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 1
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &8151190432319713610
@@ -187,14 +188,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accelerationForce: 40
   maxSpeed: 5.5
-  jumpPower: 10.5
+  jumpPower: 11
+  superJumpPower: 35
   jumpCooldown: 0.25
   playerEnergy: {fileID: 3688450473597583103}
   jumpSound: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
   isRotationOverridden: 0
-  playerRespawn: {fileID: 0}
-  wallJumpX: 9
-  wallJumpY: 7
+  playerRespawn: {fileID: 4713465253971725389}
+  isInSuperJumpZone: 0
+  wallJumpX: 10
+  wallJumpY: 8
   coyoteTime: 0.15
   move: {fileID: 0}
   groundLayer:
@@ -239,14 +242,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumHealth: 100
   damageReduction: 0
-  playerRespawn: {fileID: 0}
+  playerRespawn: {fileID: 4713465253971725389}
   immunityTime: 0.25
+  knockbackResist: 0
   components:
   - {fileID: 2547317792614927641}
   - {fileID: 8151190432319713610}
+  - {fileID: 3688450473597583103}
+  - {fileID: 670448566212692119}
   isDead: 0
-  hurtSound: {fileID: 8300000, guid: 3becec1909f194046945d85ac1077772, type: 3}
-  dieSound: {fileID: 8300000, guid: 29bde6326b4c34ad8a12da475f79b50a, type: 3}
+  hurtSound: {fileID: 8300000, guid: 8087612ddcd83144ebe4553727118a0b, type: 3}
+  dieSound: {fileID: 8300000, guid: f15d863bb0929b34ca19afab22320460, type: 3}
 --- !u!114 &670448566212692119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,9 +274,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 2048
-  damage: 25
+  damage: 20
   meleeSound: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
-  attackCooldown: 1
+  attackCooldown: 0.75
 --- !u!114 &3688450473597583103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +292,20 @@ MonoBehaviour:
   maxEnergy: 100
   playerSpeed: {fileID: 1791227259166024010}
   energyRegenRate: 5
+--- !u!114 &4713465253971725389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2799232613191483647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8f190f4f0fd6646ad0d03141bab116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
+  playerHealth: {fileID: 7409295421905777576}
+  playerEnergy: {fileID: 3688450473597583103}
 --- !u!1 &5421595885532092423
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,7 +318,7 @@ GameObject:
   m_Layer: 0
   m_Name: AttackCenter
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -329,7 +349,7 @@ GameObject:
   - component: {fileID: 5978538928311074356}
   - component: {fileID: 5722420693057750871}
   m_Layer: 0
-  m_Name: Powerup_Shield
+  m_Name: PowerupIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -344,8 +364,8 @@ Transform:
   m_GameObject: {fileID: 5574343607863699473}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5034, z: 0}
-  m_LocalScale: {x: 0.49044022, y: 0.49044022, z: 0.49044022}
+  m_LocalPosition: {x: 0.04, y: 1, z: 0}
+  m_LocalScale: {x: 0.6576313, y: 0.6576313, z: 0.6576313}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2419904991969758924}
@@ -404,7 +424,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.59, y: 1.59}
+  m_Size: {x: 0.87, y: 1.13}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -535,7 +555,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.5, y: 0}
+  m_Offset: {x: 0.55349845, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0.5}
@@ -545,5 +565,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8172138, y: 1}
   m_EdgeRadius: 0

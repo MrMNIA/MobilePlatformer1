@@ -23,10 +23,19 @@ public class RangedEnemy : EnemyAI
         base.Update();
     }
 
+    protected override bool ReadyToAttack()
+    {
+        // Hem isAttacking false olmalı (animasyon bitmiş olmalı)
+        // Hem de senin cooldown sayacın (attackTimer) sıfırlanmış olmalı
+        return base.ReadyToAttack() && attackTimer <= 0;
+    }
+
     public override void Attack()
     {
         if (attackTimer <= 0)
         {
+            base.Attack();
+
             // Sadece animasyonu ba�lat�yoruz. Hasar� animasyon event verecek.
             anim.SetTrigger("rangedAttack");
             attackTimer = attackCooldown;

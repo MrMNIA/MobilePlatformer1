@@ -87,13 +87,16 @@ public class CameraController : MonoBehaviour
         transform.position = smoothedPosition + shakeOffset;
     }
 
-    public void StartCinematicFocus(Transform newTarget, float newSmooth, float duration)
+    public void StartCinematicFocus(Transform target, float smooth, float duration, bool returnToPlayer = true)
     {
-        StartCoroutine(WaitForFocus(duration));
-        if (newTarget != null)
-            currentTarget = newTarget;
-        smoothTime = newSmooth;
-        UIManager.instance.LockJoysticks(); // Tutorial panelini kapat
+        currentTarget = target;
+        smoothTime = smooth;
+
+        // Eğer otomatik dönsün istiyorsak Coroutine başlasın
+        if (returnToPlayer)
+        {
+            StartCoroutine(WaitForFocus(duration));
+        }
     }
 
     public void AdjustCamSize(float value)
