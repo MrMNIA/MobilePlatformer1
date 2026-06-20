@@ -190,7 +190,7 @@ MonoBehaviour:
   maxSpeed: 5.5
   jumpPower: 11
   superJumpPower: 35
-  jumpCooldown: 0.25
+  jumpCooldown: 0.5
   playerEnergy: {fileID: 3688450473597583103}
   jumpSound: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
   isRotationOverridden: 0
@@ -243,7 +243,7 @@ MonoBehaviour:
   maximumHealth: 100
   damageReduction: 0
   playerRespawn: {fileID: 4713465253971725389}
-  immunityTime: 0.25
+  immunityTime: 0.5
   knockbackResist: 0
   components:
   - {fileID: 2547317792614927641}
@@ -275,7 +275,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   damage: 20
-  meleeSound: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
+  meleeSound: {fileID: 8300000, guid: 3becec1909f194046945d85ac1077772, type: 3}
   attackCooldown: 0.75
 --- !u!114 &3688450473597583103
 MonoBehaviour:
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEnergy
   maxEnergy: 100
   playerSpeed: {fileID: 1791227259166024010}
-  energyRegenRate: 5
+  energyRegenRate: 100
 --- !u!114 &4713465253971725389
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,8 @@ public class ShamanEnemy : EnemyAI
     [Header("Shaman - Attack Settings")]
     public float attackCooldown = 2f;
     private float attackTimer;
+    private Vector2 lockedDirection; // Hedef yönü saklamak için değişken
+
     public Transform firePoint;
 
     [Header("Shaman - Heal Settings")]
@@ -15,6 +17,10 @@ public class ShamanEnemy : EnemyAI
     public int healAmount = 20;
     public LayerMask enemyLayer; // Dostları bulmak için kullanılacak
     public GameObject healEffectPrefab; // İyileştirme anında çıkacak görsel
+
+    [Header ("Audio")]
+    public AudioClip sfxHeal;
+
 
     public bool isHealing = false; // İyileştirme yaparken hareket etmesini engellemek için
 
@@ -63,34 +69,35 @@ public class ShamanEnemy : EnemyAI
     }
 
     // --- SALDIRI MANTIĞI ---
+
     public override void Attack()
     {
         if (attackTimer <= 0)
         {
-            base.Attack(); // isAttacking = true yapar
+            base.Attack();
 
-            // Sadece animasyonu başlatıyoruz. Tıpkı RangedEnemy'deki gibi mermiyi animasyon event atacak.
-            anim.SetTrigger("rangedAttack"); // veya shaman için ayrı bir tetikleyici: "shamanAttack"
+            // --- HEDEFİ KİLİTLE ---
+            // Saldırı başladığı anda yönü hesaplıyoruz
+            Vector2 targetPos = new Vector2(player.position.x, player.position.y);
+            lockedDirection = (targetPos - (Vector2)firePoint.position).normalized;
+            // ----------------------
+
+            anim.SetTrigger("rangedAttack");
             attackTimer = attackCooldown;
         }
     }
 
-    // Bu metodu animasyon event'i ile çağır (Ateş topunun atılma anında)
+    // Animasyon Event tarafından çağrılan metot
     private void Shoot()
     {
-        // Merkezi havuzdan ateş topunu çekiyoruz (Senin RangedArrowHolder mantığınla aynı)
         GameObject fireball = ShamanFireballHolder.Instance.GetFireball();
 
         if (fireball != null)
         {
             fireball.transform.position = firePoint.position;
 
-            // Hedef yönü belirle (Göğüs/Karın hizasına atması için player.position.y ayarı)
-            Vector2 targetPos = new Vector2(player.position.x, player.position.y);
-            Vector2 direction = (targetPos - (Vector2)firePoint.position).normalized;
-
-            // Ateş topunu aktifleştir
-            fireball.GetComponent<FireballProjectile>().ActivateProjectile(direction);
+            // Hesaplanan değil, 'Attack' anında kilitlenen yönü kullanıyoruz
+            fireball.GetComponent<FireballProjectile>().ActivateProjectile(lockedDirection);
         }
     }
 
@@ -145,6 +152,7 @@ public class ShamanEnemy : EnemyAI
         rib.linearVelocity = Vector2.zero; // Hareket durdur
 
         anim.SetTrigger("heal"); // İyileştirme animasyonunu başlat
+        SoundManager.Instance.PlaySound(sfxHeal); // İyileştirme sesi
 
         healTimer = healCooldown; // Cooldown'ı burada başlatıyoruz ki tekrar tekrar tetiklenmesin
     }

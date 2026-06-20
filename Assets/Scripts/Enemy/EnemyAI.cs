@@ -44,6 +44,10 @@ public class EnemyAI : MonoBehaviour
     public float attackRangeX = 5f;
     public float attackRangeY = 2f;
 
+    [Header("Audio Settings")]
+    public AudioClip noticeSound; // Oyuncuyu fark edince çalacak ses
+
+    public AudioClip introSound;
     protected Transform player;
     protected Rigidbody2D rib;
     protected BoxCollider2D boxCollider;
@@ -93,11 +97,19 @@ public class EnemyAI : MonoBehaviour
             case State.Patrol:
                 HandlePatrol(isBlocked);
                 Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, true);
-                if (shouldChase) state = State.Chase;
+                if (shouldChase)
+                {
+                    state = State.Chase;
+                    SoundManager.Instance.PlaySound(noticeSound);
+                } 
                 break;
             case State.Idle:
                 HandleIdle(isBlocked);
-                if (shouldChase) state = State.Chase;
+                if (shouldChase)
+                {
+                    state = State.Chase;
+                    SoundManager.Instance.PlaySound(noticeSound);
+                }
                 break;
             case State.Chase:
                 Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer, false);
@@ -253,7 +265,7 @@ public class EnemyAI : MonoBehaviour
 
     public void WakeUp() { if (state == State.Stasis) state = State.Idle; }
     public void MakeAggressive() => isAggressive = true;
-    public void ShowIntro() { ApplyMovement(0); anim.SetTrigger("intro"); Invoke(nameof(EndIntro), 1f); }
+    public void ShowIntro() { ApplyMovement(0); anim.SetTrigger("intro"); SoundManager.Instance.PlaySound(introSound) ;Invoke(nameof(EndIntro), 1f); }
     public void EndIntro() { }
 
     protected virtual void OnDrawGizmosSelected()

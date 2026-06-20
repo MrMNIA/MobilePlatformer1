@@ -1,28 +1,27 @@
 using UnityEngine;
 using UnityEngine.Purchasing;
-using UnityEngine.Advertisements;
-using Unity.Services.Core;
-using System.Threading.Tasks;
+using GoogleMobileAds.Api; // Google AdMob Namespace
+using System;
+using System.Collections.Generic;
 
-public class ServiceManager : MonoBehaviour, IStoreListener, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
+public class ServiceManager : MonoBehaviour, IStoreListener
 {
-
     public enum AdRewardType { Coin, Respawn }
     private AdRewardType currentRewardType;
     public static ServiceManager Instance;
 
-    
     private IStoreController m_StoreController;
-    private int geciciCoinMiktari;
     private int[] paketler = { 1000, 2000, 5000, 10000, 30000 };
 
-    [Header("Ads Settings")]
-    [SerializeField] string _androidGameId = "*******";
-    [SerializeField] string _adUnitId = "Rewarded_Android";
-    [SerializeField] bool _testMode = false;
-    [HideInInspector] public bool isAdShowing = false; // Sayaç buraya bakacak
-    // Aktif olan dükkan scriptini takip etmek için
+    [Header("Google AdMob Settings")]
+    // Test için Google'ın evrensel ödüllü reklam ID'sini koydum. Canlıya çıkarken kendi ID'nizle değiştirin.
+    [SerializeField] string _adUnitId = "ca-app-pub-4278847304438026/4841672830";
+
+    private RewardedAd _rewardedAd;
+
+    [HideInInspector] public bool isAdShowing = false;
     [HideInInspector] public CoinShopItem currentShopUI;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -34,193 +33,210 @@ public class ServiceManager : MonoBehaviour, IStoreListener, IUnityAdsInitializa
         DontDestroyOnLoad(gameObject);
     }
 
-    async void Start()
+    void Start()
     {
         try
         {
-            // 1. ADIM: Önce ana servisleri başlat
-            await UnityServices.InitializeAsync();
-            Debug.Log("UGS Hazır.");
-
-            // 2. ADIM: Reklamı başlat
-            Advertisement.Initialize(_androidGameId, _testMode, this);
-
-            // 3. ADIM: IAP için 1 saniye bekle (Çakışmaları önlemek için)
-            await Task.Delay(1000);
-
-            // --- KRİTİK KONTROL ---
-            // "isInitialized" yerine bunu kullanıyoruz:
-            if (m_StoreController != null) return;
-
-            var module = StandardPurchasingModule.Instance();
-
-            // NOT: Eğer 'Transform' hatası devam ederse aşağıdaki satırı // ile yorum satırı yap.
-            // Unity 6 bazen bu pencereyi kendisi otomatik oluşturduğu için çift eklemeye çalışıyor.
-            module.useFakeStoreUIMode = FakeStoreUIMode.DeveloperUser;
-
-            // Builder'ı burada tanımlıyoruz (Initialize'dan önce olmalı!)
-            var builder = ConfigurationBuilder.Instance(module);
-            foreach (int miktar in paketler)
+            // 1. ADIM: Google Mobile Ads (AdMob) Başlatılması
+            MobileAds.Initialize((InitializationStatus initStatus) =>
             {
-                builder.AddProduct("gamecoin" + miktar, ProductType.Consumable);
-            }
+                Debug.Log("Google AdMob Başlatıldı.");
+                // AdMob initialize olduktan sonra ilk reklamı arka planda yüklemeye başla
+                LoadRewardedAd();
+            });
 
-            // 4. ADIM: IAP'yi şimdi başlat
-            UnityPurchasing.Initialize(this, builder);
-            Debug.Log("IAP Başlatma isteği gönderildi...");
+            // 2. ADIM: Google Play IAP Yapılandırması ve Başlatılması
+            InitializeIAP();
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
-            Debug.LogError("Start Metodunda Hata: " + e.Message);
+            Debug.LogError("ServiceManager Başlatma Hatası: " + e.Message);
         }
     }
-    // --- SATIN ALMA TETİKLEME ---
-    // SATIN ALMA İÇİN:
-    // --- SATIN ALMA ---
-    public void SatinAl(int miktar)
-    {
-        geciciCoinMiktari = miktar;
-        string urunID = "gamecoin" + miktar;
 
-        // Eğer Test Mode açıksa ve servis yoksa (veya hızlı test istiyorsan) anında ver
-        if (_testMode && m_StoreController == null)
+    private void InitializeIAP()
+    {
+        if (m_StoreController != null) return;
+
+        var module = StandardPurchasingModule.Instance();
+        var builder = ConfigurationBuilder.Instance(module);
+
+        foreach (int miktar in paketler)
         {
-            Debug.Log("Jüri Modu: Servis yok, anında ödül veriliyor.");
-            ProcessPurchase(null);
-            return;
+            builder.AddProduct("gamecoin" + miktar, ProductType.Consumable);
         }
 
-        // Geri kalan her durumda (Editor veya Telefon) marketi zorla
+        UnityPurchasing.Initialize(this, builder);
+    }
+
+    // --- GOOGLE PLAY IAP SATIN ALMA AKIŞI ---
+    public void SatinAl(int miktar)
+    {
+        string urunID = "gamecoin" + miktar;
+
         if (m_StoreController != null)
         {
             m_StoreController.InitiatePurchase(urunID);
         }
         else
         {
-            Debug.LogWarning("Market henüz hazır değil!");
+            Debug.LogWarning("Market hazır değil!");
+            if (currentShopUI != null) currentShopUI.ShowMessage("Store not available.");
         }
     }
 
-    // --- REKLAM ---
-    // Altın için çağıracağın metod
+    // --- ADMOB REKLAM YÜKLEME (LOAD) ---
+    private void LoadRewardedAd()
+    {
+        // Eski reklam objesi varsa hafızadan temizle
+        if (_rewardedAd != null)
+        {
+            _rewardedAd.Destroy();
+            _rewardedAd = null;
+        }
+
+        Debug.Log("Ödüllü reklam yükleniyor...");
+        var adRequest = new AdRequest();
+
+        RewardedAd.Load(_adUnitId, adRequest, (RewardedAd ad, LoadAdError error) =>
+        {
+            if (error != null || ad == null)
+            {
+                Debug.LogError("Reklam yükleme başarısız: " + error);
+                return;
+            }
+
+            Debug.Log("Reklam başarıyla yüklendi.");
+            _rewardedAd = ad;
+            RegisterEventHandlers(_rewardedAd);
+        });
+    }
+
+    // --- REKLAM ÇAĞIRMA BUTONLARI ---
     public void WatchADSCoin()
     {
+        if (isAdShowing) return;
         currentRewardType = AdRewardType.Coin;
-        StartAdSequence();
+        ShowRewardedAd();
     }
 
-    // Canlanma için çağıracağın metod
     public void WatchADSRespawn()
     {
+        if (isAdShowing) return;
         currentRewardType = AdRewardType.Respawn;
-        StartAdSequence();
+        ShowRewardedAd();
     }
 
-    // Reklam başlatma mantığını tek yere topladık
-    private void StartAdSequence()
+    // --- ADMOB REKLAM GÖSTERME (SHOW) ---
+    private void ShowRewardedAd()
     {
-        if (Advertisement.isInitialized)
+        if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
-            Advertisement.Load(_adUnitId, this);
-        }
-        else if (_testMode) // Servis yoksa ama test modundaysak direkt ödül ver (Jüri için)
-        {
-            OnUnityAdsShowComplete(_adUnitId, UnityAdsShowCompletionState.COMPLETED);
-        }
-    }
-
-    // ÖDÜLÜN VERİLDİĞİ YER (BURASI KRİTİK)
-    public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState completionState)
-    {
-        isAdShowing = false;
-        if (adUnitId.Equals(_adUnitId) && completionState.Equals(UnityAdsShowCompletionState.COMPLETED))
-        {
-            if (currentRewardType == AdRewardType.Coin)
+            isAdShowing = true;
+            _rewardedAd.Show((Reward reward) =>
             {
-                OdulVer(250);
-            }
-            else if (currentRewardType == AdRewardType.Respawn)
-            {
-                // Burada oyuncuyu canlandırma kodunu tetikle
-                Debug.Log("Oyuncu canlandırılıyor...");
-                UIManager.instance.Respawn();
-                // Not: Kendi Respawn metodunu buraya yazmalısın.
-            }
+                // ÖDÜL KAZANILDIĞINDA TETİKLENEN LAMBDA FONKSİYONU
+                // AdMob reklam başarıyla TAMAMLANDIĞINDA burayı çalıştırır.
+                OnAdRewardEarned();
+            });
+        }
+        else
+        {
+            Debug.LogWarning("Reklam henüz hazır değil, yeniden yükleniyor...");
+            if (currentShopUI != null) currentShopUI.ShowMessage("Reklam şu an müsait değil.");
+            LoadRewardedAd(); // Reklam yoksa tekrar yüklemeyi dene
         }
     }
-    // --- IAP CALLBACKS ---
-    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
-    {
-        int mevcutCoin = PlayerPrefs.GetInt("TotalCoins", 0);
-        PlayerPrefs.SetInt("TotalCoins", mevcutCoin + geciciCoinMiktari);
-        PlayerPrefs.Save();
 
-        if (currentShopUI != null)
+    // --- ADMOB ETKİNLİK DİNLEYİCİLERİ (EVENTS) ---
+    private void RegisterEventHandlers(RewardedAd ad)
+    {
+        // Reklam kapatıldığında çalışır
+        ad.OnAdFullScreenContentClosed += () =>
         {
-            currentShopUI.UpdateUI();
-            currentShopUI.ShowMessage("Transaction Successful!");
+            Debug.Log("Reklam kapatıldı.");
+            isAdShowing = false;
+            // Bir sonraki izleme için hemen yeni reklam yükle
+            LoadRewardedAd();
+        };
+
+        // Reklam hata verdiğinde çalışır
+        ad.OnAdFullScreenContentFailed += (AdError error) =>
+        {
+            Debug.LogError("Reklam gösterim hatası: " + error);
+            isAdShowing = false;
+            if (currentShopUI != null) currentShopUI.ShowMessage("Reklam gösterilemedi.");
+            LoadRewardedAd();
+        };
+    }
+
+    // --- ÖDÜLÜN DAĞITILDIĞI KISIM ---
+    private void OnAdRewardEarned()
+    {
+        if (currentRewardType == AdRewardType.Coin)
+        {
+            OdulVer(250);
         }
-
-        SoundManager.Instance.PlaySound(MoneyManager.Instance.moneyspendSound);
-        return PurchaseProcessingResult.Complete;
-    }
-
-    // --- ADS CALLBACKS ---
-    public void OnUnityAdsAdLoaded(string adUnitId)
-    {
-        if (this == null) return;
-
-        Debug.Log("Reklam yüklendi, gösteriliyor...");
-        // TimeScale'den etkilenmemesi için direkt gösteriyoruz
-        Advertisement.Show(_adUnitId, this);
-    }
-
-    void ExecuteShow()
-    {
-        if (this != null)
+        else if (currentRewardType == AdRewardType.Respawn)
         {
-            Advertisement.Show(_adUnitId, this);
+            Debug.Log("Oyuncu canlandırılıyor...");
+            if (UIManager.instance != null) UIManager.instance.Respawn();
         }
     }
 
     void OdulVer(int miktar)
     {
-        MoneyManager.Instance.AddCoins(miktar);
+        if (MoneyManager.Instance != null) MoneyManager.Instance.AddCoins(miktar);
         PlayerPrefs.Save();
         if (currentShopUI != null)
         {
             currentShopUI.UpdateUI();
-            currentShopUI.ShowMessage("Reward Received!");
+            currentShopUI.ShowMessage("Ödül Alındı!");
         }
-        SoundManager.Instance.PlaySound(MoneyManager.Instance.moneyspendSound);
+        if (SoundManager.Instance != null && MoneyManager.Instance != null)
+            SoundManager.Instance.PlaySound(MoneyManager.Instance.moneyspendSound);
     }
 
-    // --- ZORUNLU INTERFACE METOTLARI ---
+    // --- PRODUCTION IAP DOĞRULAMASI (GOOGLE PLAY) ---
+    public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
+    {
+        string purchasedProductId = args.purchasedProduct.definition.id;
+        string amountString = purchasedProductId.Replace("gamecoin", "");
+
+        if (int.TryParse(amountString, out int satinAlinanMiktar))
+        {
+            int mevcutCoin = PlayerPrefs.GetInt("TotalCoins", 0);
+            PlayerPrefs.SetInt("TotalCoins", mevcutCoin + satinAlinanMiktar);
+            PlayerPrefs.Save();
+
+            if (currentShopUI != null)
+            {
+                currentShopUI.UpdateUI();
+                currentShopUI.ShowMessage("İşlem Başarılı!");
+            }
+            if (SoundManager.Instance != null && MoneyManager.Instance != null)
+                SoundManager.Instance.PlaySound(MoneyManager.Instance.moneyspendSound);
+        }
+
+        return PurchaseProcessingResult.Complete;
+    }
+
+    // --- IAP INTERFACE YÖNETİMİ ---
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
     {
         m_StoreController = controller;
-        Debug.Log(">>> MÜJDE: IAP Başarıyla Başlatıldı! Market Kontrolcüsü Hazır.");
+        Debug.Log("Google Play IAP Canlı Mod Aktif.");
     }
 
-    public void OnInitializeFailed(InitializationFailureReason error)
+    public void OnInitializeFailed(InitializationFailureReason error) => Debug.LogError("IAP Hata: " + error);
+    public void OnInitializeFailed(InitializationFailureReason error, string message) => Debug.LogError($"IAP Hata: {error}, {message}");
+
+    public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
-        Debug.LogError(">>> HATA: IAP Başlatılamadı! Sebep: " + error);
+        if (currentShopUI != null) currentShopUI.ShowMessage("Satın alma iptal edildi.");
+        if (SoundManager.Instance != null && MoneyManager.Instance != null)
+            SoundManager.Instance.PlaySound(MoneyManager.Instance.notenoughSound);
     }
 
-    public void OnInitializeFailed(InitializationFailureReason error, string message)
-    {
-        Debug.LogError($">>> HATA: IAP Başlatılamadı! Sebep: {error}, Mesaj: {message}");
-    }
-    public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason) { if (currentShopUI != null) currentShopUI.ShowMessage("Purchase Canceled."); SoundManager.Instance.PlaySound(MoneyManager.Instance.notenoughSound); }
-    public void OnInitializationComplete() { }
-    public void OnInitializationFailed(UnityAdsInitializationError error, string message) { }
-    public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message) { if (currentShopUI != null) currentShopUI.ShowMessage("Ad Load Failed."); SoundManager.Instance.PlaySound(MoneyManager.Instance.notenoughSound); }
-    public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message) { isAdShowing = false;}
-    public void OnUnityAdsShowStart(string adUnitId) { isAdShowing = true;}
-    public void OnUnityAdsShowClick(string adUnitId) { }
-
-    private void OnApplicationQuit()
-    {
-        Instance = null;
-    }
+    private void OnApplicationQuit() { Instance = null; }
 }

@@ -52,6 +52,14 @@ public class GorillaBossAI : EnemyAI
     private float meleeTimer;
     private float specialAttackTimer;
 
+    [Header("Gorilla Audio Settings")]
+    public AudioClip sfxMelee;        // Melee vuruş sesi
+    public AudioClip sfxRockThrow;    // Kaya fırlatma sesi
+    public AudioClip sfxSlamImpact;   // Yere çarpma (Slam) sesi
+    public AudioClip sfxHealPower;    // İyileşme/Power show sesi
+    public AudioClip sfxEnraged;      // Sinirlenme (Phase 2) sesi
+    public AudioClip sfxDeath;        // Ölüm sesi
+
     protected override void Awake()
     {
         base.Awake();
@@ -159,6 +167,7 @@ public class GorillaBossAI : EnemyAI
         ApplyMovement(0);
         FacePlayer();
         anim.SetTrigger("meleeAttack");
+        SoundManager.Instance.PlaySound(sfxMelee);
     }
 
     private void ExecuteSpecialAttackByWeight()
@@ -169,13 +178,15 @@ public class GorillaBossAI : EnemyAI
         FacePlayer();
 
         int roll = UnityEngine.Random.Range(0, 100);
-        if (roll < currentRockWeight) anim.SetTrigger("rangedAttack");
+        if (roll < currentRockWeight){ anim.SetTrigger("rangedAttack"); SoundManager.Instance.PlaySound(sfxRockThrow);}
         else if (roll < (currentRockWeight + currentSlamWeight)) StartJumpSlam();
         else
         {
             anim.SetTrigger("powerShow");
+            SoundManager.Instance.PlaySound(sfxHealPower);
             if (bossHealth != null) bossHealth.AddHealth(100f);
         }
+
     }
 
     // --- ANIMASYON EVENTLERI VE VURUŞ ALANI ---
@@ -289,6 +300,7 @@ public class GorillaBossAI : EnemyAI
             isSlamming = false;
             anim.SetBool("isRunning", false);
             anim.SetTrigger("intro");
+            SoundManager.Instance.PlaySound(sfxEnraged);
             bossHealth.AddHealth(bossHealth.maximumHealth);
             if (spriteRenderer != null) spriteRenderer.color = new Color(1f, 0.4f, 0.4f);
             if (uiManager != null) uiManager.ActivateEnrageUI();
@@ -318,6 +330,7 @@ public class GorillaBossAI : EnemyAI
     {
         isSlamming = true;
         anim.SetTrigger("jumpSlamAttack");
+        SoundManager.Instance.PlaySound(sfxSlamImpact);
         rib.linearVelocity = new Vector2(rib.linearVelocity.x, jumpSlamHeight);
     }
 
@@ -330,7 +343,6 @@ public class GorillaBossAI : EnemyAI
             GameObject mgr = Instantiate(slamWaveManagerPrefab, transform.position, Quaternion.identity);
             mgr.GetComponent<SlamWaveManager>().StartWave(new Vector3(transform.position.x, boxCollider.bounds.min.y, 0));
         }
-        anim.SetTrigger("landed");
         Invoke(nameof(ResetEylemler), slamRecoveryTime);
     }
 
@@ -344,6 +356,7 @@ public class GorillaBossAI : EnemyAI
         rib.linearVelocity = new Vector2(0, rib.linearVelocity.y);
         anim.SetBool("isRunning", false);
         anim.SetTrigger("die");
+        SoundManager.Instance.PlaySound(sfxDeath);
     }
 
     public void Event_FinishAttack() { if (!isSlamming) isAttacking = false; }

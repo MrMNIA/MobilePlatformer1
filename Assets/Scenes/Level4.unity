@@ -18037,21 +18037,25 @@ MonoBehaviour:
     initialX: 0
     initialY: 0
     spriteWidth: 0
+    initialScale: {x: 0, y: 0, z: 0}
   - layerSprite: {fileID: 1309391214}
     verticalWeight: 0.95
     initialX: 0
     initialY: 0
     spriteWidth: 0
+    initialScale: {x: 0, y: 0, z: 0}
   - layerSprite: {fileID: 1174978922}
     verticalWeight: 0.9
     initialX: 0
     initialY: 0
     spriteWidth: 0
+    initialScale: {x: 0, y: 0, z: 0}
   - layerSprite: {fileID: 805901863}
     verticalWeight: 0.88
     initialX: 0
     initialY: 0
     spriteWidth: 0
+    initialScale: {x: 0, y: 0, z: 0}
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26777,6 +26781,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 232957505217594940, guid: 47f0c97f73aa9d64d856941c820cd005, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 877017762696676268, guid: 47f0c97f73aa9d64d856941c820cd005, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -26965,11 +26973,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2419904991969758924, guid: 2345785ec7f14a44f99275f33ed10173, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.24
+      value: 3.39
       objectReference: {fileID: 0}
     - target: {fileID: 2419904991969758924, guid: 2345785ec7f14a44f99275f33ed10173, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.54
+      value: -4.1
       objectReference: {fileID: 0}
     - target: {fileID: 2419904991969758924, guid: 2345785ec7f14a44f99275f33ed10173, type: 3}
       propertyPath: m_LocalPosition.z

@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     public string kilitGorselAdi = "LockIcon"; // Kilit görselinin objesinin adı
     private bool isMoving = false;
 
+    [SerializeField] float kaymaMiktari = 500f;
+
+
     private void Start()
     {
         // Başlangıçta butonları ve başlığı güncelle
@@ -62,25 +65,61 @@ public class GameManager : MonoBehaviour
             chapterTitle.text = "Chapter " + (currentChapter + 1);
     }
 
+    // Seri hale getirilmiş bir değişken olarak en üste ekleyebilirsiniz
+
     IEnumerator ChangeBackground(int oldIndex, int newIndex)
     {
         float elapsed = 0f;
         Color oldStartColor = chapterImages[oldIndex].color;
         Color newStartColor = chapterImages[newIndex].color;
 
+        // Pozisyon referansları
+        Vector2 centerPos = Vector2.zero;
+        Vector2 bottomPos = new Vector2(0, -kaymaMiktari);
+
+        // Başlangıç ayarları
+        if (newIndex > oldIndex)
+        {
+            // İLERİ GİDİŞ: 1'den 2'ye. 1 (old) aşağı kayacak. 2 (new) sabit kalacak.
+            chapterImages[newIndex].rectTransform.anchoredPosition = centerPos;
+        }
+        else
+        {
+            // GERİ DÖNÜŞ: 2'den 1'ye. 1 (new) aşağıdan yukarı çıkacak.
+            chapterImages[newIndex].rectTransform.anchoredPosition = bottomPos;
+        }
+
         while (elapsed < gecisSuresi)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / gecisSuresi;
 
+            // Renk geçişleri (her zaman aynı)
             chapterImages[oldIndex].color = new Color(oldStartColor.r, oldStartColor.g, oldStartColor.b, Mathf.Lerp(1f, 0f, t));
             chapterImages[newIndex].color = new Color(newStartColor.r, newStartColor.g, newStartColor.b, Mathf.Lerp(0f, 1f, t));
+
+            // Hareket geçişleri
+            if (newIndex > oldIndex)
+            {
+                // 1 numara aşağı kayarak kaybolur
+                chapterImages[oldIndex].rectTransform.anchoredPosition = Vector2.Lerp(centerPos, bottomPos, t);
+            }
+            else
+            {
+                // 1 numara aşağıdan yukarı gelerek belirir
+                chapterImages[newIndex].rectTransform.anchoredPosition = Vector2.Lerp(bottomPos, centerPos, t);
+            }
 
             yield return null;
         }
 
+        // Değerleri sabitleme
         chapterImages[oldIndex].color = new Color(oldStartColor.r, oldStartColor.g, oldStartColor.b, 0f);
         chapterImages[newIndex].color = new Color(newStartColor.r, newStartColor.g, newStartColor.b, 1f);
+
+        // İşlem bitince her iki resmin de pozisyonunu merkeze çekelim ki bir sonraki geçişte sorun olmasın
+        chapterImages[oldIndex].rectTransform.anchoredPosition = centerPos;
+        chapterImages[newIndex].rectTransform.anchoredPosition = centerPos;
     }
 
     IEnumerator SmoothMove(Vector2 hedef)

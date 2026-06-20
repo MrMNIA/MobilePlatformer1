@@ -9,6 +9,9 @@ public class RangedEnemy : EnemyAI
     [Header("Attack Settings")]
     public LayerMask playerLayer;
     public Transform firePoint;
+
+    private Vector2 lockedDirection; // Saldırı başladığında yönü burada saklayacağız
+
     // E�er Awake'te ekstra i�lem yapacaksan:
     protected override void Awake()
     {
@@ -30,13 +33,18 @@ public class RangedEnemy : EnemyAI
         return base.ReadyToAttack() && attackTimer <= 0;
     }
 
+
     public override void Attack()
     {
         if (attackTimer <= 0)
         {
             base.Attack();
 
-            // Sadece animasyonu ba�lat�yoruz. Hasar� animasyon event verecek.
+            // --- YÖNÜ BURADA HESAPLIYOR VE KİLİTLİYORUZ ---
+            Vector2 targetPos = new Vector2(player.position.x, player.position.y);
+            lockedDirection = (targetPos - (Vector2)transform.position).normalized;
+            // ----------------------------------------------
+
             anim.SetTrigger("rangedAttack");
             attackTimer = attackCooldown;
         }
@@ -44,19 +52,14 @@ public class RangedEnemy : EnemyAI
 
     private void Shoot()
     {
-
-        // Merkezi havuzdan oku çekiyoruz
         GameObject arrow = RangedArrowHolder.Instance.GetArrow();
 
         if (arrow != null)
-        {// Okun çıkış noktası (firePoint yoksa transform.position kullanabilirsin)
+        {
             arrow.transform.position = firePoint.position;
 
-            // Hedef - Başlangıç = Yön Vektörü
-            Vector2 targetPos = new Vector2(player.position.x, (player.position.y + -0f)); // Karın boşluğuna nişan al
-            Vector2 direction = (targetPos - (Vector2)transform.position).normalized;
-
-            arrow.GetComponent<ArrowProjectile>().ActivateProjectile(direction);
+            // Hesaplanan değil, önceden kaydedilen (locked) yönü kullanıyoruz
+            arrow.GetComponent<ArrowProjectile>().ActivateProjectile(lockedDirection);
         }
     }
 }

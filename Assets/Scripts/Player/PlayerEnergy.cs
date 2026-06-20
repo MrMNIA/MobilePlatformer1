@@ -34,7 +34,7 @@ public class PlayerEnergy : MonoBehaviour
         if (currentEnergy < maxEnergy)
         {
             float regeneration = energyRegenRate;
-            if (playerSpeed.linearVelocity.magnitude == 0) // Eğer karakter hareket etmiyorsa, yenilenme hızını artır
+            if (playerSpeed.linearVelocity.magnitude <= 0.1f) // Eğer karakter hareket etmiyorsa, yenilenme hızını artır
             {
                 regeneration *= 2f; // Örneğin, dururken yenilenme hızını %100 artırabilirsiniz
             }

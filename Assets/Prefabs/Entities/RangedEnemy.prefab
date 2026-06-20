@@ -316,12 +316,13 @@ MonoBehaviour:
   damageReduction: 0
   playerRespawn: {fileID: 0}
   immunityTime: 0
+  knockbackResist: 0
   components:
   - {fileID: 2962976227545328672}
   - {fileID: 4943859411978127318}
   isDead: 0
-  hurtSound: {fileID: 0}
-  dieSound: {fileID: 0}
+  hurtSound: {fileID: 8300000, guid: 2f823c1814a90744382f61bea124f652, type: 3}
+  dieSound: {fileID: 8300000, guid: 93a402045a58cf64ab019c99d530acb8, type: 3}
 --- !u!114 &4943859411978127318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,6 +361,7 @@ MonoBehaviour:
   stopDistanceY: 4
   attackRangeX: 10
   attackRangeY: 5
+  noticeSound: {fileID: 8300000, guid: c6c9d1d0f5c47bf4fa8e3bb41aa22ed8, type: 3}
   isAttacking: 0
   canFallOffWhileChasing: 0
   attackCooldown: 2

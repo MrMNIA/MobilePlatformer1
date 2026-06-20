@@ -109,12 +109,10 @@ public class Health : MonoBehaviour
 
     private void Knockback(Vector3 attackerPosition, float knockbackForce)
     {
-        if (rb == null || knockbackResist >= 100f) return; // %100 direnç varsa hiç hesaplama yapma
+        if (rb == null || knockbackResist >= 100f) return;
 
-        // Direnç miktarını uygula (Örn: Resist 90 ise kuvveti 0.1 ile çarp)
         float effectiveForce = knockbackForce * (1f - (knockbackResist / 100f));
-
-        if (effectiveForce <= 0.1f) return; // Kuvvet çok küçükse itmeye değmez
+        if (effectiveForce <= 0.1f) return;
 
         if (enemyAI != null)
         {
@@ -128,11 +126,18 @@ public class Health : MonoBehaviour
             if (pm != null) StartCoroutine(pm.PlayerKnockbackRoutine(0.25f));
         }
 
+        // Yön hesaplama
         float directionX = (transform.position.x - attackerPosition.x) > 0 ? 1f : -1f;
         Vector2 finalDirection = new Vector2(directionX, 0.5f).normalized;
 
-        // Rigidbody'ye direnç uygulanmış kuvveti ver
-        rb.linearVelocity = finalDirection * effectiveForce;
+        // --- DEĞİŞİKLİK BURADA BAŞLIYOR ---
+
+        // 1. Mevcut hızı sıfırlamak (Opsiyonel ama önerilir): 
+        // Eğer bunu yapmazsanız, karakter zaten zıt yöne çok hızlı gidiyorsa knockback onu durdurmaya yetmeyebilir.
+
+        // 2. AddForce Kullanımı:
+        // ForceMode2D.Impulse kullanıyoruz çünkü knockback anlık bir patlama etkisidir.
+        rb.AddForce(finalDirection * effectiveForce, ForceMode2D.Impulse);
     }
 
     private IEnumerator DisableEnemyAI(float duration)

@@ -596,14 +596,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.21960784, g: 0.2509804, b: 0.69803923, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cc132e060e26fa14591f3a4229207f07, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c03d29614fe3abf4e8af7a5ce39f0535, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -691,7 +691,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BUY
+  m_Text: SATIN AL
 --- !u!222 &16808348
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -904,7 +904,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ' SOUND VOLUME'
+  m_Text: "SES D\xDCZEY\u0130"
 --- !u!222 &32796694
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1139,7 +1139,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1227,7 +1227,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: DAMAGE
+  m_Text: HASAR
 --- !u!222 &61664550
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1555,7 +1555,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: QUIT
+  m_Text: "OYUNDAN \xC7IK"
 --- !u!222 &79932171
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1705,7 +1705,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1780,7 +1780,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2153,7 +2153,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ' MUSIC VOLUME'
+  m_Text: "M\xDCZ\u0130K D\xDCZEY\u0130"
 --- !u!222 &118829503
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2307,7 +2307,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: MEDIUM
+  m_Text: ORTA
 --- !u!222 &132063212
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2458,7 +2458,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: SHOP
+      value: "MA\u011EAZA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -2474,7 +2474,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2482,7 +2482,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMin.y
@@ -2490,7 +2490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 384.5239
+      value: 384.52393
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2526,11 +2526,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 382
+      value: -215
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -135
+      value: 73
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2647,7 +2647,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: BACK
+      value: "GER\u0130"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -3008,7 +3008,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -248, y: -79}
+  m_AnchoredPosition: {x: -479, y: -79}
   m_SizeDelta: {x: 424.41284, y: 257.1733}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &210791840
@@ -3525,7 +3525,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SELECT DIFFICULTY
+  m_Text: "ZORLU\u011EU SE\xC7"
 --- !u!222 &239242964
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4202,7 +4202,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: START
+      value: "BA\u015ELA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -4351,7 +4351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4437,7 +4437,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4465,7 +4465,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: BACK
+      value: "GER\u0130"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -4843,7 +4843,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4940,6 +4940,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 345531482}
+  m_CullTransparentMesh: 1
+--- !u!1 &353761910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 353761911}
+  - component: {fileID: 353761913}
+  - component: {fileID: 353761912}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &353761911
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353761910}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 484894451}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 316.42, y: 58.661}
+  m_SizeDelta: {x: 118.02, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &353761912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353761910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.68235296}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &353761913
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 353761910}
   m_CullTransparentMesh: 1
 --- !u!1 &359688334
 GameObject:
@@ -5112,6 +5187,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 77f2e080abf05be46a8bc1d02892cbee, type: 3}
+    - target: {fileID: 6485045328646096389, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6485045328646096389, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6485045328646096389, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5178,7 +5265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 437
+      value: 647
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5425,7 +5512,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: HARD
+  m_Text: ZOR
 --- !u!222 &413847906
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5570,7 +5657,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5623,7 +5710,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -186}
-  m_SizeDelta: {x: 653.916, y: 316.8667}
+  m_SizeDelta: {x: 583.6829, y: 282.834}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &431092563
 MonoBehaviour:
@@ -5645,7 +5732,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6f41515345cc6f247b043249fb7f3035, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 789c20bb816c84f458ac37cae52181b4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5887,7 +5974,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: SAVE
+      value: KAYDET
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -6252,7 +6343,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6340,7 +6431,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: GET MORE COINS!!!
+  m_Text: ALTIN SATIN AL
 --- !u!222 &474123840
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6458,6 +6549,8 @@ RectTransform:
   m_Children:
   - {fileID: 32796691}
   - {fileID: 118829500}
+  - {fileID: 353761911}
+  - {fileID: 1131586407}
   - {fileID: 293287033}
   - {fileID: 659840616}
   - {fileID: 902068100}
@@ -6528,7 +6621,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6824,7 +6917,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "ABDULLAH \xD6ZPERK\nGame Design\nProgramming\nWriting"
+  m_Text: "ABDULLAH \xD6ZPERK\nOyun tasar\u0131m\u0131\nProgramlama\nSeslendirme"
 --- !u!222 &500698191
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6964,7 +7057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.98475426, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.9843137, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7190,7 +7283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7210,10 +7303,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Adjust the layout to your preference.
-
-    Position the buttons and bars
-    as you like.'
+  m_Text: "Tu\u015Flar\u0131 keyfine g\xF6re s\xFCr\xFCkle ve kaydet"
 --- !u!222 &549877523
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7237,7 +7327,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: WATCH
+      value: "\u0130ZLE"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_FontData.m_MaxSize
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 57
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -7615,7 +7713,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 25
+  m_Text: 20
 --- !u!222 &599243856
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7674,7 +7772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6830188, g: 0.6830188, b: 0.6830188, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8541,7 +8639,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8771,7 +8869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.031088274, b: 0, a: 1}
+  m_Color: {r: 0.5169811, g: 0.016219016, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8791,7 +8889,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: +5
+  m_Text: +4
 --- !u!222 &678540160
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9310,7 +9408,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9398,7 +9496,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: EASY
+  m_Text: KOLAY
 --- !u!222 &741623259
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9517,7 +9615,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SELECT DIFFICULTY
+  m_Text: "ZORLU\u011EU SE\xC7"
 --- !u!222 &761080008
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9707,7 +9805,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9917,14 +10015,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.2171591, g: 0.25240877, b: 0.754717, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cc132e060e26fa14591f3a4229207f07, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c03d29614fe3abf4e8af7a5ce39f0535, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10178,7 +10276,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: 10.00 $
+      value: "400 \u20BA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -10795,7 +10893,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11395,7 +11493,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11450,7 +11548,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
   m_Color: {r: 0.13319963, g: 1, b: 0.042452812, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -11458,10 +11556,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: b23ada45e57b1074492fc12ddeb25ad7, type: 3}
-    m_FontSize: 82
+    m_FontSize: 65
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 6
     m_MaxSize: 90
     m_Alignment: 4
     m_AlignByGeometry: 1
@@ -11495,7 +11593,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 73}
-  m_SizeDelta: {x: 0, y: 111.089294}
+  m_SizeDelta: {x: 0, y: 111.0893}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1034821322
 GameObject:
@@ -12114,7 +12212,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: MEDIUM
+  m_Text: ORTA
 --- !u!222 &1110638083
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12477,6 +12575,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126562955}
   m_CullTransparentMesh: 1
+--- !u!1 &1131586406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1131586407}
+  - component: {fileID: 1131586409}
+  - component: {fileID: 1131586408}
+  m_Layer: 5
+  m_Name: Image (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1131586407
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131586406}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 484894451}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 315.99997, y: -60.00001}
+  m_SizeDelta: {x: 118.02, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1131586408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131586406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.68235296}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1131586409
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131586406}
+  m_CullTransparentMesh: 1
 --- !u!224 &1166657414 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
@@ -12539,7 +12712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12720,7 +12893,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: SET LAYOUTS
+      value: "TU\u015ELARI\nD\xDCZENLE"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -12752,11 +12929,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 384.5239
+      value: 479.1203
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 97.5486
+      value: 121.5465
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12792,7 +12969,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100
+      value: 78
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -12808,15 +12985,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7323594630735041810, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 384.52
+      value: 488.5803
       objectReference: {fileID: 0}
     - target: {fileID: 7323594630735041810, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 80.015
+      value: 121.55
       objectReference: {fileID: 0}
     - target: {fileID: 7323594630735041810, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -0.000015261
+      objectReference: {fileID: 0}
+    - target: {fileID: 7323594630735041810, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000053406
       objectReference: {fileID: 0}
     - target: {fileID: 8854473865224774793, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -12875,9 +13056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23acb383d5dfb6948ba46fd3045baeff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ServiceManager
-  _androidGameId: 6099824
-  _adUnitId: Rewarded_Android
-  _testMode: 1
+  _adUnitId: ca-app-pub-4278847304438026/4841672830
   isAdShowing: 0
   currentShopUI: {fileID: 0}
 --- !u!1 &1211530257
@@ -13664,7 +13843,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: BACK
+      value: "GER\u0130"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -13870,10 +14049,10 @@ RectTransform:
   - {fileID: 685282019}
   m_Father: {fileID: 1034821326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 471.364, y: 278.55737}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1263648558
 GameObject:
@@ -14164,7 +14343,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: 2.00 $
+      value: "96 \u20BA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -14390,7 +14569,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: START WITH POWERUP
+  m_Text: "G\xDC\xC7LEND\u0130R\u0130C\u0130 SATIN AL"
 --- !u!222 &1362665986
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14436,15 +14615,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d111fb17c80f0444a7b20cb3584aed3, type: 3}
-  m_Type: 2
+  m_Sprite: {fileID: 21300000, guid: 1e3ec9fc467fd884c9f5e812425fcf6e, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -14564,7 +14743,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: POWERUP
+  m_Text: "G\xDC\xC7 S\xDCRES\u0130"
 --- !u!222 &1386168341
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14867,7 +15046,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: SET DEFAULT
+      value: SIFIRLA
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -15232,7 +15411,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15609,6 +15788,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1261754105}
     m_Modifications:
+    - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
+      propertyPath: m_Text
+      value: "GER\u0130"
+      objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
       value: Back
@@ -15623,7 +15806,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15631,7 +15814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchorMin.y
@@ -15675,11 +15858,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -393
+      value: 236
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -135
+      value: 78
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -15867,7 +16050,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: START
+      value: "BA\u015ELA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -16110,7 +16293,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: BACK
+      value: "GER\u0130"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -16219,7 +16402,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: 5.00 $
+      value: "200 \u20BA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -17014,7 +17197,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -17428,7 +17611,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: OPTIONS
+  m_Text: AYARLAR
 --- !u!222 &1572939505
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17494,7 +17677,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -17621,9 +17804,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 111895753}
-  - {fileID: 1032612126}
   - {fileID: 2017940584}
   - {fileID: 1346662351}
+  - {fileID: 1032612126}
   m_Father: {fileID: 1034821326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -18099,7 +18282,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 8d111fb17c80f0444a7b20cb3584aed3, type: 3}
-  m_Type: 2
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -18594,7 +18777,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BUY
+  m_Text: SATIN AL
 --- !u!222 &1650787027
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18836,7 +19019,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3213646383545856298, guid: 940df27de9901474a9fe7a9b46c16674, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18915,6 +19098,7 @@ MonoBehaviour:
   chapterTitle: {fileID: 39760466}
   gecisSuresi: 0.5
   kilitGorselAdi: lockIcon
+  kaymaMiktari: 250
 --- !u!225 &1725806132
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -18997,7 +19181,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: HARD
+  m_Text: ZOR
 --- !u!222 &1734976336
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19288,14 +19472,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.2171591, g: 0.25240877, b: 0.754717, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cc132e060e26fa14591f3a4229207f07, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c03d29614fe3abf4e8af7a5ce39f0535, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -19838,7 +20022,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BUY
+  m_Text: SATIN AL
 --- !u!222 &1776960502
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19979,7 +20163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6301429047446442448, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 217b065d43d2fa342ba6ed64615bd32f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -20200,7 +20384,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "TALHA YAS\u0130R \xD6ZPERK\nArt & Visuals\nMusic Composition\nSound Design"
+  m_Text: "KRAY\nG\xF6rseller\nM\xFCzikler"
 --- !u!222 &1806629740
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20303,7 +20487,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1812551308
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20669,7 +20853,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: 1.00 $
+      value: "48 \u20BA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -20794,7 +20978,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: 0.50 $
+      value: "24 \u20BA"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -21993,7 +22177,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CREDITS
+  m_Text: YAPANLAR
 --- !u!222 &1905142860
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23044,7 +23228,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: BACK
+      value: "GER\u0130"
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name
@@ -23112,7 +23296,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 37
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6661764838666849953, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -23676,14 +23860,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.2171591, g: 0.25240877, b: 0.754717, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cc132e060e26fa14591f3a4229207f07, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c03d29614fe3abf4e8af7a5ce39f0535, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -23980,7 +24164,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: HEALTH
+  m_Text: "SA\u011ELIK"
 --- !u!222 &2075740893
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -24064,7 +24248,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: EASY
+  m_Text: KOLAY
 --- !u!222 &2083858688
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -24422,7 +24606,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020359795103985408, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Text
-      value: PLAY
+      value: OYNA
       objectReference: {fileID: 0}
     - target: {fileID: 4693546305562854045, guid: ce9d3844db6375847a70bb02022829fc, type: 3}
       propertyPath: m_Name

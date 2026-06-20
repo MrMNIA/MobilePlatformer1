@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour
         winPanel.SetActive(false);
         closeTutorialButton.SetActive(false);
         UpdateLayout();
+        MoneyManager.Instance.ResetCurrentCoin();
         UpdateCurrentLevelCoinUI(0);
     }
 
@@ -256,12 +257,12 @@ public class UIManager : MonoBehaviour
 
             if (DifficultyManager.Instance.currentDifficulty == DifficultyManager.Difficulty.Medium)
             {
-                addText.text = "Medium Bonus: x1.25";
+                addText.text = "Orta Zorluk Bonusu: x1.25";
                 addText.color = Color.yellow;
             }
             else if (DifficultyManager.Instance.currentDifficulty == DifficultyManager.Difficulty.Hard)
             {
-                addText.text = "Hard Bonus: x1.5";
+                addText.text = "Zor Zorluk Bonusu: x1.5";
                 addText.color = Color.red;
             }
 
@@ -282,7 +283,7 @@ public class UIManager : MonoBehaviour
         // 3. AŞAMA: İlk Bitirme Bonusu
         if (isFirstClear)
         {
-            addText.text = "First Clear Bonus: x2";
+            addText.text = "İlk Bitirme Bonusu: x2";
             addText.color = Color.green;
             baseAmount = Mathf.RoundToInt(baseAmount * 2);
 

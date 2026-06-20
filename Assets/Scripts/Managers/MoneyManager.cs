@@ -19,6 +19,10 @@ public class MoneyManager : MonoBehaviour
     public AudioClip moneyspendSound;
     public AudioClip notenoughSound;
 
+    public void ResetCurrentCoin()
+    {
+        currentLevelCoins = 0;
+    }
     private void Awake()
     {
         // Singleton Yapısı

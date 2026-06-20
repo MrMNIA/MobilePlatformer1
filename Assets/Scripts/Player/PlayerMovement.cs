@@ -79,11 +79,6 @@ public class PlayerMovement : MonoBehaviour
             body.gravityScale = 0.3f;
             anim.SetBool("isSliding", true);
         }
-        else if (body.linearVelocity.y > 0 && !(Input.GetKey(KeyCode.Space) || move.IsJumping))
-        {
-            body.gravityScale = 4.0f;
-            anim.SetBool("isSliding", false);
-        }
         else
         {
             body.gravityScale = 2.0f;

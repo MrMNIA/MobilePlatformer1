@@ -56,7 +56,6 @@ public class MenuManager : MonoBehaviour
         layoutPanel.SetActive(false);
         shopCoinPanel.SetActive(false);
         creditsPanel.SetActive(false);
-        SoundManager.Instance.PlaybuttonClickSound();
     }
 
     public void ShowOptions()
@@ -176,15 +175,15 @@ public class MenuManager : MonoBehaviour
         {
             case DifficultyManager.Difficulty.Easy:
                 difficultyInfoText[selectedDifficultyPanel].color = Color.green;
-                difficultyInfoText[selectedDifficultyPanel].text = "Enemy Health = 100% \nEnemy Damage = 100%\nCoin Multiplier = 100%";
+                difficultyInfoText[selectedDifficultyPanel].text = "Varsayılan Zorluk";
                 break;
             case DifficultyManager.Difficulty.Medium:
                 difficultyInfoText[selectedDifficultyPanel].color = Color.yellow;
-                difficultyInfoText[selectedDifficultyPanel].text = "Enemy Health = 125% \nEnemy Damage = 125%\nCoin Multiplier = 125%";
+                difficultyInfoText[selectedDifficultyPanel].text = "%25 Daha zor tuzaklar\n%25 Daha güçlü düşmanlar\n%25 Daha çok para";
                 break;
             case DifficultyManager.Difficulty.Hard:
                 difficultyInfoText[selectedDifficultyPanel].color = new Color(153, 0, 0, 255) / 255f; // Koyu kırmızı
-                difficultyInfoText[selectedDifficultyPanel].text = "Enemy Health = 150% \nEnemy Damage = 150%\nCoin Multiplier = 150%";
+                difficultyInfoText[selectedDifficultyPanel].text = "%50 Daha zor tuzaklar\n%50 Daha güçlü düşmanlar\n%50 Daha çok para";
                 break;
         }
     }
@@ -258,19 +257,19 @@ public class MenuManager : MonoBehaviour
         {
             case DifficultyManager.CurrentPowerup.Speed:
                 infoText.color = Color.green;
-                infoText.text = "Speed Powerup: \nIncreases movement speed by 50%";
+                infoText.text = "Hız Güçlendiricisi\n Daha hızlı koşmanı ve uzağa zıplamanı sağlar";
                 break;
             case DifficultyManager.CurrentPowerup.Attack:
                 infoText.color = Color.red;
-                infoText.text = "Attack Powerup: \nIncreases damage dealt by 50%";
+                infoText.text = "Saldırı Güçlendiricisi\n Verilen hasarı %50 artırır";
                 break;
             case DifficultyManager.CurrentPowerup.Shield:
                 infoText.color = Color.blue;
-                infoText.text = "Shield Powerup: \nReduces damage taken by 50%";
+                infoText.text = "Kalkan Güçlendiricisi\n Alınan hasarı %50 azaltır";
                 break;
             default: // None durumu veya geçersiz bir durum
                 infoText.color = Color.black;
-                infoText.text = "Select a powerup and start with it to game. \n Costs 50 gold.";
+                infoText.text = "Bir güçlendirici seçin ve oyunu başlatın. \n 50 altın maliyeti.";
                 break;
         }
     }
